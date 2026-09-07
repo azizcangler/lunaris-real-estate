@@ -1,0 +1,226 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+
+import heroAsset from "@/assets/dubai-coast-villa-hero.png.asset.json";
+import binghattiImage from "@/assets/portfolio-binghatti.jpg";
+import dwtnImage from "@/assets/portfolio-dwtn.jpg";
+import samanaImage from "@/assets/portfolio-samana.jpg";
+import teamImage from "@/assets/team-dubai.jpg";
+import { Button } from "@/components/ui/button";
+import { SiteHeader } from "@/components/site-header";
+
+export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Dubai Luxury Real Estate | Lunaris" },
+      { name: "description", content: "Curated Dubai properties for living, investing and renting, guided from first conversation to handover." },
+      { property: "og:title", content: "Dubai Luxury Real Estate | Lunaris" },
+      { property: "og:description", content: "Selected Dubai developments with personal, end-to-end advisory." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
+  component: Index,
+});
+
+const choices = {
+  living: {
+    label: "LIVING",
+    title: "A life that feels like yours",
+    description: "Discover selected Dubai homes shaped around your daily rhythm, family and expectations.",
+    to: "/living",
+  },
+  investing: {
+    label: "INVESTING",
+    title: "Carry value forward",
+    description: "Evaluate location, developer quality and long-term potential before choosing the right opportunity.",
+    to: "/investing",
+  },
+  renting: {
+    label: "RENTING",
+    title: "Your next chapter in Dubai",
+    description: "Find a move-in-ready residence suited to your lifestyle, preferred location and timing.",
+    to: "/renting",
+  },
+} as const;
+
+type Choice = keyof typeof choices;
+
+const featuredProjects = [
+  { name: "Mercedes-Benz Places", location: "Binghatti City · Dubai", image: binghattiImage },
+  { name: "Samana Resort", location: "Dubai Production City", image: samanaImage },
+  { name: "Binghatti Aquarise", location: "Luxury waterfront residences", image: dwtnImage },
+] as const;
+
+function Index() {
+  const [selected, setSelected] = useState<Choice>("living");
+  const current = choices[selected];
+
+  return (
+    <main className="min-h-screen overflow-x-hidden bg-background">
+      <SiteHeader overlay />
+      <section className="relative min-h-[560px] h-[72svh] overflow-hidden text-[var(--hero-foreground)] md:min-h-[580px] md:h-[62svh]">
+        <img
+          src={heroAsset.url}
+          alt="Floor-to-ceiling glass doors opening to a calm coastline from a modern villa interior"
+          width={992}
+          height={1488}
+          fetchPriority="high"
+          className="absolute inset-0 h-full w-full object-cover object-center"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--hero-scrim)_0%,transparent_64%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--hero-scrim)_0%,transparent_38%)] opacity-75" />
+
+        <div className="relative z-10 flex h-full flex-col px-5 pb-6 pt-24 sm:px-10 md:px-16 md:pb-10 md:pt-32 lg:px-24">
+          <div className="hero-reveal flex items-start justify-between gap-8">
+            <h1 className="max-w-[820px] font-sans text-[clamp(2.6rem,5.7vw,6.2rem)] font-normal uppercase leading-[0.92]">
+              <span className="block">Dubai</span>
+              <span className="block">Luxury Real Estate</span>
+              <span className="mt-4 block font-display text-[0.55em] normal-case italic leading-none">with end-to-end guidance</span>
+            </h1>
+            <p className="hidden max-w-[178px] text-right text-xs leading-[1.35] md:block">
+              We source and verify each property, guide the transaction and remain by your side after completion.
+            </p>
+          </div>
+
+          <div className="hero-reveal hero-reveal-delayed mt-auto flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
+            <div className="grid grid-cols-3 divide-x divide-[var(--hero-foreground)]/45">
+              <div className="pr-4 md:pr-8">
+                <span className="font-display text-3xl italic md:text-4xl">32+</span>
+                <p className="mt-1 text-[10px] leading-tight md:text-xs">selected<br />projects</p>
+              </div>
+              <div className="px-4 md:px-8">
+                <span className="font-display text-3xl italic md:text-4xl">12</span>
+                <p className="mt-1 text-[10px] leading-tight md:text-xs">trusted<br />developers</p>
+              </div>
+              <div className="pl-4 md:pl-8">
+                <span className="font-display text-3xl italic md:text-4xl">4.9</span>
+                <p className="mt-1 text-[10px] leading-tight md:text-xs">client<br />rating</p>
+              </div>
+            </div>
+            <Button asChild size="lg" className="h-12 w-full rounded-none bg-card px-8 text-xs text-card-foreground shadow-none hover:bg-secondary md:w-auto">
+              <a href="#options">REQUEST A CONSULTATION</a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <section id="options" className="section-watermark min-h-[420px] border-t border-border bg-background px-5 py-12 sm:px-10 md:px-16 md:py-20 lg:px-24">
+        <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_0.72fr] md:gap-20">
+          <div>
+            <h2 className="font-sans text-4xl font-normal uppercase leading-[0.92] text-foreground md:text-6xl">
+              Which path
+              <span className="block font-display text-[0.82em] normal-case italic">is right for you?</span>
+            </h2>
+            <div className="mt-9 grid max-w-lg grid-cols-3 gap-2" role="group" aria-label="Choose your property goal">
+              {(Object.entries(choices) as [Choice, (typeof choices)[Choice]][]).map(([key, choice]) => (
+                <Button
+                  key={key}
+                  type="button"
+                  variant={selected === key ? "default" : "outline"}
+                  aria-pressed={selected === key}
+                  onClick={() => setSelected(key)}
+                  className="h-11 rounded-none border-primary text-[11px] shadow-none"
+                >
+                  {choice.label}
+                </Button>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex min-h-40 flex-col justify-between border-t border-primary/35 pt-5 md:min-h-48 md:border-t-0 md:pt-1">
+            <p className="max-w-[230px] text-xs leading-relaxed text-muted-foreground md:ml-auto md:text-right">
+              Select your goal and discover an approach shaped around your plans.
+            </p>
+            <div key={selected} className="hero-reveal mt-8 md:mt-16">
+              <p className="font-display text-3xl italic text-foreground">{current.title}</p>
+              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">{current.description}</p>
+              <Link to={current.to} className="mt-5 inline-flex items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent">
+                Explore this path <ArrowDownRight aria-hidden="true" className="size-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-watermark section-watermark-inverted bg-[#5c4a3d] px-5 py-14 sm:px-10 md:px-16 md:py-28 lg:px-24">
+        <div className="relative z-10 grid gap-9 md:grid-cols-[0.8fr_1.2fr] md:gap-20 lg:gap-32">
+          <div>
+            <p className="text-[11px] font-medium uppercase text-white/65">Who are we</p>
+            <h2 className="mt-5 max-w-lg font-sans text-4xl font-normal uppercase leading-[0.92] text-white md:text-6xl">
+              Local insight,
+              <span className="block font-display text-[0.82em] normal-case italic">personal guidance</span>
+            </h2>
+          </div>
+          <div className="md:mt-1">
+            <div className="flex justify-center md:justify-end">
+              <img
+                src={teamImage}
+                alt="Lunaris advisory team reviewing property plans in a Dubai office"
+                width={400}
+                height={300}
+                loading="lazy"
+                className="aspect-[16/10] w-full max-w-[420px] object-cover object-center md:aspect-[4/3] md:max-w-[320px]"
+              />
+            </div>
+            <div className="mt-6 border-t border-white/20 pt-6 md:mt-8 md:pt-7">
+              <p className="max-w-2xl text-base leading-relaxed text-white md:text-2xl md:leading-relaxed">
+                Lunaris is an independent Dubai real estate advisory built around one clear idea: every property decision should begin with the person, not the listing.
+              </p>
+              <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/75 md:mt-8">
+                We combine close market knowledge with a considered, one-to-one approach—curating the right opportunities and guiding each step from first conversation to handover.
+              </p>
+              <Button asChild size="lg" className="mt-8 h-12 w-full rounded-none border border-white bg-transparent px-8 text-xs uppercase text-white shadow-none hover:bg-white hover:text-[#5c4a3d] md:w-auto">
+                <Link to="/team">
+                  Meet the team <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section-watermark border-t border-border px-5 py-14 sm:px-10 md:px-16 md:py-24 lg:px-24">
+        <div className="relative z-10 mb-7 flex items-end justify-between gap-6 md:mb-10">
+          <div>
+            <p className="text-[11px] font-medium uppercase text-muted-foreground">Our portfolio</p>
+            <h2 className="mt-4 font-display text-4xl italic text-foreground md:text-5xl">Selected projects</h2>
+          </div>
+          <Link to="/portfolio" className="hidden items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent sm:inline-flex">
+            View all <ArrowUpRight aria-hidden="true" className="size-4" />
+          </Link>
+        </div>
+
+        <div className="relative z-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
+          {featuredProjects.map((project, index) => (
+            <Link key={project.name} to="/portfolio" className="group block border border-border bg-card">
+              <div className="overflow-hidden">
+                <img
+                  src={project.image}
+                  alt={`Architectural view representing ${project.name}`}
+                  width={1200}
+                  height={900}
+                  loading="lazy"
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-[1.025]"
+                />
+              </div>
+              <div className="flex min-h-28 items-start justify-between gap-4 p-5">
+                <div>
+                  <p className="text-[10px] text-muted-foreground">0{index + 1}</p>
+                  <h3 className="mt-2 font-display text-2xl italic text-foreground">{project.name}</h3>
+                  <p className="mt-1 text-xs text-muted-foreground">{project.location}</p>
+                </div>
+                <ArrowUpRight aria-hidden="true" className="size-4 shrink-0 text-primary transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <Link to="/portfolio" className="relative z-10 mt-7 inline-flex items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent sm:hidden">
+          View all projects <ArrowUpRight aria-hidden="true" className="size-4" />
+        </Link>
+      </section>
+    </main>
+  );
+}
