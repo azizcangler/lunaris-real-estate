@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as InvestingRouteImport } from './routes/investing'
 import { Route as LivingRouteImport } from './routes/living'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
@@ -19,6 +20,11 @@ import { Route as TeamRouteImport } from './routes/team'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvestingRoute = InvestingRouteImport.update({
@@ -49,6 +55,7 @@ const TeamRoute = TeamRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/investing': typeof InvestingRoute
   '/living': typeof LivingRoute
   '/portfolio': typeof PortfolioRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/investing': typeof InvestingRoute
   '/living': typeof LivingRoute
   '/portfolio': typeof PortfolioRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/contact': typeof ContactRoute
   '/investing': typeof InvestingRoute
   '/living': typeof LivingRoute
   '/portfolio': typeof PortfolioRoute
@@ -75,12 +84,26 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/investing' | '/living' | '/portfolio' | '/renting' | '/team'
+    | '/'
+    | '/contact'
+    | '/investing'
+    | '/living'
+    | '/portfolio'
+    | '/renting'
+    | '/team'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/investing' | '/living' | '/portfolio' | '/renting' | '/team'
+  to:
+    | '/'
+    | '/contact'
+    | '/investing'
+    | '/living'
+    | '/portfolio'
+    | '/renting'
+    | '/team'
   id:
     | '__root__'
     | '/'
+    | '/contact'
     | '/investing'
     | '/living'
     | '/portfolio'
@@ -90,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ContactRoute: typeof ContactRoute
   InvestingRoute: typeof InvestingRoute
   LivingRoute: typeof LivingRoute
   PortfolioRoute: typeof PortfolioRoute
@@ -104,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/investing': {
@@ -146,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ContactRoute: ContactRoute,
   InvestingRoute: InvestingRoute,
   LivingRoute: LivingRoute,
   PortfolioRoute: PortfolioRoute,

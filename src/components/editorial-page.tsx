@@ -1,6 +1,8 @@
+import { Link } from "@tanstack/react-router";
 import { ArrowDownRight, Check } from "lucide-react";
 
 import heroImage from "@/assets/dubai-villas-hero-v2.jpg";
+import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 
 type EditorialPageProps = {
@@ -12,7 +14,14 @@ type EditorialPageProps = {
   checklist: string[];
 };
 
-export function EditorialPage({ eyebrow, title, italicTitle, introduction, points, checklist }: EditorialPageProps) {
+export function EditorialPage({
+  eyebrow,
+  title,
+  italicTitle,
+  introduction,
+  points,
+  checklist,
+}: EditorialPageProps) {
   return (
     <main className="min-h-screen bg-background">
       <SiteHeader />
@@ -28,7 +37,9 @@ export function EditorialPage({ eyebrow, title, italicTitle, introduction, point
             {points.map((point) => (
               <article key={point.number}>
                 <span className="font-display text-3xl italic text-accent">{point.number}</span>
-                <h2 className="mt-5 text-sm font-medium uppercase text-foreground">{point.title}</h2>
+                <h2 className="mt-5 text-sm font-medium uppercase text-foreground">
+                  {point.title}
+                </h2>
                 <p className="mt-3 text-xs leading-6 text-muted-foreground">{point.copy}</p>
               </article>
             ))}
@@ -37,21 +48,35 @@ export function EditorialPage({ eyebrow, title, italicTitle, introduction, point
       </section>
 
       <section className="grid bg-primary text-primary-foreground md:grid-cols-2">
-        <img src={heroImage} alt="Modern Dubai villa with an infinity pool overlooking the sea at golden hour" width={1920} height={1088} loading="lazy" className="h-full min-h-96 w-full object-cover" />
+        <img
+          src={heroImage}
+          alt="Modern Dubai villa with an infinity pool overlooking the sea at golden hour"
+          width={1920}
+          height={1088}
+          loading="lazy"
+          className="h-full min-h-96 w-full object-cover"
+        />
         <div className="flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16 lg:px-24">
           <p className="font-display text-4xl italic">A considered path, from brief to keys.</p>
           <ul className="mt-10 space-y-5">
             {checklist.map((item) => (
-              <li key={item} className="flex items-center gap-3 border-b border-primary-foreground/25 pb-5 text-sm">
+              <li
+                key={item}
+                className="flex items-center gap-3 border-b border-primary-foreground/25 pb-5 text-sm"
+              >
                 <Check className="size-4 shrink-0" aria-hidden="true" /> {item}
               </li>
             ))}
           </ul>
-          <span className="mt-10 inline-flex items-center gap-2 text-xs font-medium uppercase">
+          <Link
+            to="/contact"
+            className="mt-10 inline-flex items-center gap-2 text-xs font-medium uppercase hover:underline hover:underline-offset-8"
+          >
             Private consultation <ArrowDownRight className="size-4" aria-hidden="true" />
-          </span>
+          </Link>
         </div>
       </section>
+      <SiteFooter />
     </main>
   );
 }

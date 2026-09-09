@@ -78,10 +78,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Lunaris Dubai Real Estate" },
-      { name: "description", content: "Personal guidance across Dubai's most considered residential opportunities." },
+      {
+        name: "description",
+        content: "Personal guidance across Dubai's most considered residential opportunities.",
+      },
       { name: "author", content: "Lunaris Real Estate" },
       { property: "og:title", content: "Lunaris Dubai Real Estate" },
-      { property: "og:description", content: "Personal guidance across Dubai's most considered residential opportunities." },
+      {
+        property: "og:description",
+        content: "Personal guidance across Dubai's most considered residential opportunities.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
