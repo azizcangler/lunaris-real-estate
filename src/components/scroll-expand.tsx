@@ -311,6 +311,7 @@ export function ScrollExpand({
           src={src}
           alt={alt}
           fetchPriority="high"
+          decoding="async"
           style={{ ...initial.media, ...(coverSrc && enabled ? { visibility: "hidden" } : {}) }}
           className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center"
         />
