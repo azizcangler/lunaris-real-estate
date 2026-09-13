@@ -16,6 +16,7 @@ import { Route as LivingRouteImport } from './routes/living'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as RentingRouteImport } from './routes/renting'
 import { Route as TeamRouteImport } from './routes/team'
+import { Route as PortfolioSlugRouteImport } from './routes/portfolio_.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +53,11 @@ const TeamRoute = TeamRouteImport.update({
   path: '/team',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
+  id: '/portfolio_/$slug',
+  path: '/portfolio/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -61,6 +67,7 @@ export interface FileRoutesByFullPath {
   '/portfolio': typeof PortfolioRoute
   '/renting': typeof RentingRoute
   '/team': typeof TeamRoute
+  '/portfolio/$slug': typeof PortfolioSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -70,6 +77,7 @@ export interface FileRoutesByTo {
   '/portfolio': typeof PortfolioRoute
   '/renting': typeof RentingRoute
   '/team': typeof TeamRoute
+  '/portfolio/$slug': typeof PortfolioSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -80,6 +88,7 @@ export interface FileRoutesById {
   '/portfolio': typeof PortfolioRoute
   '/renting': typeof RentingRoute
   '/team': typeof TeamRoute
+  '/portfolio_/$slug': typeof PortfolioSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/renting'
     | '/team'
+    | '/portfolio/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/renting'
     | '/team'
+    | '/portfolio/$slug'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/portfolio'
     | '/renting'
     | '/team'
+    | '/portfolio_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -119,6 +131,7 @@ export interface RootRouteChildren {
   PortfolioRoute: typeof PortfolioRoute
   RentingRoute: typeof RentingRoute
   TeamRoute: typeof TeamRoute
+  PortfolioSlugRoute: typeof PortfolioSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TeamRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio_/$slug': {
+      id: '/portfolio_/$slug'
+      path: '/portfolio/$slug'
+      fullPath: '/portfolio/$slug'
+      preLoaderRoute: typeof PortfolioSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -183,6 +203,7 @@ const rootRouteChildren: RootRouteChildren = {
   PortfolioRoute: PortfolioRoute,
   RentingRoute: RentingRoute,
   TeamRoute: TeamRoute,
+  PortfolioSlugRoute: PortfolioSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

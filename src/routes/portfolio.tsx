@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowDownRight, ArrowUpRight, FileText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { ProjectLink } from "@/components/project-link";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { projects } from "@/data/projects";
@@ -51,16 +52,29 @@ function PortfolioPage() {
             id={project.slug}
             className="group flex flex-col border-b border-border md:odd:border-r"
           >
-            <div className="overflow-hidden bg-muted">
-              <img
-                src={project.image}
-                alt={`Architectural rendering of ${project.name} by ${project.developer}`}
-                width={900}
-                height={1100}
-                loading={index < 2 ? "eager" : "lazy"}
-                className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
-              />
-            </div>
+            {project.details ? (
+              <ProjectLink project={project} className="block overflow-hidden bg-muted">
+                <img
+                  src={project.image}
+                  alt={`Architectural rendering of ${project.name} by ${project.developer}`}
+                  width={900}
+                  height={1100}
+                  loading={index < 2 ? "eager" : "lazy"}
+                  className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                />
+              </ProjectLink>
+            ) : (
+              <div className="overflow-hidden bg-muted">
+                <img
+                  src={project.image}
+                  alt={`Architectural rendering of ${project.name} by ${project.developer}`}
+                  width={900}
+                  height={1100}
+                  loading={index < 2 ? "eager" : "lazy"}
+                  className="aspect-[4/3] w-full object-cover object-top transition-transform duration-700 group-hover:scale-[1.02]"
+                />
+              </div>
+            )}
             <div className="flex flex-1 flex-col px-6 py-7 sm:px-10">
               <div className="flex items-start justify-between gap-6">
                 <div>
@@ -68,7 +82,13 @@ function PortfolioPage() {
                     {String(index + 1).padStart(2, "0")} · {project.developer}
                   </p>
                   <h2 className="mt-2 font-display text-3xl italic text-foreground">
-                    {project.name}
+                    {project.details ? (
+                      <ProjectLink project={project} className="hover:text-primary">
+                        {project.name}
+                      </ProjectLink>
+                    ) : (
+                      project.name
+                    )}
                   </h2>
                   <p className="mt-2 text-xs text-muted-foreground">{project.location}</p>
                 </div>
@@ -80,14 +100,24 @@ function PortfolioPage() {
               <p className="mt-3 max-w-xl text-sm leading-7 text-muted-foreground">
                 {project.description}
               </p>
-              <a
-                href={project.brochure}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-auto inline-flex items-center gap-2 pt-6 text-xs font-medium uppercase text-primary hover:text-accent"
-              >
-                <FileText className="size-4" aria-hidden="true" /> Read the brochure (PDF)
-              </a>
+              <div className="mt-auto flex flex-wrap items-center gap-x-8 gap-y-3 pt-6">
+                {project.details ? (
+                  <ProjectLink
+                    project={project}
+                    className="inline-flex items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
+                  >
+                    Explore the project <ArrowUpRight className="size-4" aria-hidden="true" />
+                  </ProjectLink>
+                ) : null}
+                <a
+                  href={project.brochure}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
+                >
+                  <FileText className="size-4" aria-hidden="true" /> Read the brochure (PDF)
+                </a>
+              </div>
             </div>
           </article>
         ))}

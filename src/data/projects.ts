@@ -8,6 +8,67 @@ import dwtnImage from "@/assets/projects/dwtn-residences.jpg";
 import solisImage from "@/assets/projects/sobha-solis.jpg";
 import centralImage from "@/assets/projects/sobha-central.jpg";
 import siniyaImage from "@/assets/projects/sobha-siniya-island.jpg";
+import acresImage from "@/assets/projects/the-acres.jpg";
+import { theAcresDetails } from "@/data/project-details/the-acres";
+
+export type ProjectImage = { src: string; alt: string };
+export type ProjectFact = { label: string; value: string };
+export type ProjectStat = { value: string; label: string };
+
+export type ProjectDetails = {
+  /** Small line above the hero title, e.g. "Meraas · Dubailand". */
+  eyebrow: string;
+  /** Italic second line under the project name in the hero. */
+  titleItalic: string;
+  summary: string;
+  hero: ProjectImage;
+  /** Optional brochure cover shown in the small hero frame before it expands into `hero`. */
+  cover?: ProjectImage;
+  /** Stage colour behind the small hero frame, usually sampled from the cover. */
+  coverBackdrop?: string;
+  /** Optional texture image behind the small hero frame (e.g. the brochure's stone background). */
+  coverTexture?: ProjectImage;
+  /** Three or four short phrases shown as a strip under the hero. */
+  highlights: string[];
+  facts: ProjectFact[];
+  intro: { heading: string; headingItalic: string; copy: string[]; image: ProjectImage };
+  location: {
+    heading: string;
+    headingItalic: string;
+    copy: string[];
+    distances: ProjectFact[];
+    image: ProjectImage;
+    /** Inline SVG markup of a stylised area map; replaces `image` in the location section when present. */
+    mapSvg?: string;
+    mapCaption?: string;
+  };
+  masterplan: {
+    heading: string;
+    headingItalic: string;
+    copy: string[];
+    /** Six pillars shown one per pinned scroll step; each carries its own figures. */
+    pillars: { title: string; copy: string; stats?: ProjectStat[]; image?: ProjectImage }[];
+  };
+  keyFeatures: string[];
+  gardens?: {
+    heading: string;
+    headingItalic: string;
+    copy: string;
+    items: { name: string; copy: string; features: string[]; image: ProjectImage }[];
+  };
+  villas: {
+    heading: string;
+    headingItalic: string;
+    copy: string[];
+    image: ProjectImage;
+    /** One entry per villa type; every image becomes a card, the expanded card shows the type's copy. */
+    items: { name: string; bedrooms?: string; copy: string; images: ProjectImage[] }[];
+  };
+  /** Gallery cards; `title`/`description` show in the expanded view. */
+  gallery: (ProjectImage & { title?: string; description?: string })[];
+  materials?: string[];
+  developer: { name: string; copy: string; image: ProjectImage };
+};
 
 export type Project = {
   slug: string;
@@ -18,9 +79,23 @@ export type Project = {
   description: string;
   image: string;
   brochure: string;
+  /** Present only for projects that have a dedicated detail page at /portfolio/$slug. */
+  details?: ProjectDetails;
 };
 
 export const projects: Project[] = [
+  {
+    slug: "the-acres",
+    name: "The Acres",
+    developer: "Meraas",
+    location: "Dubailand · Dubai",
+    headline: "Step inside the outdoors",
+    description:
+      "A community of standalone 3 to 5-bedroom villas graced with serene gardens and swimmable lagoons, where meandering pathways connect every corner of an ever-flourishing, LEED Gold pre-certified neighbourhood.",
+    image: acresImage,
+    brochure: "/brochures/meraas-the-acres.pdf",
+    details: theAcresDetails,
+  },
   {
     slug: "mercedes-benz-places",
     name: "Mercedes-Benz Places",

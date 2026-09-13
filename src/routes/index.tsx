@@ -5,6 +5,7 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import heroAsset from "@/assets/dubai-coast-villa-hero.png.asset.json";
 import teamImage from "@/assets/team-dubai.jpg";
 import { Button } from "@/components/ui/button";
+import { ProjectLink } from "@/components/project-link";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { howItWorks, strengths, whoWeAre, whyChooseUs } from "@/data/company";
@@ -244,10 +245,9 @@ function Index() {
 
         <div className="relative z-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
           {featuredProjects.map((project, index) => (
-            <Link
+            <ProjectLink
               key={project.slug}
-              to="/portfolio"
-              hash={project.slug}
+              project={project}
               className="group block border border-border bg-card"
             >
               <div className="overflow-hidden">
@@ -275,7 +275,7 @@ function Index() {
                   className="size-4 shrink-0 text-primary transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
                 />
               </div>
-            </Link>
+            </ProjectLink>
           ))}
         </div>
 
