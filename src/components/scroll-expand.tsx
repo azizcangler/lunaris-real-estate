@@ -167,7 +167,9 @@ export function ScrollExpand({
         frame.style.height = `${h}px`;
         frame.style.left = `${Math.round((W - w) / 2)}px`;
         frame.style.top = `${Math.round((H - h) / 2)}px`;
+        // Tailwind's -translate-* utilities set the standalone `translate` property, so clear both.
         frame.style.transform = "none";
+        frame.style.translate = "0px 0px";
         frame.style.borderRadius = String(styles.frame.borderRadius);
       }
       stageRef.current?.style.setProperty("--sx-e", String(easeOut(progress)));
@@ -176,6 +178,12 @@ export function ScrollExpand({
       Object.assign(titleRef.current?.style ?? {}, styles.title);
       if (backdropSrc) Object.assign(backdropRef.current?.style ?? {}, styles.backdrop);
       if (coverSrc) {
+        // While the cover is fully opaque, hide the media underneath so its edge can never peek
+        // out as a hairline beside the cover.
+        if (mediaRef.current) {
+          mediaRef.current.style.visibility =
+            Number(styles.cover.opacity) >= 1 ? "hidden" : "visible";
+        }
         Object.assign(coverRef.current?.style ?? {}, styles.cover);
         Object.assign(textRef.current?.style ?? {}, styles.text);
         Object.assign(gradientRef.current?.style ?? {}, styles.text);
@@ -303,8 +311,8 @@ export function ScrollExpand({
           src={src}
           alt={alt}
           fetchPriority="high"
-          style={initial.media}
-          className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center will-change-transform"
+          style={{ ...initial.media, ...(coverSrc && enabled ? { visibility: "hidden" } : {}) }}
+          className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center"
         />
         {/* Bottom gradient keeps the title legible in the small frame; the uniform scrim fades in as it expands. */}
         {coverSrc ? (
