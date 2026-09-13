@@ -402,8 +402,13 @@ function ProjectPage() {
           const stage = details.coverBackdrop ?? "#42473a";
           return (
             <div
-              className={`flex h-full flex-col justify-center py-3 text-[#efe9dc] md:py-6 ${sectionPadding}`}
-              style={{ backgroundColor: stage }}
+              className={`flex h-full flex-col justify-center bg-cover bg-center py-3 text-[#efe9dc] md:py-6 ${sectionPadding}`}
+              style={{
+                backgroundColor: stage,
+                ...(details.coverTexture
+                  ? { backgroundImage: `url(${details.coverTexture.src})` }
+                  : {}),
+              }}
             >
               <div className="grid gap-5 md:grid-cols-[0.8fr_0.85fr_1.15fr] md:items-center md:gap-12 lg:gap-16">
                 {/* Heading + step navigator */}
@@ -562,15 +567,15 @@ function ProjectPage() {
               type="button"
               onClick={() => setOpenMasterplan(true)}
               aria-label="Open the full masterplan"
-              className="group relative block cursor-pointer overflow-hidden border border-border bg-[#e7e2d6] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="group relative block cursor-pointer overflow-hidden border border-border bg-[#dfdbcf] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <img
                 src={details.keyFeaturesMap.plan.src}
                 alt={details.keyFeaturesMap.plan.alt}
-                width={799}
-                height={868}
+                width={819}
+                height={875}
                 loading="lazy"
-                className="aspect-[799/868] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                className="aspect-[819/875] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
               />
               <span className="pointer-events-none absolute bottom-4 right-4 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-[11px] font-medium uppercase text-foreground backdrop-blur">
                 Tap to enlarge <ArrowUpRight className="size-3.5" aria-hidden="true" />

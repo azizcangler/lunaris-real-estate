@@ -154,8 +154,23 @@ export function ScrollExpand({
 
     const apply = (progress: number) => {
       const styles = stylesFor(progress, geometry, window.innerWidth < 640);
+      // Snap the frame to whole pixels: fractional widths plus a -50% translate leave hairline
+      // seams at the edges while the frame animates.
+      const stage = stageRef.current;
+      const frame = frameRef.current;
+      if (stage && frame) {
+        const W = stage.clientWidth;
+        const H = stage.clientHeight;
+        const w = Math.round((parseFloat(String(styles.frame.width)) / 100) * W);
+        const h = Math.round((parseFloat(String(styles.frame.height)) / 100) * H);
+        frame.style.width = `${w}px`;
+        frame.style.height = `${h}px`;
+        frame.style.left = `${Math.round((W - w) / 2)}px`;
+        frame.style.top = `${Math.round((H - h) / 2)}px`;
+        frame.style.transform = "none";
+        frame.style.borderRadius = String(styles.frame.borderRadius);
+      }
       stageRef.current?.style.setProperty("--sx-e", String(easeOut(progress)));
-      Object.assign(frameRef.current?.style ?? {}, styles.frame);
       Object.assign(mediaRef.current?.style ?? {}, styles.media);
       Object.assign(scrimRef.current?.style ?? {}, styles.scrim);
       Object.assign(titleRef.current?.style ?? {}, styles.title);
@@ -280,8 +295,8 @@ export function ScrollExpand({
       ) : null}
       <div
         ref={frameRef}
-        style={initial.frame}
-        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-muted will-change-[width,height,border-radius]"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden bg-muted [backface-visibility:hidden] [contain:layout_paint]"
+        style={{ ...initial.frame, backgroundColor: backdropColor ?? undefined }}
       >
         <img
           ref={mediaRef}
@@ -289,7 +304,7 @@ export function ScrollExpand({
           alt={alt}
           fetchPriority="high"
           style={initial.media}
-          className="absolute inset-0 h-full w-full object-cover object-center will-change-transform"
+          className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center will-change-transform"
         />
         {/* Bottom gradient keeps the title legible in the small frame; the uniform scrim fades in as it expands. */}
         {coverSrc ? (
@@ -299,7 +314,7 @@ export function ScrollExpand({
             alt={coverAlt}
             fetchPriority="high"
             style={initial.cover}
-            className="absolute inset-0 h-full w-full object-cover object-center"
+            className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center"
           />
         ) : null}
         <div
