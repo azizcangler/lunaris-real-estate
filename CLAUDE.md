@@ -3,8 +3,8 @@
 Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, sonra Cloudflare Workers'a taşındı.
 
 ## Canlı ortam
-- Site: https://lunaris.aguler2949.workers.dev (Cloudflare Workers, worker adı `lunaris`; `npx wrangler deploy --name lunaris`). Eski adres https://lunaris-real-estate.aguler2949.workers.dev Cloudflare tarafında donuk (aşağıya bak), worker silinip yeniden kurulsa bile eski içeriği sunuyor; `lunaris-real-estate` worker'ı da aynı kodla ayakta, adres kendiliğinden düzelirse kullanılabilir.
-  - 2026-09-13: ana workers.dev adresi Cloudflare tarafında 9 Eylül sürümüne (8584efdf) takılı kaldı; yeni deploy'lar API/`deployments list`te %100 görünse de ana adres eski içeriği sunuyor, workers.dev'i kapatmak, rollback+yeniden yayın ve worker'ı silip aynı adla yeniden kurmak bile etkilemedi (silinmişken bile 200 döndü). Sürüm önizleme adresleri (`<versiyon-öneki>-lunaris-real-estate.aguler2949.workers.dev`) yeni içeriği doğru sunuyor. Deploy sonrası `curl` ile ana adreste yeni asset hash'ini doğrula.
+- Site: https://lunaris-real-estate.aguler2949.workers.dev (Cloudflare Workers, worker adı `lunaris-real-estate`). Aynı kodla yedek bir `lunaris` worker'ı da var (https://lunaris.aguler2949.workers.dev); gereksizse `npx wrangler delete --name lunaris` ile kaldır.
+  - 2026-09-13: ana workers.dev adresi Cloudflare tarafında 9 Eylül sürümüne takılı kalmıştı (yeni deploy'lar, triggers deploy, workers.dev kapat/aç, rollback etkisizdi). Çözüm: worker'ı silip aynı adla yeniden deploy etmek; etkisi ~10 dakika gecikmeyle geldi. Deploy sonrası `curl` ile ana adreste yeni asset hash'ini doğrula; sürüm önizleme adresi `<versiyon-öneki>-lunaris-real-estate.aguler2949.workers.dev` hemen günceldir.
 - Repo: https://github.com/azizcangler/lunaris-real-estate (branch `main`)
 - Eski site (içerik kaynağı): https://lunarisrealestate.com — kopyası `../old-site-reference/` altında (repo dışı)
 
@@ -20,7 +20,7 @@ npm install
 npm run dev            # yerel geliştirme
 npm run build          # .output/ üretir (server + public)
 npx wrangler dev --port 8788   # build sonrası Workers ortamında önizleme
-npx wrangler deploy --name lunaris   # Cloudflare'a yayınla (wrangler zaten oturum açmış); eski adı da güncel tutmak için ayrıca: npx wrangler deploy
+npx wrangler deploy    # Cloudflare'a yayınla (wrangler zaten oturum açmış)
 npx tsc --noEmit -p tsconfig.json && npx eslint src
 git push origin main   # GitHub (keychain kimlik bilgisi mevcut)
 ```
