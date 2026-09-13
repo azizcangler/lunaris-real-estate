@@ -462,8 +462,7 @@ function ProjectPage() {
                 {/* Step image */}
                 <div
                   style={{
-                    transform: "translateY(calc(var(--step-exit, 0) * -10px))",
-                    opacity: "calc(1 - max(0, var(--step-exit, 0) - 0.82) / 0.18)",
+                    transform: "translateY(calc(var(--step-local, 0) * -6px))",
                   }}
                 >
                   <div className="relative aspect-[16/9] max-h-[22svh] w-full overflow-hidden md:aspect-[4/5] md:max-h-[70svh]">
@@ -476,7 +475,7 @@ function ProjectPage() {
                           width={1600}
                           height={1200}
                           loading={index === 0 ? "eager" : "lazy"}
-                          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+                          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
                             index === active ? "opacity-100" : "opacity-0"
                           }`}
                         />
@@ -489,13 +488,12 @@ function ProjectPage() {
                 <div>
                   <div
                     style={{
-                      transform: "translateY(calc(var(--step-exit, 0) * -18px))",
-                      opacity: "calc(1 - max(0, var(--step-exit, 0) - 0.82) / 0.18)",
+                      transform: "translateY(calc(var(--step-local, 0) * -10px))",
                     }}
                   >
                     <div
                       key={`text-${active}`}
-                      className="hero-reveal"
+                      className="step-reveal"
                       role="group"
                       aria-live="polite"
                     >

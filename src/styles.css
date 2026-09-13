@@ -188,5 +188,6 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .hero-reveal { animation: hero-reveal 900ms ease-out both; }
+  .step-reveal { animation: hero-reveal 220ms ease-out both; }
   .hero-reveal-delayed { animation-delay: 180ms; }
 }
