@@ -41,7 +41,11 @@ export function PinnedSteps({
       el.style.setProperty("--steps-progress", progress.toFixed(4));
       const next = Math.min(count - 1, Math.floor(progress * count));
       // 0–1 within the active step, so step content can drift/fade continuously with the wheel.
-      el.style.setProperty("--step-local", clamp(progress * count - next, 0, 1).toFixed(4));
+      const local = clamp(progress * count - next, 0, 1);
+      el.style.setProperty("--step-local", local.toFixed(4));
+      // Exit progress drives the fade-out between steps; the last step never fades, so the stage
+      // stays filled until the section unpins.
+      el.style.setProperty("--step-exit", (next < count - 1 ? local : 0).toFixed(4));
       setActive((prev) => (prev === next ? prev : next));
     };
     read();
@@ -75,6 +79,7 @@ export function PinnedSteps({
           "--pin-desktop": 1 + count * stepDistance,
           "--steps-progress": 0,
           "--step-local": 0,
+          "--step-exit": 0,
         } as React.CSSProperties
       }
     >

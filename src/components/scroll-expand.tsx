@@ -171,6 +171,15 @@ export function ScrollExpand({
         frame.style.transform = "none";
         frame.style.translate = "0px 0px";
         frame.style.borderRadius = String(styles.frame.borderRadius);
+        // Keep the images at full stage size and only shift them so the frame acts as a window:
+        // the browser then moves composited layers instead of re-rasterising 2400px bitmaps.
+        for (const img of [mediaRef.current, coverRef.current]) {
+          if (!img) continue;
+          img.style.width = `${W + 2}px`;
+          img.style.height = `${H + 2}px`;
+          img.style.left = `${-Math.round((W - w) / 2) - 1}px`;
+          img.style.top = `${-Math.round((H - h) / 2) - 1}px`;
+        }
       }
       stageRef.current?.style.setProperty("--sx-e", String(easeOut(progress)));
       Object.assign(mediaRef.current?.style ?? {}, styles.media);
@@ -323,7 +332,7 @@ export function ScrollExpand({
             alt={coverAlt}
             fetchPriority="high"
             style={initial.cover}
-            className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center"
+            className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center will-change-[transform,opacity]"
           />
         ) : null}
         <div

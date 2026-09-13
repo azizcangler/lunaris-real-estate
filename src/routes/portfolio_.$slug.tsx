@@ -247,7 +247,7 @@ function ProjectPage() {
         mediaZoom={1.35}
         scrollDistance={0.9}
         holdDistance={0.15}
-        smoothing={0.1}
+        smoothing={0.3}
         overlayScrim={0}
         enabled
         topSlot={
@@ -462,8 +462,8 @@ function ProjectPage() {
                 {/* Step image */}
                 <div
                   style={{
-                    transform: "translateY(calc(var(--step-local, 0) * -10px))",
-                    opacity: "calc(1 - max(0, var(--step-local, 0) - 0.82) / 0.18)",
+                    transform: "translateY(calc(var(--step-exit, 0) * -10px))",
+                    opacity: "calc(1 - max(0, var(--step-exit, 0) - 0.82) / 0.18)",
                   }}
                 >
                   <div key={`image-${active}`} className="hero-reveal">
@@ -484,8 +484,8 @@ function ProjectPage() {
                 <div>
                   <div
                     style={{
-                      transform: "translateY(calc(var(--step-local, 0) * -18px))",
-                      opacity: "calc(1 - max(0, var(--step-local, 0) - 0.82) / 0.18)",
+                      transform: "translateY(calc(var(--step-exit, 0) * -18px))",
+                      opacity: "calc(1 - max(0, var(--step-exit, 0) - 0.82) / 0.18)",
                     }}
                   >
                     <div
