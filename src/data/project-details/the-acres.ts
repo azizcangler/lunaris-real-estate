@@ -38,6 +38,8 @@ import villaFDriveway from "@/assets/projects/the-acres/villa-f-driveway.jpg";
 import villaFLiving from "@/assets/projects/the-acres/villa-f-living.jpg";
 import meraasLagoon from "@/assets/projects/the-acres/meraas-lagoon.jpg";
 import locationMapSvg from "@/assets/projects/the-acres/location-map.svg?raw";
+import masterplanPlan from "@/assets/projects/the-acres/masterplan-plan.jpg";
+import masterplanPoster from "@/assets/projects/the-acres/masterplan-poster.jpg";
 
 export const theAcresDetails: ProjectDetails = {
   eyebrow: "Meraas · Dubailand",
@@ -172,6 +174,29 @@ export const theAcresDetails: ProjectDetails = {
           { value: "54 m²", label: "of green space per resident" },
         ],
       },
+    ],
+  },
+  keyFeaturesMap: {
+    plan: {
+      src: masterplanPlan,
+      alt: "Illustrated masterplan of The Acres with numbered key features around the central lagoons",
+    },
+    poster: {
+      src: masterplanPoster,
+      alt: "The Acres key features poster: numbered masterplan, legend and illustrations of each amenity",
+    },
+    legend: [
+      "Entrance",
+      "Primary school",
+      "Mosque",
+      "Halo Park / community park",
+      "Clubhouse",
+      "Retail",
+      "Kindergarten",
+      "Lagoon clubhouse",
+      "Juice bar",
+      "Lagoon – lake",
+      "Community amenities",
     ],
   },
   keyFeatures: [

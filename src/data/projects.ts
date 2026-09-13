@@ -50,6 +50,8 @@ export type ProjectDetails = {
     pillars: { title: string; copy: string; stats?: ProjectStat[]; image?: ProjectImage }[];
   };
   keyFeatures: string[];
+  /** Illustrated masterplan: `plan` shown inline, `poster` (plan + legend + feature vignettes) in a dialog. */
+  keyFeaturesMap?: { plan: ProjectImage; poster: ProjectImage; legend: string[] };
   gardens?: {
     heading: string;
     headingItalic: string;

@@ -206,6 +206,7 @@ function VillaDialogBody({
 function ProjectPage() {
   const { slug } = Route.useLoaderData();
   const [openVilla, setOpenVilla] = useState<number | null>(null);
+  const [openMasterplan, setOpenMasterplan] = useState(false);
   const project = findDetailedProject(slug);
   if (!project) return null;
   const { details } = project;
@@ -506,7 +507,7 @@ function ProjectPage() {
         }}
       </PinnedSteps>
 
-      {/* Key features */}
+      {/* Key features: numbered legend beside the illustrated masterplan; the full poster opens in a dialog */}
       <section
         className={`section-watermark border-t border-border py-20 md:py-28 ${sectionPadding}`}
       >
@@ -519,19 +520,94 @@ function ProjectPage() {
                 within reach
               </span>
             </h2>
-          </div>
-          <ul className="grid gap-3 border-t border-primary/35 pt-8 sm:grid-cols-2">
-            {details.keyFeatures.map((item) => (
-              <li
-                key={item}
-                className="flex items-center gap-3 border-b border-border pb-3 text-sm text-foreground"
+            {details.keyFeaturesMap ? (
+              <ol className="mt-10 grid gap-y-3 border-t border-primary/35 pt-6 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
+                {details.keyFeaturesMap.legend.map((item, index) => (
+                  <li key={item} className="flex items-center gap-3 text-sm text-foreground">
+                    <span className="inline-flex size-7 shrink-0 items-center justify-center rounded-full border border-primary/50 font-display text-sm italic text-primary">
+                      {index + 1}
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <ul className="mt-10 grid gap-3 border-t border-primary/35 pt-8">
+                {details.keyFeatures.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-center gap-3 border-b border-border pb-3 text-sm text-foreground"
+                  >
+                    <Check className="size-4 shrink-0 text-accent" aria-hidden="true" /> {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {details.keyFeaturesMap ? (
+              <button
+                type="button"
+                onClick={() => setOpenMasterplan(true)}
+                className="mt-8 inline-flex cursor-pointer items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
               >
-                <Check className="size-4 shrink-0 text-accent" aria-hidden="true" /> {item}
-              </li>
-            ))}
-          </ul>
+                Open the full masterplan <ArrowUpRight className="size-4" aria-hidden="true" />
+              </button>
+            ) : null}
+          </div>
+          {details.keyFeaturesMap ? (
+            <button
+              type="button"
+              onClick={() => setOpenMasterplan(true)}
+              aria-label="Open the full masterplan"
+              className="group relative block cursor-pointer overflow-hidden border border-border bg-[#e7e2d6] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <img
+                src={details.keyFeaturesMap.plan.src}
+                alt={details.keyFeaturesMap.plan.alt}
+                width={799}
+                height={868}
+                loading="lazy"
+                className="aspect-[799/868] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+              />
+              <span className="pointer-events-none absolute bottom-4 right-4 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-[11px] font-medium uppercase text-foreground backdrop-blur">
+                Tap to enlarge <ArrowUpRight className="size-3.5" aria-hidden="true" />
+              </span>
+            </button>
+          ) : (
+            <ul className="grid gap-3 border-t border-primary/35 pt-8 sm:grid-cols-2">
+              {details.keyFeatures.map((item) => (
+                <li
+                  key={item}
+                  className="flex items-center gap-3 border-b border-border pb-3 text-sm text-foreground"
+                >
+                  <Check className="size-4 shrink-0 text-accent" aria-hidden="true" /> {item}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
+
+      {details.keyFeaturesMap ? (
+        <Dialog open={openMasterplan} onOpenChange={setOpenMasterplan}>
+          <DialogContent className="max-h-[94svh] w-[min(96vw,60rem)] max-w-none gap-0 overflow-y-auto rounded-none border-border bg-[#e7e2d6] p-0 sm:rounded-none">
+            <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border bg-[#e7e2d6]/95 px-5 py-3 pr-14 backdrop-blur">
+              <DialogTitle className="font-sans text-sm font-medium uppercase tracking-normal text-foreground">
+                The masterplan · key features
+              </DialogTitle>
+              <DialogDescription className="hidden text-[11px] uppercase text-muted-foreground sm:block">
+                Scroll to explore the plan and each feature
+              </DialogDescription>
+            </div>
+            <img
+              src={details.keyFeaturesMap.poster.src}
+              alt={details.keyFeaturesMap.poster.alt}
+              width={1024}
+              height={1536}
+              className="block w-full"
+            />
+          </DialogContent>
+        </Dialog>
+      ) : null}
 
       {/* Gardens */}
       {details.gardens ? (
