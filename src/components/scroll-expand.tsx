@@ -173,7 +173,7 @@ export function ScrollExpand({
         frame.style.borderRadius = String(styles.frame.borderRadius);
         // Keep the images at full stage size and only shift them so the frame acts as a window:
         // the browser then moves composited layers instead of re-rasterising 2400px bitmaps.
-        for (const img of [mediaRef.current, coverRef.current]) {
+        for (const img of [mediaRef.current]) {
           if (!img) continue;
           img.style.width = `${W + 2}px`;
           img.style.height = `${H + 2}px`;

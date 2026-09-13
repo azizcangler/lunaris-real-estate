@@ -466,17 +466,22 @@ function ProjectPage() {
                     opacity: "calc(1 - max(0, var(--step-exit, 0) - 0.82) / 0.18)",
                   }}
                 >
-                  <div key={`image-${active}`} className="hero-reveal">
-                    {pillar?.image ? (
-                      <img
-                        src={pillar.image.src}
-                        alt={pillar.image.alt}
-                        width={1600}
-                        height={1200}
-                        loading="lazy"
-                        className="aspect-[16/9] max-h-[22svh] w-full object-cover md:aspect-[4/5] md:max-h-[70svh]"
-                      />
-                    ) : null}
+                  <div className="relative aspect-[16/9] max-h-[22svh] w-full overflow-hidden md:aspect-[4/5] md:max-h-[70svh]">
+                    {pillars.map((item, index) =>
+                      item.image ? (
+                        <img
+                          key={item.image.src}
+                          src={item.image.src}
+                          alt={item.image.alt}
+                          width={1600}
+                          height={1200}
+                          loading={index === 0 ? "eager" : "lazy"}
+                          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+                            index === active ? "opacity-100" : "opacity-0"
+                          }`}
+                        />
+                      ) : null,
+                    )}
                   </div>
                 </div>
 
