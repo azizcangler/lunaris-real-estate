@@ -79,7 +79,7 @@ function VillaCell({ villa, index, onOpen }: { villa: Villa; index: number; onOp
       type="button"
       onClick={onOpen}
       aria-label={`Open ${villa.name}${villa.bedrooms ? `, ${villa.bedrooms}` : ""}`}
-      className="group relative block h-[46svh] w-full cursor-pointer overflow-hidden border-b border-border bg-muted text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring md:h-[60vh]"
+      className="group relative block h-[38svh] w-full cursor-pointer overflow-hidden border-b border-border bg-muted text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring md:h-[60vh]"
     >
       {cover ? (
         <img
@@ -234,8 +234,8 @@ function ProjectPage() {
         startRadius={24}
         endRadius={0}
         mediaZoom={1.35}
-        scrollDistance={1.2}
-        holdDistance={0.35}
+        scrollDistance={0.9}
+        holdDistance={0.15}
         smoothing={0.1}
         overlayScrim={0}
         enabled
@@ -391,8 +391,12 @@ function ProjectPage() {
       </section>
 
       {/* Masterplan: pinned stage, scrolling steps through the six pillars one at a time */}
-      <PinnedSteps count={details.masterplan.pillars.length} stepDistance={0.7}>
-        {({ active, progress, goTo }) => {
+      <PinnedSteps
+        count={details.masterplan.pillars.length}
+        stepDistance={0.5}
+        mobileStepDistance={0.4}
+      >
+        {({ active, goTo }) => {
           const pillars = details.masterplan.pillars;
           const pillar = pillars[active];
           const stage = details.coverBackdrop ?? "#42473a";
@@ -496,8 +500,8 @@ function ProjectPage() {
                   </div>
                   <div className="mt-3 h-px w-full bg-[#efe9dc]/15 md:mt-12" aria-hidden="true">
                     <div
-                      className="h-px bg-[#efe9dc]/70 transition-[width] duration-150 ease-out"
-                      style={{ width: `${Math.round(progress * 100)}%` }}
+                      className="h-px origin-left bg-[#efe9dc]/70"
+                      style={{ transform: "scaleX(var(--steps-progress, 0))" }}
                     />
                   </div>
                 </div>
@@ -700,7 +704,7 @@ function ProjectPage() {
           ))}
           <Link
             to="/contact"
-            className="group relative block h-[46svh] overflow-hidden border-b border-border bg-muted md:h-[60vh]"
+            className="group relative block h-[38svh] overflow-hidden border-b border-border bg-muted md:h-[60vh]"
           >
             <img
               src={details.villas.image.src}
