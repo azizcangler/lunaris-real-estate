@@ -212,7 +212,18 @@ function ProjectPage() {
   const { details } = project;
 
   return (
-    <main className="min-h-screen bg-background">
+    <main
+      className="min-h-screen bg-background"
+      style={
+        {
+          // This page's primary colour follows the brochure green used in the hero and masterplan.
+          "--primary": "oklch(0.37 0.022 125)",
+          "--primary-foreground": "#efe9dc",
+          "--accent": "oklch(0.52 0.03 125)",
+          "--ring": "oklch(0.37 0.022 125)",
+        } as React.CSSProperties
+      }
+    >
       {/* Overlay header: the hero stage must start at the very top so it pins from the first scrolled pixel. */}
       <SiteHeader overlay />
 
@@ -449,59 +460,73 @@ function ProjectPage() {
                 </div>
 
                 {/* Step image */}
-                <div key={`image-${active}`} className="hero-reveal">
-                  {pillar?.image ? (
-                    <img
-                      src={pillar.image.src}
-                      alt={pillar.image.alt}
-                      width={1600}
-                      height={1200}
-                      loading="lazy"
-                      className="aspect-[16/9] max-h-[22svh] w-full object-cover md:aspect-[4/5] md:max-h-[70svh]"
-                    />
-                  ) : null}
+                <div
+                  style={{
+                    transform: "translateY(calc(var(--step-local, 0) * -10px))",
+                    opacity: "calc(1 - max(0, var(--step-local, 0) - 0.82) / 0.18)",
+                  }}
+                >
+                  <div key={`image-${active}`} className="hero-reveal">
+                    {pillar?.image ? (
+                      <img
+                        src={pillar.image.src}
+                        alt={pillar.image.alt}
+                        width={1600}
+                        height={1200}
+                        loading="lazy"
+                        className="aspect-[16/9] max-h-[22svh] w-full object-cover md:aspect-[4/5] md:max-h-[70svh]"
+                      />
+                    ) : null}
+                  </div>
                 </div>
 
                 {/* Step text */}
                 <div>
                   <div
-                    key={`text-${active}`}
-                    className="hero-reveal"
-                    role="group"
-                    aria-live="polite"
+                    style={{
+                      transform: "translateY(calc(var(--step-local, 0) * -18px))",
+                      opacity: "calc(1 - max(0, var(--step-local, 0) - 0.82) / 0.18)",
+                    }}
                   >
-                    <div className="flex items-baseline gap-3">
-                      <span className="font-display text-4xl italic leading-none md:text-8xl">
-                        {String(active + 1).padStart(2, "0")}
-                      </span>
-                      <span className="text-[11px] font-medium uppercase text-[#efe9dc]/50">
-                        / {String(pillars.length).padStart(2, "0")}
-                      </span>
+                    <div
+                      key={`text-${active}`}
+                      className="hero-reveal"
+                      role="group"
+                      aria-live="polite"
+                    >
+                      <div className="flex items-baseline gap-3">
+                        <span className="font-display text-4xl italic leading-none md:text-8xl">
+                          {String(active + 1).padStart(2, "0")}
+                        </span>
+                        <span className="text-[11px] font-medium uppercase text-[#efe9dc]/50">
+                          / {String(pillars.length).padStart(2, "0")}
+                        </span>
+                      </div>
+                      <h3 className="mt-3 font-sans text-xl font-normal uppercase leading-[0.95] md:mt-6 md:text-4xl">
+                        {pillar?.title}
+                      </h3>
+                      <p className="mt-2 line-clamp-3 max-w-xl text-[13px] leading-5 text-[#efe9dc]/80 md:mt-5 md:line-clamp-none md:text-base md:leading-8">
+                        {pillar?.copy}
+                      </p>
+                      {pillar?.stats?.length ? (
+                        <dl
+                          className={`mt-3 grid gap-x-4 gap-y-3 border-t border-[#efe9dc]/20 pt-3 md:mt-10 md:gap-x-6 md:gap-y-6 md:pt-6 ${
+                            pillar.stats.length >= 3 ? "grid-cols-3" : "grid-cols-2 lg:grid-cols-3"
+                          }`}
+                        >
+                          {pillar.stats.map((stat) => (
+                            <div key={stat.label}>
+                              <dd className="font-display text-2xl italic md:text-5xl">
+                                {stat.value}
+                              </dd>
+                              <dt className="mt-1 text-[11px] leading-4 text-[#efe9dc]/70 md:mt-2 md:text-xs md:leading-5">
+                                {stat.label}
+                              </dt>
+                            </div>
+                          ))}
+                        </dl>
+                      ) : null}
                     </div>
-                    <h3 className="mt-3 font-sans text-xl font-normal uppercase leading-[0.95] md:mt-6 md:text-4xl">
-                      {pillar?.title}
-                    </h3>
-                    <p className="mt-2 line-clamp-3 max-w-xl text-[13px] leading-5 text-[#efe9dc]/80 md:mt-5 md:line-clamp-none md:text-base md:leading-8">
-                      {pillar?.copy}
-                    </p>
-                    {pillar?.stats?.length ? (
-                      <dl
-                        className={`mt-3 grid gap-x-4 gap-y-3 border-t border-[#efe9dc]/20 pt-3 md:mt-10 md:gap-x-6 md:gap-y-6 md:pt-6 ${
-                          pillar.stats.length >= 3 ? "grid-cols-3" : "grid-cols-2 lg:grid-cols-3"
-                        }`}
-                      >
-                        {pillar.stats.map((stat) => (
-                          <div key={stat.label}>
-                            <dd className="font-display text-2xl italic md:text-5xl">
-                              {stat.value}
-                            </dd>
-                            <dt className="mt-1 text-[11px] leading-4 text-[#efe9dc]/70 md:mt-2 md:text-xs md:leading-5">
-                              {stat.label}
-                            </dt>
-                          </div>
-                        ))}
-                      </dl>
-                    ) : null}
                   </div>
                   <div className="mt-3 h-px w-full bg-[#efe9dc]/15 md:mt-12" aria-hidden="true">
                     <div
@@ -832,7 +857,13 @@ function ProjectPage() {
       </section>
 
       {/* CTA */}
-      <section className={`bg-primary py-20 text-primary-foreground md:py-28 ${sectionPadding}`}>
+      <section
+        className={`bg-primary bg-cover bg-center py-20 text-primary-foreground md:py-28 ${sectionPadding}`}
+        style={{
+          backgroundColor: details.coverBackdrop ?? undefined,
+          ...(details.coverTexture ? { backgroundImage: `url(${details.coverTexture.src})` } : {}),
+        }}
+      >
         <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-end md:gap-20">
           <div>
             <Eyebrow tone="light">Next step</Eyebrow>
