@@ -43,8 +43,8 @@ function Index() {
       <section className="border-b border-border px-5 py-10 sm:px-10 md:px-16 md:py-20 lg:px-24 lg:py-24">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div className="hero-reveal flex min-w-0 flex-col">
-            <p className="inline-flex w-fit items-center gap-2 rounded-full bg-muted px-3.5 py-1.5 text-xs font-medium text-foreground">
-              <span aria-hidden="true" className="size-1.5 rounded-full bg-foreground" />
+            <p className="inline-flex w-fit items-center gap-3 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+              <span aria-hidden="true" className="h-px w-8 bg-primary" />
               Popular projects in Dubai
             </p>
             <h1 className="mt-8 max-w-[640px] font-sans text-[clamp(2.75rem,5.4vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.02em] text-foreground">
