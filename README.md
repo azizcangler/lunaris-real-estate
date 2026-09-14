@@ -8,7 +8,7 @@ Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, Clou
 
 | | |
 |---|---|
-| Site | https://lunaris-real-estate.aguler2949.workers.dev (henüz 13 Eylül sürümünde; Athlon ve Damac Islands sayfaları deploy edilmedi) |
+| Site | https://lunaris-real-estate.aguler2949.workers.dev (14 Eylül sürümü, üç detay sayfası canlı) |
 | Yedek adres | https://lunaris.aguler2949.workers.dev (aynı kod, geçici) |
 | Repo | https://github.com/azizcangler/lunaris-real-estate (`main`) |
 | Eski site | https://lunarisrealestate.com (içerik kaynağı) |
@@ -92,15 +92,14 @@ TanStack Start 1.168, React 19, Tailwind 4, shadcn/ui. Build Vite 8 + Nitro (clo
 - **Hosting olayı (13 Eylül):** Ana workers.dev adresi Cloudflare tarafında eski sürümde takılı kaldı; yeni deploy'lar, tetikleyici yenileme, workers.dev kapat/aç ve rollback etkisizdi. Worker silinip aynı adla yeniden kurulunca yaklaşık 10 dakika gecikmeyle düzeldi. Bu sırada açılan `lunaris` yedek worker'ı hâlâ duruyor; gerekirse `npx wrangler delete --name lunaris` ile kaldırılır. Deploy sonrası ana adreste yeni asset hash'ini `curl` ile doğrulamak iyi bir alışkanlık.
 - **Tarayıcı:** Brave'de kaydırma farklı hissedildiği bildirildi; Chrome ve Safari'de sorun yok. Shields kapalıyken test edilmesi bekleniyor.
 - **Öne çıkanlar:** Ana sayfadaki üçlü The Acres, Athlon, Damac Islands; portföy sayfasında da bu üçü başta. Sıralama `projects.ts` içinden değiştirilir.
-- **Durum:** Athlon ve Damac Islands sayfaları ile 14 Eylül düzeltmeleri `c036934` ile commit edilip GitHub'a push edildi; henüz deploy edilmedi (canlı site 13 Eylül sürümünde).
+- **Durum:** Athlon ve Damac Islands sayfaları ile 14 Eylül düzeltmeleri `c036934` ile commit edilip push edildi ve aynı gün deploy edildi (sürüm `3becbb07`); ana adreste yeni asset hash'leri ve hero düzeltmesi `curl` ile doğrulandı.
 
 ## Sırada ne var
 
-1. Üretim önizlemesinde (8789) kare hızını doğrulamak; takılma sürerse bölüm bazında bakmak ve görsel boyutlarını düşürmek.
-2. `npx wrangler deploy` ile yayınlamak; deploy sonrası ana adreste yeni asset hash'ini doğrulamak.
-3. İçerik doğrulama: Damac "Seychelles 2" bilgisi, Athlon mesafeleri.
-4. Villa A/E/F (The Acres) için geliştiriciden yatak odası ve açıklama bilgisi.
-5. Özel alan adı bağlanması (workers.dev adresinin yerini alacak).
+1. Canlı sitede kare hızını doğrulamak; takılma sürerse bölüm bazında bakmak ve görsel boyutlarını düşürmek.
+2. İçerik doğrulama: Damac "Seychelles 2" bilgisi, Athlon mesafeleri.
+3. Villa A/E/F (The Acres) için geliştiriciden yatak odası ve açıklama bilgisi.
+4. Özel alan adı bağlanması (workers.dev adresinin yerini alacak).
 
 ## Komutlar
 
