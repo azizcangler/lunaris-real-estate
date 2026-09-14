@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type React from "react";
 import type { EmblaCarouselType, EmblaEventType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 
@@ -25,7 +26,16 @@ export function ProjectCoverflow({
   projects: Project[];
   className?: string;
 }) {
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center", duration: 28 });
+  // Embla's own drag is off: a swipe goes the way the finger points (right → the card on the
+  // right), which is the opposite of scroll-style dragging.
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "center",
+    duration: 28,
+    watchDrag: false,
+  });
+  const drag = useRef<{ x: number; y: number } | null>(null);
+  const swiped = useRef(false);
   const [selected, setSelected] = useState(0);
   // Slide whose brochure cover is currently shown over the render (top projects only).
   const [coverOn, setCoverOn] = useState<number | null>(null);
@@ -129,6 +139,34 @@ export function ProjectCoverflow({
     return () => window.clearInterval(id);
   }, [emblaApi]);
 
+  const onPointerDown = (event: React.PointerEvent) => {
+    if (event.button !== 0) return;
+    drag.current = { x: event.clientX, y: event.clientY };
+    swiped.current = false;
+  };
+  const onPointerUp = (event: React.PointerEvent) => {
+    if (!drag.current) return;
+    const dx = event.clientX - drag.current.x;
+    const dy = event.clientY - drag.current.y;
+    drag.current = null;
+    if (Math.abs(dx) < 24 || Math.abs(dx) < Math.abs(dy)) return;
+    swiped.current = true;
+    if (dx > 0) emblaApi?.scrollNext();
+    else emblaApi?.scrollPrev();
+  };
+  const onCardClick = (event: React.MouseEvent, index: number) => {
+    // A swipe that ends on a card must not open it; a click on a side card centres it instead.
+    if (swiped.current) {
+      event.preventDefault();
+      swiped.current = false;
+      return;
+    }
+    if (index !== selected) {
+      event.preventDefault();
+      emblaApi?.scrollTo(index);
+    }
+  };
+
   return (
     <div
       className={className}
@@ -137,14 +175,26 @@ export function ProjectCoverflow({
       onFocus={() => (paused.current = true)}
       onBlur={() => (paused.current = false)}
     >
-      <div ref={emblaRef} className="overflow-hidden px-1 py-8">
+      <div
+        ref={emblaRef}
+        className="cursor-grab overflow-hidden px-1 py-8 select-none active:cursor-grabbing"
+        onPointerDown={onPointerDown}
+        onPointerUp={onPointerUp}
+        onPointerCancel={() => (drag.current = null)}
+      >
         <div className="flex touch-pan-y">
           {projects.map((project, index) => (
             <div
               key={project.slug}
               className="relative min-w-0 flex-[0_0_62%] px-1.5 sm:flex-[0_0_44%] lg:flex-[0_0_31%]"
             >
-              <div data-card className="relative will-change-transform">
+              <div
+                data-card
+                className="relative will-change-transform"
+                onClickCapture={(event) => onCardClick(event, index)}
+                // Links are natively draggable; a native drag would cancel the pointer swipe.
+                onDragStart={(event) => event.preventDefault()}
+              >
                 <ProjectLink
                   project={project}
                   className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-muted shadow-[0_18px_50px_-24px_rgba(20,22,16,0.45)]"
@@ -155,6 +205,7 @@ export function ProjectCoverflow({
                     width={1200}
                     height={900}
                     loading={index < 3 ? "eager" : "lazy"}
+                    draggable={false}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
                   {project.details?.cover ? (
