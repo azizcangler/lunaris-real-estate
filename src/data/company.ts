@@ -9,9 +9,9 @@ export const company = {
   phoneTel: "+971526985565",
   whatsapp: "https://wa.me/971526985565",
   address: {
-    building: "Rigga Business Centre",
-    area: "Al Muraqqabat",
-    office: "Office 124-255",
+    building: "Iris Bay Tower",
+    area: "Business Bay",
+    office: "Office 1005-06",
     city: "Dubai, United Arab Emirates",
   },
   social: {

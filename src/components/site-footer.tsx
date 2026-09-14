@@ -86,9 +86,9 @@ export function SiteFooter() {
         <div>
           <p className="text-[11px] font-medium uppercase text-muted-foreground">Visit us</p>
           <address className="mt-5 text-sm not-italic leading-7 text-foreground">
-            {company.address.building}
+            {company.address.building}, {company.address.area}
             <br />
-            {company.address.area}, {company.address.office}
+            {company.address.office}
             <br />
             {company.address.city}
           </address>

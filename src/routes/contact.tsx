@@ -84,9 +84,9 @@ function ContactPage() {
             <div className="flex gap-4">
               <MapPin className="mt-1 size-4 shrink-0 text-accent" aria-hidden="true" />
               <address className="text-sm not-italic leading-7 text-foreground">
-                {company.address.building}
+                {company.address.building}, {company.address.area}
                 <br />
-                {company.address.area}, {company.address.office}
+                {company.address.office}
                 <br />
                 {company.address.city}
               </address>
