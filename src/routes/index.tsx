@@ -70,8 +70,8 @@ function Index() {
     <main className="min-h-screen overflow-x-hidden bg-background">
       <SiteHeader />
       {/* Hero: split layout with the popular projects in a coverflow carousel (shadcnblocks hero231) */}
-      <section className="border-b border-border px-5 py-14 sm:px-10 md:px-16 md:py-20 lg:px-24 lg:py-24">
-        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+      <section className="border-b border-border px-5 py-10 sm:px-10 md:px-16 md:py-20 lg:px-24 lg:py-24">
+        <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div className="hero-reveal flex min-w-0 flex-col">
             <p className="inline-flex w-fit items-center gap-2 rounded-full bg-muted px-3.5 py-1.5 text-xs font-medium text-foreground">
               <span aria-hidden="true" className="size-1.5 rounded-full bg-foreground" />
@@ -109,7 +109,8 @@ function Index() {
             </div>
           </div>
 
-          <div className="hero-reveal hero-reveal-delayed min-w-0">
+          {/* Mobile: images first, copy underneath; desktop: copy left, images right. */}
+          <div className="hero-reveal hero-reveal-delayed order-first min-w-0 lg:order-none">
             <DeveloperBelt names={developers} />
             <ProjectCoverflow projects={popularProjects} className="mt-6" />
           </div>
