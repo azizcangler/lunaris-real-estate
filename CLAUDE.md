@@ -1,5 +1,7 @@
 # Lunaris Real Estate — proje el kitabı
 
+Genel durum raporu için önce [`README.md`](./README.md) dosyasını okuyun; bu dosya teknik ayrıntı ve çalışma kurallarıdır.
+
 Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, sonra Cloudflare Workers'a taşındı.
 
 ## Canlı ortam
