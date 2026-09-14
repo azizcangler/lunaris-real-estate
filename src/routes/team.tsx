@@ -14,7 +14,7 @@ export const Route = createFileRoute("/team")({
       {
         name: "description",
         content:
-          "Meet the founders of Lunaris Real Estate and learn how we redefine the property journey in Dubai through innovation, integrity and personalized service.",
+          "Meet the founder of Lunaris Real Estate and learn how we redefine the property journey in Dubai through innovation, integrity and personalized service.",
       },
       { property: "og:title", content: "About Us | Lunaris" },
       { property: "og:description", content: "More than property. It's a promise." },
@@ -108,15 +108,15 @@ function Team() {
       <section className="section-watermark border-t border-border px-6 py-20 sm:px-10 md:px-16 md:py-28 lg:px-24">
         <div className="relative z-10">
           <p className="text-[11px] font-medium uppercase text-muted-foreground">
-            About our founders
+            About our founder
           </p>
           <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
-            The people
+            The person
             <span className="block font-display text-[0.82em] normal-case italic">
               behind Lunaris
             </span>
           </h2>
-          <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:max-w-4xl">
+          <div className="mt-12 grid gap-8 sm:max-w-sm">
             {founders.map((person) => (
               <article key={person.name} className="border border-border bg-card">
                 <img

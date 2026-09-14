@@ -1,5 +1,4 @@
 import erdiEmecanImage from "@/assets/team/erdi-emecan.jpg";
-import halilUtanImage from "@/assets/team/halil-utan.jpg";
 
 export const company = {
   name: "Lunaris Real Estate",
@@ -20,10 +19,7 @@ export const company = {
   },
 } as const;
 
-export const founders = [
-  { name: "Erdi Emecan", role: "Owner", image: erdiEmecanImage },
-  { name: "Halil Utan", role: "Owner", image: halilUtanImage },
-] as const;
+export const founders = [{ name: "Erdi Emecan", role: "Owner", image: erdiEmecanImage }] as const;
 
 export const whoWeAre = {
   intro:
