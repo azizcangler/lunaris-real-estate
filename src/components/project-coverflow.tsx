@@ -139,20 +139,45 @@ export function ProjectCoverflow({
     return () => window.clearInterval(id);
   }, [emblaApi]);
 
-  const onPointerDown = (event: React.PointerEvent) => {
-    if (event.button !== 0) return;
-    drag.current = { x: event.clientX, y: event.clientY };
-    swiped.current = false;
-  };
-  const onPointerUp = (event: React.PointerEvent) => {
-    if (!drag.current) return;
-    const dx = event.clientX - drag.current.x;
-    const dy = event.clientY - drag.current.y;
-    drag.current = null;
+  // Decide the swipe from its horizontal travel: right → the card on the right, left → the one on
+  // the left. Diagonal or tiny moves are ignored so vertical page scrolling keeps working.
+  const finishSwipe = (dx: number, dy: number) => {
     if (Math.abs(dx) < 24 || Math.abs(dx) < Math.abs(dy)) return;
     swiped.current = true;
     if (dx > 0) emblaApi?.scrollNext();
     else emblaApi?.scrollPrev();
+  };
+  // Mouse: pointer events. Touch is handled separately below because browsers may cancel the
+  // pointer stream (no pointerup) once they start a scroll gesture.
+  const onPointerDown = (event: React.PointerEvent) => {
+    if (event.pointerType === "touch" || event.button !== 0) return;
+    drag.current = { x: event.clientX, y: event.clientY };
+    swiped.current = false;
+  };
+  const onPointerUp = (event: React.PointerEvent) => {
+    if (event.pointerType === "touch" || !drag.current) return;
+    const { x, y } = drag.current;
+    drag.current = null;
+    finishSwipe(event.clientX - x, event.clientY - y);
+  };
+  const touch = useRef<{ x: number; y: number; lastX: number; lastY: number } | null>(null);
+  const onTouchStart = (event: React.TouchEvent) => {
+    const t = event.touches[0];
+    if (!t) return;
+    touch.current = { x: t.clientX, y: t.clientY, lastX: t.clientX, lastY: t.clientY };
+    swiped.current = false;
+  };
+  const onTouchMove = (event: React.TouchEvent) => {
+    const t = event.touches[0];
+    if (!t || !touch.current) return;
+    touch.current.lastX = t.clientX;
+    touch.current.lastY = t.clientY;
+  };
+  const onTouchEnd = () => {
+    if (!touch.current) return;
+    const { x, y, lastX, lastY } = touch.current;
+    touch.current = null;
+    finishSwipe(lastX - x, lastY - y);
   };
   const onCardClick = (event: React.MouseEvent, index: number) => {
     // A swipe that ends on a card must not open it; a click on a side card centres it instead.
@@ -181,6 +206,10 @@ export function ProjectCoverflow({
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerCancel={() => (drag.current = null)}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchEnd}
       >
         <div className="flex touch-pan-y">
           {projects.map((project, index) => (
