@@ -101,14 +101,14 @@ function Index() {
             </h2>
           </div>
           <div className="md:mt-1">
-            <div className="flex justify-center md:justify-end">
+            <div className="flex justify-center md:justify-start">
               <img
                 src={teamImage}
                 alt="Lunaris advisory team reviewing property plans in a Dubai office"
-                width={400}
-                height={300}
+                width={1600}
+                height={1000}
                 loading="lazy"
-                className="aspect-[16/10] w-full max-w-[420px] object-cover object-center md:aspect-[4/3] md:max-w-[320px]"
+                className="aspect-[16/10] w-full max-w-[420px] object-cover object-center md:max-w-none"
               />
             </div>
             <div className="mt-6 border-t border-white/20 pt-6 md:mt-8 md:pt-7">
