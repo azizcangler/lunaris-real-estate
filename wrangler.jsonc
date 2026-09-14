@@ -2,5 +2,14 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "lunaris-real-estate",
   "compatibility_date": "2026-09-07",
-  "compatibility_flags": ["nodejs_compat"]
+  "compatibility_flags": ["nodejs_compat"],
+  // Keep the workers.dev address and version preview URLs alongside the custom domains.
+  "workers_dev": true,
+  "preview_urls": true,
+  // Custom domains: Cloudflare creates the DNS records and certificates on deploy.
+  // The zone must be active on this account first (lunarisrealestate.com moved from GoDaddy DNS on 14 Sep 2026).
+  "routes": [
+    { "pattern": "lunarisrealestate.com", "custom_domain": true },
+    { "pattern": "www.lunarisrealestate.com", "custom_domain": true }
+  ]
 }

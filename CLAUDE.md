@@ -5,7 +5,7 @@ Genel durum raporu için önce [`README.md`](./README.md) dosyasını okuyun; bu
 Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, sonra Cloudflare Workers'a taşındı.
 
 ## Canlı ortam
-- Site: https://lunaris-real-estate.aguler2949.workers.dev (Cloudflare Workers, worker adı `lunaris-real-estate`). Aynı kodla yedek bir `lunaris` worker'ı da var (https://lunaris.aguler2949.workers.dev); gereksizse `npx wrangler delete --name lunaris` ile kaldır.
+- Site: https://lunarisrealestate.com ve https://www.lunarisrealestate.com (Cloudflare Workers custom domain, `wrangler.jsonc` içindeki `routes`; DNS bölgesi aynı hesapta, 14 Eylül 2026'da GoDaddy DNS'ten taşındı, GoDaddy'de DNSSEC kapalı olmalı). workers.dev adresi de açık: https://lunaris-real-estate.aguler2949.workers.dev (worker adı `lunaris-real-estate`). Not: Nitro, `wrangler.jsonc`'yi build sırasında `.output/server/wrangler.json`'a kopyalar; wrangler ayarı değişince deploy öncesi `npm run build` gerekir. Aynı kodla yedek bir `lunaris` worker'ı da var (https://lunaris.aguler2949.workers.dev); gereksizse `npx wrangler delete --name lunaris` ile kaldır.
   - 2026-09-13: ana workers.dev adresi Cloudflare tarafında 9 Eylül sürümüne takılı kalmıştı (yeni deploy'lar, triggers deploy, workers.dev kapat/aç, rollback etkisizdi). Çözüm: worker'ı silip aynı adla yeniden deploy etmek; etkisi ~10 dakika gecikmeyle geldi. Deploy sonrası `curl` ile ana adreste yeni asset hash'ini doğrula; sürüm önizleme adresi `<versiyon-öneki>-lunaris-real-estate.aguler2949.workers.dev` hemen günceldir.
 - Repo: https://github.com/azizcangler/lunaris-real-estate (branch `main`)
 - Eski site (içerik kaynağı): https://lunarisrealestate.com — kopyası `../old-site-reference/` altında (repo dışı)

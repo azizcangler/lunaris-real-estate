@@ -8,10 +8,11 @@ Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, Clou
 
 | | |
 |---|---|
-| Site | https://lunaris-real-estate.aguler2949.workers.dev (14 Eylül sürümü, üç detay sayfası canlı) |
+| Site | https://lunarisrealestate.com (ve www; 14 Eylül'de Cloudflare özel alan adı olarak bağlandı, DNS GoDaddy'den Cloudflare'e taşındı) |
+| Workers.dev adresi | https://lunaris-real-estate.aguler2949.workers.dev (aynı worker, açık tutuluyor) |
 | Yedek adres | https://lunaris.aguler2949.workers.dev (aynı kod, geçici) |
 | Repo | https://github.com/azizcangler/lunaris-real-estate (`main`) |
-| Eski site | https://lunarisrealestate.com (içerik kaynağı) |
+| Eski site | GitHub Pages'teki eski site alan adından ayrıldı; kopyası `../old-site-reference/` altında |
 
 ## Teknoloji
 
@@ -99,7 +100,7 @@ TanStack Start 1.168, React 19, Tailwind 4, shadcn/ui. Build Vite 8 + Nitro (clo
 1. Canlı sitede kare hızını doğrulamak; takılma sürerse bölüm bazında bakmak ve görsel boyutlarını düşürmek.
 2. İçerik doğrulama: Damac "Seychelles 2" bilgisi, Athlon mesafeleri.
 3. Villa A/E/F (The Acres) için geliştiriciden yatak odası ve açıklama bilgisi.
-4. Özel alan adı bağlanması (workers.dev adresinin yerini alacak).
+4. www → ana alan adı yönlendirmesi ve canonical etiketi (şu an ikisi de aynı siteyi sunuyor); istenirse Cloudflare tarafında DNSSEC'i yeniden açmak.
 
 ## Komutlar
 
