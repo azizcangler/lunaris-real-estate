@@ -92,12 +92,12 @@ TanStack Start 1.168, React 19, Tailwind 4, shadcn/ui. Build Vite 8 + Nitro (clo
 - **Hosting olayı (13 Eylül):** Ana workers.dev adresi Cloudflare tarafında eski sürümde takılı kaldı; yeni deploy'lar, tetikleyici yenileme, workers.dev kapat/aç ve rollback etkisizdi. Worker silinip aynı adla yeniden kurulunca yaklaşık 10 dakika gecikmeyle düzeldi. Bu sırada açılan `lunaris` yedek worker'ı hâlâ duruyor; gerekirse `npx wrangler delete --name lunaris` ile kaldırılır. Deploy sonrası ana adreste yeni asset hash'ini `curl` ile doğrulamak iyi bir alışkanlık.
 - **Tarayıcı:** Brave'de kaydırma farklı hissedildiği bildirildi; Chrome ve Safari'de sorun yok. Shields kapalıyken test edilmesi bekleniyor.
 - **Öne çıkanlar:** Ana sayfadaki üçlü The Acres, Athlon, Damac Islands; portföy sayfasında da bu üçü başta. Sıralama `projects.ts` içinden değiştirilir.
-- **Durum:** Athlon ve Damac Islands sayfaları ile bugünkü tüm düzeltmeler yerelde build/tsc/eslint'ten geçti ve tarayıcıda kontrol edildi; henüz commit ve deploy edilmedi.
+- **Durum:** Athlon ve Damac Islands sayfaları ile 14 Eylül düzeltmeleri `c036934` ile commit edilip GitHub'a push edildi; henüz deploy edilmedi (canlı site 13 Eylül sürümünde).
 
 ## Sırada ne var
 
 1. Üretim önizlemesinde (8789) kare hızını doğrulamak; takılma sürerse bölüm bazında bakmak ve görsel boyutlarını düşürmek.
-2. Athlon ve Damac Islands sayfalarını commit edip deploy etmek; deploy sonrası ana adreste doğrulamak.
+2. `npx wrangler deploy` ile yayınlamak; deploy sonrası ana adreste yeni asset hash'ini doğrulamak.
 3. İçerik doğrulama: Damac "Seychelles 2" bilgisi, Athlon mesafeleri.
 4. Villa A/E/F (The Acres) için geliştiriciden yatak odası ve açıklama bilgisi.
 5. Özel alan adı bağlanması (workers.dev adresinin yerini alacak).
