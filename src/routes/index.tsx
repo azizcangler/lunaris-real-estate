@@ -1,5 +1,4 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 import teamImage from "@/assets/team-dubai.jpg";
@@ -36,36 +35,7 @@ export const Route = createFileRoute("/")({
 const popularProjects = projects.slice(0, 7);
 const developers = [...new Set(projects.map((project) => project.developer))];
 
-const choices = {
-  living: {
-    label: "LIVING",
-    title: "A life that feels like yours",
-    description:
-      "Discover selected Dubai homes shaped around your daily rhythm, family and expectations.",
-    to: "/living",
-  },
-  investing: {
-    label: "INVESTING",
-    title: "Carry value forward",
-    description:
-      "Evaluate location, developer quality and long-term potential before choosing the right opportunity.",
-    to: "/investing",
-  },
-  renting: {
-    label: "RENTING",
-    title: "Your next chapter in Dubai",
-    description:
-      "Find a move-in-ready residence suited to your lifestyle, preferred location and timing.",
-    to: "/renting",
-  },
-} as const;
-
-type Choice = keyof typeof choices;
-
 function Index() {
-  const [selected, setSelected] = useState<Choice>("living");
-  const current = choices[selected];
-
   return (
     <main className="min-h-screen overflow-x-hidden bg-background">
       <SiteHeader />
@@ -113,60 +83,6 @@ function Index() {
           <div className="hero-reveal hero-reveal-delayed order-first min-w-0 lg:order-none">
             <DeveloperBelt names={developers} />
             <ProjectCoverflow projects={popularProjects} className="mt-6" />
-          </div>
-        </div>
-      </section>
-
-      <section
-        id="options"
-        className="section-watermark min-h-[420px] border-t border-border bg-background px-5 py-12 sm:px-10 md:px-16 md:py-20 lg:px-24"
-      >
-        <div className="relative z-10 grid gap-8 md:grid-cols-[1fr_0.72fr] md:gap-20">
-          <div>
-            <h2 className="font-sans text-4xl font-normal uppercase leading-[0.92] text-foreground md:text-6xl">
-              Which path
-              <span className="block font-display text-[0.82em] normal-case italic">
-                is right for you?
-              </span>
-            </h2>
-            <div
-              className="mt-9 grid max-w-lg grid-cols-3 gap-2"
-              role="group"
-              aria-label="Choose your property goal"
-            >
-              {(Object.entries(choices) as [Choice, (typeof choices)[Choice]][]).map(
-                ([key, choice]) => (
-                  <Button
-                    key={key}
-                    type="button"
-                    variant={selected === key ? "default" : "outline"}
-                    aria-pressed={selected === key}
-                    onClick={() => setSelected(key)}
-                    className="h-11 rounded-none border-primary text-[11px] shadow-none"
-                  >
-                    {choice.label}
-                  </Button>
-                ),
-              )}
-            </div>
-          </div>
-
-          <div className="flex min-h-40 flex-col justify-between border-t border-primary/35 pt-5 md:min-h-48 md:border-t-0 md:pt-1">
-            <p className="max-w-[230px] text-xs leading-relaxed text-muted-foreground md:ml-auto md:text-right">
-              Select your goal and discover an approach shaped around your plans.
-            </p>
-            <div key={selected} className="hero-reveal mt-8 md:mt-16">
-              <p className="font-display text-3xl italic text-foreground">{current.title}</p>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground">
-                {current.description}
-              </p>
-              <Link
-                to={current.to}
-                className="mt-5 inline-flex items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
-              >
-                Explore this path <ArrowDownRight aria-hidden="true" className="size-4" />
-              </Link>
-            </div>
           </div>
         </div>
       </section>

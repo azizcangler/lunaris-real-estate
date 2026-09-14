@@ -21,7 +21,7 @@ TanStack Start 1.168, React 19, Tailwind 4, shadcn/ui. Build Vite 8 + Nitro (clo
 
 | Route | İçerik |
 |---|---|
-| `/` | Popüler projeler hero'su (solda başlık ve CTA'lar, sağda geliştirici şeridi ve otomatik dönen coverflow proje carousel'i; 14 Eylül'de eski görsel hero'nun yerine), Living/Investing/Renting seçici, Who we are, öne çıkan 3 proje (The Acres, Athlon, Damac Islands), Why clients choose us, How it works |
+| `/` | Popüler projeler hero'su (solda başlık ve CTA'lar, sağda geliştirici şeridi ve otomatik dönen coverflow proje carousel'i; 14 Eylül'de eski görsel hero'nun yerine), Who we are, öne çıkan 3 proje (The Acres, Athlon, Damac Islands), Why clients choose us, How it works (Living/Investing/Renting seçici 14 Eylül'de kaldırıldı) |
 | `/portfolio` | 13 projenin tamamı; detay sayfası olanlar karttan detaya gider |
 | `/portfolio/the-acres` | **The Acres (Meraas)** detay sayfası |
 | `/portfolio/athlon` | **Athlon (Aldar)** detay sayfası |
