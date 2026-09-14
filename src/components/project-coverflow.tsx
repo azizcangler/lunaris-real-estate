@@ -64,8 +64,13 @@ export function ProjectCoverflow({
         const scale = 1.14 - 0.24 * distance;
         const rotate = 10 * signed;
         node.style.transform = `perspective(1200px) rotateY(${rotate}deg) scale(${scale})`;
-        node.style.opacity = String(1 - 0.12 * distance);
-        node.style.zIndex = String(Math.round(10 - distance * 9));
+        // Centre card sits on top of its neighbours, which get a light black shade. The z-index
+        // goes on the slide: Embla translates looped slides, which makes each a stacking context.
+        const z = String(Math.round(30 - distance * 20));
+        node.style.zIndex = z;
+        if (node.parentElement) node.parentElement.style.zIndex = z;
+        const shade = node.querySelector<HTMLElement>("[data-shade]");
+        if (shade) shade.style.opacity = String(Math.min(0.45, 0.5 * distance));
       });
     });
   }, []);
@@ -137,7 +142,7 @@ export function ProjectCoverflow({
           {projects.map((project, index) => (
             <div
               key={project.slug}
-              className="min-w-0 flex-[0_0_62%] px-1.5 sm:flex-[0_0_44%] lg:flex-[0_0_31%]"
+              className="relative min-w-0 flex-[0_0_62%] px-1.5 sm:flex-[0_0_44%] lg:flex-[0_0_31%]"
             >
               <div data-card className="relative will-change-transform">
                 <ProjectLink
@@ -163,6 +168,11 @@ export function ProjectCoverflow({
                       }`}
                     />
                   ) : null}
+                  <div
+                    data-shade
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 bg-black opacity-0"
+                  />
                   {/* Caption only on hover/focus: the block shows bare portraits. */}
                   <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(18,22,16,0.78)_0%,rgba(18,22,16,0)_100%)] px-4 pb-4 pt-16 text-[var(--hero-foreground)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                     <p className="text-[10px] font-medium uppercase tracking-[0.12em] opacity-80">
