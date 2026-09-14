@@ -9,11 +9,31 @@ import solisImage from "@/assets/projects/sobha-solis.jpg";
 import centralImage from "@/assets/projects/sobha-central.jpg";
 import siniyaImage from "@/assets/projects/sobha-siniya-island.jpg";
 import acresImage from "@/assets/projects/the-acres.jpg";
+import athlonImage from "@/assets/projects/athlon.jpg";
+import damacIslandsImage from "@/assets/projects/damac-islands.jpg";
 import { theAcresDetails } from "@/data/project-details/the-acres";
+import { athlonDetails } from "@/data/project-details/athlon";
+import { damacIslandsDetails } from "@/data/project-details/damac-islands";
 
-export type ProjectImage = { src: string; alt: string };
+export type ProjectImage = {
+  src: string;
+  alt: string;
+  /** CSS object-position for containers that crop the image, e.g. "center top" to keep faces. */
+  position?: string;
+};
 export type ProjectFact = { label: string; value: string };
 export type ProjectStat = { value: string; label: string };
+/** Two-line section heading: an uppercase line and an italic display line. */
+export type SectionHeading = { line: string; italic: string };
+/** CSS colour values applied as tokens on the project page (`--primary`, `--accent`, ...). */
+export type ProjectTheme = {
+  primary: string;
+  primaryForeground: string;
+  accent: string;
+  ring?: string;
+  /** Text colour on the pinned masterplan stage; defaults to the cream used by The Acres. */
+  stageForeground?: string;
+};
 
 export type ProjectDetails = {
   /** Small line above the hero title, e.g. "Meraas · Dubailand". */
@@ -28,10 +48,23 @@ export type ProjectDetails = {
   coverBackdrop?: string;
   /** Optional texture image behind the small hero frame (e.g. the brochure's stone background). */
   coverTexture?: ProjectImage;
+  /** CSS colour laid over `coverTexture` in the masterplan stage and CTA (not the hero), e.g. to keep light text readable on a bright texture. */
+  coverTextureScrim?: string;
+  /** Colour or gradient laid over `coverTexture` behind the hero frame; fades out as the frame expands. */
+  coverTextureHeroScrim?: string;
+  /** Buttons, links and numbered markers on the page follow the brochure palette. */
+  theme: ProjectTheme;
   /** Three or four short phrases shown as a strip under the hero. */
   highlights: string[];
   facts: ProjectFact[];
-  intro: { heading: string; headingItalic: string; copy: string[]; image: ProjectImage };
+  intro: {
+    heading: string;
+    headingItalic: string;
+    copy: string[];
+    image: ProjectImage;
+    /** CSS aspect-ratio of the intro photo, e.g. "16 / 9" to show a wide shot uncropped; defaults to 4:3. */
+    imageAspect?: string;
+  };
   location: {
     heading: string;
     headingItalic: string;
@@ -41,34 +74,60 @@ export type ProjectDetails = {
     /** Inline SVG markup of a stylised area map; replaces `image` in the location section when present. */
     mapSvg?: string;
     mapCaption?: string;
+    /** Overrides for the map's CSS colour variables (`--map-ground`, `--map-ink`, ...). */
+    mapVars?: Record<string, string>;
   };
   masterplan: {
+    eyebrow: string;
+    /** Accessible name of the step navigator. */
+    navLabel: string;
     heading: string;
     headingItalic: string;
     copy: string[];
     /** Six pillars shown one per pinned scroll step; each carries its own figures. */
     pillars: { title: string; copy: string; stats?: ProjectStat[]; image?: ProjectImage }[];
   };
+  keyFeaturesHeading: SectionHeading;
   keyFeatures: string[];
   /** Illustrated masterplan: `plan` shown inline, `poster` (plan + legend + feature vignettes) in a dialog. */
-  keyFeaturesMap?: { plan: ProjectImage; poster: ProjectImage; legend: string[] };
+  keyFeaturesMap?: {
+    plan: ProjectImage;
+    poster: ProjectImage;
+    legend: string[];
+    /** CSS aspect-ratio of `plan`, e.g. "16 / 9"; defaults to the portrait Acres plan. */
+    planAspect?: string;
+  };
+  /** Without a masterplan poster: a photo shown beside the `keyFeatures` list. */
+  keyFeaturesImage?: ProjectImage;
   gardens?: {
+    eyebrow: string;
     heading: string;
     headingItalic: string;
     copy: string;
     items: { name: string; copy: string; features: string[]; image: ProjectImage }[];
   };
   villas: {
+    eyebrow: string;
+    /** Plural noun for the type counter, e.g. "villa types" or "home types". */
+    unitLabel: string;
     heading: string;
     headingItalic: string;
     copy: string[];
     image: ProjectImage;
-    /** One entry per villa type; every image becomes a card, the expanded card shows the type's copy. */
-    items: { name: string; bedrooms?: string; copy: string; images: ProjectImage[] }[];
+    /** One entry per home type; every image becomes a card, the expanded card shows the type's copy. */
+    items: {
+      name: string;
+      bedrooms?: string;
+      /** Saleable area shown next to the bedrooms in the expanded card. */
+      area?: string;
+      copy: string;
+      images: ProjectImage[];
+    }[];
   };
+  galleryHeading: string;
   /** Gallery cards; `title`/`description` show in the expanded view. */
   gallery: (ProjectImage & { title?: string; description?: string })[];
-  materials?: string[];
+  materials?: { heading: SectionHeading; items: string[] };
   developer: { name: string; copy: string; image: ProjectImage };
 };
 
@@ -97,6 +156,30 @@ export const projects: Project[] = [
     image: acresImage,
     brochure: "/brochures/meraas-the-acres.pdf",
     details: theAcresDetails,
+  },
+  {
+    slug: "athlon",
+    name: "Athlon",
+    developer: "Aldar",
+    location: "Dubailand · Dubai",
+    headline: "Welcome to active living",
+    description:
+      "The first community in Dubai that makes movement a natural part of life: 3 to 6-bedroom villas and townhouses woven together by running, cycling and family loops, lush parks and seven clubhouses, never more than five minutes from the next activity.",
+    image: athlonImage,
+    brochure: "/brochures/aldar-athlon.pdf",
+    details: athlonDetails,
+  },
+  {
+    slug: "damac-islands",
+    name: "Damac Islands",
+    developer: "Damac",
+    location: "Dubailand · Dubai",
+    headline: "Paradise is a state of mind",
+    description:
+      "A tropical island community inspired by the Maldives, Bora Bora, Seychelles, Hawaii, Bali and Fiji: 4 to 7-bedroom townhouses and villas around a swimmable lagoon, a jungle river and twenty-two curated attractions.",
+    image: damacIslandsImage,
+    brochure: "/brochures/damac-islands.pdf",
+    details: damacIslandsDetails,
   },
   {
     slug: "mercedes-benz-places",

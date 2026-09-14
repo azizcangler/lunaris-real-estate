@@ -56,6 +56,12 @@ export const theAcresDetails: ProjectDetails = {
   },
   coverBackdrop: "#42473a",
   coverTexture: { src: coverTexture, alt: "" },
+  // Brochure green used in the hero and masterplan.
+  theme: {
+    primary: "oklch(0.37 0.022 125)",
+    primaryForeground: "#efe9dc",
+    accent: "oklch(0.52 0.03 125)",
+  },
   highlights: ["3 to 5-bedroom villas", "Dubailand, Dubai", "LEED Gold pre-certified"],
   facts: [
     { label: "Developer", value: "Meraas" },
@@ -100,6 +106,8 @@ export const theAcresDetails: ProjectDetails = {
     mapCaption: "Dubailand, between Sheikh Zayed Bin Hamdan Al Nahyan Street and Emirates Road",
   },
   masterplan: {
+    eyebrow: "Masterplan",
+    navLabel: "Sustainability pillars",
     heading: "Nature's",
     headingItalic: "blueprint",
     copy: [
@@ -176,6 +184,7 @@ export const theAcresDetails: ProjectDetails = {
       },
     ],
   },
+  keyFeaturesHeading: { line: "Everything", italic: "within reach" },
   keyFeaturesMap: {
     plan: {
       src: masterplanPlan,
@@ -212,6 +221,7 @@ export const theAcresDetails: ProjectDetails = {
     "EV fast chargers in every cluster",
   ],
   gardens: {
+    eyebrow: "The gardens",
     heading: "Immersive",
     headingItalic: "amenities",
     copy: "An array of engaging amenities nestled within carefully curated gardens that encircle the main park. Within this expansive green network, facilities tailored to a diverse range of interests are easily accessible for all to enjoy.",
@@ -313,6 +323,8 @@ export const theAcresDetails: ProjectDetails = {
     ],
   },
   villas: {
+    eyebrow: "The villas",
+    unitLabel: "villa types",
     heading: "A step closer",
     headingItalic: "to the outdoors",
     copy: [
@@ -406,19 +418,23 @@ export const theAcresDetails: ProjectDetails = {
       },
     ],
   },
+  galleryHeading: "Life on the lagoon",
   gallery: [
     { src: lagoonBridgeAerial, alt: "Timber bridge across the lagoon at The Acres" },
     { src: lagoonEvening, alt: "Lagoon clubhouse and pool at dusk" },
     { src: lagoonBeach, alt: "Sandy lagoon beach with cabanas and infinity pool" },
   ],
-  materials: [
-    "Textured accent walls in living, dining and bedrooms",
-    "Porcelain tile flooring throughout",
-    "Porcelain accent wall tiles in master and secondary bathrooms",
-    "Reconstituted stone vanity countertops",
-    "Veneer-finished kitchen cabinets and vanity shutters",
-    "Porcelain slab kitchen countertops and backsplash",
-  ],
+  materials: {
+    heading: { line: "Shaped", italic: "by nature" },
+    items: [
+      "Textured accent walls in living, dining and bedrooms",
+      "Porcelain tile flooring throughout",
+      "Porcelain accent wall tiles in master and secondary bathrooms",
+      "Reconstituted stone vanity countertops",
+      "Veneer-finished kitchen cabinets and vanity shutters",
+      "Porcelain slab kitchen countertops and backsplash",
+    ],
+  },
   developer: {
     name: "Meraas",
     copy: "Meraas is dedicated to enhancing Dubai's global real estate position through a diverse portfolio of master developments, land and properties, including iconic destinations such as Port de La Mer, Bluewaters Residences, City Walk Residences, Nikki Beach Residences, BVLGARI Residences and Nad Al Sheba Gardens. Meraas values sophistication and innovation to deliver exceptional residential experiences for a global clientele.",

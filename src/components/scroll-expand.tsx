@@ -23,6 +23,8 @@ type ScrollExpandProps = {
   backdropColor?: string | undefined;
   /** Optional texture image behind the small frame; fades out into the page background as it expands. */
   backdropSrc?: string | undefined;
+  /** Optional colour or gradient laid over `backdropSrc` (e.g. to deepen or even out a bright texture); fades with it. */
+  backdropScrim?: string | undefined;
   /** Small hint shown under the frame until the user starts scrolling. */
   scrollHint?: string;
   /** Content revealed once the frame has expanded. */
@@ -110,6 +112,7 @@ export function ScrollExpand({
   children,
   backdropColor,
   backdropSrc,
+  backdropScrim,
   useWindowScroll = false,
   startWidth = 42,
   startHeight = 58,
@@ -130,7 +133,7 @@ export function ScrollExpand({
   const scrimRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const coverRef = useRef<HTMLImageElement>(null);
-  const backdropRef = useRef<HTMLImageElement>(null);
+  const backdropRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
   const revealRef = useRef<HTMLDivElement>(null);
@@ -173,6 +176,8 @@ export function ScrollExpand({
         frame.style.borderRadius = String(styles.frame.borderRadius);
         // Keep the images at full stage size and only shift them so the frame acts as a window:
         // the browser then moves composited layers instead of re-rasterising 2400px bitmaps.
+        // Both images carry `max-w-none`: the preflight `img { max-width: 100% }` would otherwise
+        // clamp them to the frame width, leaving the frame background visible along the right edge.
         for (const img of [mediaRef.current]) {
           if (!img) continue;
           img.style.width = `${W + 2}px`;
@@ -300,15 +305,22 @@ export function ScrollExpand({
       }`}
     >
       {backdropSrc ? (
-        <img
+        <div
           ref={backdropRef}
-          src={backdropSrc}
-          alt=""
           aria-hidden="true"
-          fetchPriority="high"
           style={initial.backdrop}
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
+          className="absolute inset-0 will-change-[opacity]"
+        >
+          <img
+            src={backdropSrc}
+            alt=""
+            fetchPriority="high"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          {backdropScrim ? (
+            <div className="absolute inset-0" style={{ background: backdropScrim }} />
+          ) : null}
+        </div>
       ) : null}
       <div
         ref={frameRef}
@@ -322,7 +334,7 @@ export function ScrollExpand({
           fetchPriority="high"
           decoding="async"
           style={{ ...initial.media, ...(coverSrc && enabled ? { visibility: "hidden" } : {}) }}
-          className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center"
+          className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] max-w-none object-cover object-center will-change-transform"
         />
         {/* Bottom gradient keeps the title legible in the small frame; the uniform scrim fades in as it expands. */}
         {coverSrc ? (
@@ -332,19 +344,23 @@ export function ScrollExpand({
             alt={coverAlt}
             fetchPriority="high"
             style={initial.cover}
-            className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center will-change-[transform,opacity]"
+            className="absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] max-w-none object-cover object-center will-change-[transform,opacity]"
           />
         ) : null}
         <div
           ref={gradientRef}
           style={coverSrc ? initial.text : undefined}
-          className="absolute inset-0 bg-[linear-gradient(0deg,var(--hero-scrim)_0%,transparent_50%)]"
+          className="absolute inset-0 bg-[linear-gradient(0deg,var(--hero-scrim)_0%,transparent_50%)] will-change-[opacity]"
         />
-        <div ref={scrimRef} style={initial.scrim} className="absolute inset-0 bg-black" />
+        <div
+          ref={scrimRef}
+          style={initial.scrim}
+          className="absolute inset-0 bg-black will-change-[opacity]"
+        />
 
         <div
           ref={textRef}
-          className="absolute inset-x-0 bottom-0 z-10 flex flex-col [--pad-end:1.5rem] sm:[--pad-end:2.5rem] md:[--pad-end:4rem] lg:[--pad-end:6rem]"
+          className="absolute inset-x-0 bottom-0 z-10 flex flex-col will-change-[opacity] [--pad-end:1.5rem] sm:[--pad-end:2.5rem] md:[--pad-end:4rem] lg:[--pad-end:6rem]"
           style={{
             ...(coverSrc ? initial.text : null),
             padding:
@@ -355,7 +371,11 @@ export function ScrollExpand({
           {eyebrow ? (
             <p className="mt-4 text-[11px] font-medium uppercase text-white/75">{eyebrow}</p>
           ) : null}
-          <div ref={titleRef} style={initial.title} className="origin-bottom-left">
+          <div
+            ref={titleRef}
+            style={initial.title}
+            className="origin-bottom-left will-change-transform"
+          >
             <h1 className="mt-3 max-w-4xl font-sans text-[clamp(3rem,8vw,7.5rem)] font-normal uppercase leading-[0.86] text-white">
               {title}
               {subtitle ? (

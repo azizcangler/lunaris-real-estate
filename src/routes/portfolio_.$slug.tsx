@@ -70,6 +70,22 @@ function SectionTitle({
   );
 }
 
+/** Compact multi-column checklist used when a project has no illustrated masterplan. */
+function FeatureList({ items, className = "" }: { items: string[]; className?: string }) {
+  return (
+    <ul className={`grid gap-x-8 border-t border-primary/35 pt-2 ${className}`}>
+      {items.map((item) => (
+        <li
+          key={item}
+          className="flex items-center gap-3 border-b border-border py-2.5 text-sm text-foreground"
+        >
+          <Check className="size-4 shrink-0 text-accent" aria-hidden="true" /> {item}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 type Villa = ProjectDetails["villas"]["items"][number];
 
 function VillaCell({ villa, index, onOpen }: { villa: Villa; index: number; onOpen: () => void }) {
@@ -151,6 +167,7 @@ function VillaDialogBody({
         <p className="text-[11px] font-medium uppercase text-muted-foreground">
           {String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}
           {villa.bedrooms ? ` · ${villa.bedrooms}` : ""}
+          {villa.area ? ` · ${villa.area}` : ""}
         </p>
         <DialogTitle className="mt-3 font-sans text-3xl font-normal uppercase leading-[0.92] tracking-normal text-foreground md:text-4xl">
           {villa.name}
@@ -210,17 +227,32 @@ function ProjectPage() {
   const project = findDetailedProject(slug);
   if (!project) return null;
   const { details } = project;
+  const { theme } = details;
+  const stageFg = theme.stageForeground ?? "#efe9dc";
+  const stageFgAt = (alpha: number) =>
+    `color-mix(in oklab, ${stageFg} ${Math.round(alpha * 100)}%, transparent)`;
+  // Texture behind the masterplan stage and the CTA, optionally deepened by a flat scrim.
+  const textureBackground = details.coverTexture
+    ? {
+        backgroundImage: details.coverTextureScrim
+          ? `linear-gradient(${details.coverTextureScrim}, ${details.coverTextureScrim}), url(${details.coverTexture.src})`
+          : `url(${details.coverTexture.src})`,
+      }
+    : {};
+  // Header cell + type cells + CTA cell: with an odd count the CTA cell spans the full row.
+  const ctaSpansRow = (details.villas.items.length + 2) % 2 === 1;
 
   return (
     <main
       className="min-h-screen bg-background"
       style={
         {
-          // This page's primary colour follows the brochure green used in the hero and masterplan.
-          "--primary": "oklch(0.37 0.022 125)",
-          "--primary-foreground": "#efe9dc",
-          "--accent": "oklch(0.52 0.03 125)",
-          "--ring": "oklch(0.37 0.022 125)",
+          // Each project's primary colour follows its brochure palette (see `details.theme`).
+          "--primary": theme.primary,
+          "--primary-foreground": theme.primaryForeground,
+          "--accent": theme.accent,
+          "--ring": theme.ring ?? theme.primary,
+          "--stage-fg": stageFg,
         } as React.CSSProperties
       }
     >
@@ -235,6 +267,7 @@ function ProjectPage() {
         coverAlt={details.cover?.alt}
         backdropColor={details.coverBackdrop}
         backdropSrc={details.coverTexture?.src}
+        backdropScrim={details.coverTextureHeroScrim}
         title={project.name}
         subtitle={details.titleItalic}
         eyebrow={details.eyebrow}
@@ -287,10 +320,9 @@ function ProjectPage() {
             <img
               src={details.intro.image.src}
               alt={details.intro.image.alt}
-              width={1600}
-              height={801}
               loading="lazy"
-              className="mt-10 aspect-[4/3] w-full object-cover md:max-w-md"
+              style={{ aspectRatio: details.intro.imageAspect ?? "4 / 3" }}
+              className="mt-10 w-full object-cover md:max-w-md"
             />
           </div>
           <div className="border-t border-primary/35 pt-7">
@@ -345,6 +377,7 @@ function ProjectPage() {
             {/* Mobile: map is a band at the bottom under the copy. md+: map fills the section, copy sits on a left scrim. */}
             <LocationMap
               svg={details.location.mapSvg}
+              vars={details.location.mapVars}
               cover
               className="absolute inset-x-0 bottom-0 h-[460px] md:inset-0 md:h-auto"
             />
@@ -413,36 +446,33 @@ function ProjectPage() {
           const stage = details.coverBackdrop ?? "#42473a";
           return (
             <div
-              className={`flex h-full flex-col justify-center bg-cover bg-center py-3 text-[#efe9dc] md:py-6 ${sectionPadding}`}
-              style={{
-                backgroundColor: stage,
-                ...(details.coverTexture
-                  ? { backgroundImage: `url(${details.coverTexture.src})` }
-                  : {}),
-              }}
+              className={`flex h-full flex-col justify-center bg-cover bg-center py-3 text-(--stage-fg) md:py-6 ${sectionPadding}`}
+              style={{ backgroundColor: stage, ...textureBackground }}
             >
               <div className="grid gap-5 md:grid-cols-[0.8fr_0.85fr_1.15fr] md:items-center md:gap-12 lg:gap-16">
                 {/* Heading + step navigator */}
                 <div>
-                  <p className="text-[11px] font-medium uppercase text-[#efe9dc]/60">Masterplan</p>
+                  <p className="text-[11px] font-medium uppercase text-(--stage-fg)/60">
+                    {details.masterplan.eyebrow}
+                  </p>
                   <h2 className="mt-2 font-sans text-2xl font-normal uppercase leading-[0.92] md:mt-5 md:text-5xl">
                     {details.masterplan.heading}
                     <span className="block font-display text-[0.82em] normal-case italic">
                       {details.masterplan.headingItalic}
                     </span>
                   </h2>
-                  <p className="mt-6 hidden max-w-sm text-sm leading-7 text-[#efe9dc]/70 lg:block">
+                  <p className="mt-6 hidden max-w-sm text-sm leading-7 text-(--stage-fg)/70 lg:block">
                     {details.masterplan.copy[0]}
                   </p>
                   <LineSidebar
-                    aria-label="Sustainability pillars"
+                    aria-label={details.masterplan.navLabel}
                     className="mt-4 md:mt-10"
                     items={pillars.map((item) => item.title)}
                     activeIndex={active}
                     onItemClick={(index) => goTo(index)}
-                    accentColor="#efe9dc"
-                    textColor="rgba(239, 233, 220, 0.45)"
-                    markerColor="rgba(239, 233, 220, 0.3)"
+                    accentColor={stageFg}
+                    textColor={stageFgAt(0.45)}
+                    markerColor={stageFgAt(0.3)}
                     showIndex
                     showMarker
                     proximityRadius={100}
@@ -461,6 +491,7 @@ function ProjectPage() {
 
                 {/* Step image */}
                 <div
+                  className="will-change-transform"
                   style={{
                     transform: "translateY(calc(var(--step-local, 0) * -6px))",
                   }}
@@ -475,6 +506,7 @@ function ProjectPage() {
                           width={1600}
                           height={1200}
                           loading={index === 0 ? "eager" : "lazy"}
+                          style={{ objectPosition: item.image.position }}
                           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${
                             index === active ? "opacity-100" : "opacity-0"
                           }`}
@@ -487,6 +519,7 @@ function ProjectPage() {
                 {/* Step text */}
                 <div>
                   <div
+                    className="will-change-transform"
                     style={{
                       transform: "translateY(calc(var(--step-local, 0) * -10px))",
                     }}
@@ -501,19 +534,19 @@ function ProjectPage() {
                         <span className="font-display text-4xl italic leading-none md:text-8xl">
                           {String(active + 1).padStart(2, "0")}
                         </span>
-                        <span className="text-[11px] font-medium uppercase text-[#efe9dc]/50">
+                        <span className="text-[11px] font-medium uppercase text-(--stage-fg)/50">
                           / {String(pillars.length).padStart(2, "0")}
                         </span>
                       </div>
                       <h3 className="mt-3 font-sans text-xl font-normal uppercase leading-[0.95] md:mt-6 md:text-4xl">
                         {pillar?.title}
                       </h3>
-                      <p className="mt-2 line-clamp-3 max-w-xl text-[13px] leading-5 text-[#efe9dc]/80 md:mt-5 md:line-clamp-none md:text-base md:leading-8">
+                      <p className="mt-2 line-clamp-3 max-w-xl text-[13px] leading-5 text-(--stage-fg)/80 md:mt-5 md:line-clamp-none md:text-base md:leading-8">
                         {pillar?.copy}
                       </p>
                       {pillar?.stats?.length ? (
                         <dl
-                          className={`mt-3 grid gap-x-4 gap-y-3 border-t border-[#efe9dc]/20 pt-3 md:mt-10 md:gap-x-6 md:gap-y-6 md:pt-6 ${
+                          className={`mt-3 grid gap-x-4 gap-y-3 border-t border-(--stage-fg)/20 pt-3 md:mt-10 md:gap-x-6 md:gap-y-6 md:pt-6 ${
                             pillar.stats.length >= 3 ? "grid-cols-3" : "grid-cols-2 lg:grid-cols-3"
                           }`}
                         >
@@ -522,7 +555,7 @@ function ProjectPage() {
                               <dd className="font-display text-2xl italic md:text-5xl">
                                 {stat.value}
                               </dd>
-                              <dt className="mt-1 text-[11px] leading-4 text-[#efe9dc]/70 md:mt-2 md:text-xs md:leading-5">
+                              <dt className="mt-1 text-[11px] leading-4 text-(--stage-fg)/70 md:mt-2 md:text-xs md:leading-5">
                                 {stat.label}
                               </dt>
                             </div>
@@ -531,9 +564,9 @@ function ProjectPage() {
                       ) : null}
                     </div>
                   </div>
-                  <div className="mt-3 h-px w-full bg-[#efe9dc]/15 md:mt-12" aria-hidden="true">
+                  <div className="mt-3 h-px w-full bg-(--stage-fg)/15 md:mt-12" aria-hidden="true">
                     <div
-                      className="h-px origin-left bg-[#efe9dc]/70"
+                      className="h-px origin-left bg-(--stage-fg)/70 will-change-transform"
                       style={{ transform: "scaleX(var(--steps-progress, 0))" }}
                     />
                   </div>
@@ -548,16 +581,16 @@ function ProjectPage() {
       <section
         className={`section-watermark border-t border-border py-20 md:py-28 ${sectionPadding}`}
       >
-        <div className="relative z-10 grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
-          <div>
-            <Eyebrow>Key features</Eyebrow>
-            <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
-              Everything
-              <span className="block font-display text-[0.82em] normal-case italic">
-                within reach
-              </span>
-            </h2>
-            {details.keyFeaturesMap ? (
+        {details.keyFeaturesMap ? (
+          <div className="relative z-10 grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
+            <div>
+              <Eyebrow>Key features</Eyebrow>
+              <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
+                {details.keyFeaturesHeading.line}
+                <span className="block font-display text-[0.82em] normal-case italic">
+                  {details.keyFeaturesHeading.italic}
+                </span>
+              </h2>
               <ol className="mt-10 grid gap-y-3 border-t border-primary/35 pt-6 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
                 {details.keyFeaturesMap.legend.map((item, index) => (
                   <li key={item} className="flex items-center gap-3 text-sm text-foreground">
@@ -568,19 +601,6 @@ function ProjectPage() {
                   </li>
                 ))}
               </ol>
-            ) : (
-              <ul className="mt-10 grid gap-3 border-t border-primary/35 pt-8">
-                {details.keyFeatures.map((item) => (
-                  <li
-                    key={item}
-                    className="flex items-center gap-3 border-b border-border pb-3 text-sm text-foreground"
-                  >
-                    <Check className="size-4 shrink-0 text-accent" aria-hidden="true" /> {item}
-                  </li>
-                ))}
-              </ul>
-            )}
-            {details.keyFeaturesMap ? (
               <button
                 type="button"
                 onClick={() => setOpenMasterplan(true)}
@@ -588,40 +608,50 @@ function ProjectPage() {
               >
                 Open the full masterplan <ArrowUpRight className="size-4" aria-hidden="true" />
               </button>
-            ) : null}
-          </div>
-          {details.keyFeaturesMap ? (
+            </div>
             <button
               type="button"
               onClick={() => setOpenMasterplan(true)}
               aria-label="Open the full masterplan"
-              className="group relative block cursor-pointer overflow-hidden border border-border bg-[#dfdbcf] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="group relative block cursor-pointer self-start overflow-hidden border border-border bg-[#dfdbcf] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <img
                 src={details.keyFeaturesMap.plan.src}
                 alt={details.keyFeaturesMap.plan.alt}
-                width={819}
-                height={875}
                 loading="lazy"
-                className="aspect-[819/875] w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+                style={{ aspectRatio: details.keyFeaturesMap.planAspect ?? "819 / 875" }}
+                className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
               />
               <span className="pointer-events-none absolute bottom-4 right-4 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-[11px] font-medium uppercase text-foreground backdrop-blur">
                 Tap to enlarge <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </span>
             </button>
-          ) : (
-            <ul className="grid gap-3 border-t border-primary/35 pt-8 sm:grid-cols-2">
-              {details.keyFeatures.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-center gap-3 border-b border-border pb-3 text-sm text-foreground"
-                >
-                  <Check className="size-4 shrink-0 text-accent" aria-hidden="true" /> {item}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+          </div>
+        ) : (
+          /* No masterplan poster: heading (and optional photo) above a compact multi-column checklist */
+          <div className="relative z-10">
+            <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:items-end md:gap-20">
+              <div>
+                <Eyebrow>Key features</Eyebrow>
+                <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
+                  {details.keyFeaturesHeading.line}
+                  <span className="block font-display text-[0.82em] normal-case italic">
+                    {details.keyFeaturesHeading.italic}
+                  </span>
+                </h2>
+              </div>
+              {details.keyFeaturesImage ? (
+                <img
+                  src={details.keyFeaturesImage.src}
+                  alt={details.keyFeaturesImage.alt}
+                  loading="lazy"
+                  className="aspect-[2/1] w-full bg-muted object-cover"
+                />
+              ) : null}
+            </div>
+            <FeatureList items={details.keyFeatures} className="mt-10 grid-cols-2 lg:grid-cols-4" />
+          </div>
+        )}
       </section>
 
       {details.keyFeaturesMap ? (
@@ -638,8 +668,6 @@ function ProjectPage() {
             <img
               src={details.keyFeaturesMap.poster.src}
               alt={details.keyFeaturesMap.poster.alt}
-              width={1024}
-              height={1536}
               className="block w-full"
             />
           </DialogContent>
@@ -652,7 +680,7 @@ function ProjectPage() {
           <div className={`py-20 md:py-28 ${sectionPadding}`}>
             <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
               <div>
-                <Eyebrow>The gardens</Eyebrow>
+                <Eyebrow>{details.gardens.eyebrow}</Eyebrow>
                 <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
                   {details.gardens.heading}
                   <span className="block font-display text-[0.82em] normal-case italic">
@@ -712,7 +740,7 @@ function ProjectPage() {
           <div
             className={`flex flex-col justify-center border-b border-border py-16 md:h-[60vh] md:py-0 ${sectionPadding}`}
           >
-            <Eyebrow>The villas</Eyebrow>
+            <Eyebrow>{details.villas.eyebrow}</Eyebrow>
             <h2 className="mt-5 font-sans text-[clamp(2.6rem,5.5vw,5.25rem)] font-normal uppercase leading-[0.88] text-foreground">
               {details.villas.heading}
               <span className="block font-display text-[0.62em] normal-case italic">
@@ -724,7 +752,7 @@ function ProjectPage() {
             </p>
             <p className="mt-8 inline-flex items-center gap-3 text-[11px] font-medium uppercase text-muted-foreground">
               <span className="h-px w-8 bg-primary/50" aria-hidden="true" />
-              {details.villas.items.length} villa types · select one to explore
+              {details.villas.items.length} {details.villas.unitLabel} · select one to explore
             </p>
           </div>
           {details.villas.items.map((villa, index) => (
@@ -737,7 +765,9 @@ function ProjectPage() {
           ))}
           <Link
             to="/contact"
-            className="group relative block h-[38svh] overflow-hidden border-b border-border bg-muted md:h-[60vh]"
+            className={`group relative block h-[38svh] overflow-hidden border-b border-border bg-muted md:h-[60vh] ${
+              ctaSpansRow ? "md:col-span-2 md:border-r-0!" : ""
+            }`}
           >
             <img
               src={details.villas.image.src}
@@ -787,7 +817,7 @@ function ProjectPage() {
             <div>
               <Eyebrow>Gallery</Eyebrow>
               <h2 className="mt-4 font-display text-4xl italic text-foreground md:text-5xl">
-                Life on the lagoon
+                {details.galleryHeading}
               </h2>
             </div>
             <a
@@ -822,13 +852,13 @@ function ProjectPage() {
             <div>
               <Eyebrow>Material board</Eyebrow>
               <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-4xl">
-                Shaped
+                {details.materials.heading.line}
                 <span className="block font-display text-[0.82em] normal-case italic">
-                  by nature
+                  {details.materials.heading.italic}
                 </span>
               </h2>
               <ul className="mt-8 max-w-md border-t border-primary/35">
-                {details.materials.map((item) => (
+                {details.materials.items.map((item) => (
                   <li
                     key={item}
                     className="flex items-center gap-3 border-b border-border py-3 text-sm text-foreground"
@@ -864,7 +894,7 @@ function ProjectPage() {
         className={`bg-primary bg-cover bg-center py-20 text-primary-foreground md:py-28 ${sectionPadding}`}
         style={{
           backgroundColor: details.coverBackdrop ?? undefined,
-          ...(details.coverTexture ? { backgroundImage: `url(${details.coverTexture.src})` } : {}),
+          ...textureBackground,
         }}
       >
         <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-end md:gap-20">
