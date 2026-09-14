@@ -10,6 +10,8 @@ const navigation = [
   { to: "/investing", label: "Investing" },
   { to: "/renting", label: "Renting" },
   { to: "/portfolio", label: "Portfolio" },
+  { to: "/", hash: "news", label: "News" },
+  { to: "/", hash: "faq", label: "FAQ" },
   { to: "/team", label: "Team" },
   { to: "/contact", label: "Contact" },
 ] as const;
@@ -38,8 +40,12 @@ export function SiteFooter() {
           <p className="text-[11px] font-medium uppercase text-muted-foreground">Navigation</p>
           <ul className="mt-5 space-y-3">
             {navigation.map((item) => (
-              <li key={item.to}>
-                <Link to={item.to} className="text-sm text-foreground hover:text-accent">
+              <li key={item.label}>
+                <Link
+                  to={item.to}
+                  {...("hash" in item ? { hash: item.hash } : {})}
+                  className="text-sm text-foreground hover:text-accent"
+                >
                   {item.label}
                 </Link>
               </li>
