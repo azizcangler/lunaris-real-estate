@@ -69,84 +69,49 @@ function Index() {
   return (
     <main className="min-h-screen overflow-x-hidden bg-background">
       <SiteHeader />
-      {/* Hero: split layout with the popular projects in a coverflow carousel (shadcnblocks hero231 style) */}
-      <section className="section-watermark border-b border-border px-5 pb-12 pt-10 sm:px-10 md:px-16 md:pb-20 md:pt-14 lg:px-24">
-        <div className="relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
-          <div className="hero-reveal min-w-0">
-            <p className="inline-flex items-center gap-2 border border-border bg-card px-3 py-1.5 text-[11px] font-medium uppercase text-muted-foreground">
-              <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
+      {/* Hero: split layout with the popular projects in a coverflow carousel (shadcnblocks hero231) */}
+      <section className="border-b border-border px-5 py-14 sm:px-10 md:px-16 md:py-20 lg:px-24 lg:py-24">
+        <div className="grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+          <div className="hero-reveal flex min-w-0 flex-col">
+            <p className="inline-flex w-fit items-center gap-2 rounded-full bg-muted px-3.5 py-1.5 text-xs font-medium text-foreground">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-foreground" />
               Popular projects in Dubai
             </p>
-            <h1 className="mt-7 max-w-[760px] font-sans text-[clamp(2.6rem,5.2vw,5.6rem)] font-normal uppercase leading-[0.92] text-foreground">
-              <span className="block">Find your</span>
-              <span className="block">exclusive home</span>
-              <span className="mt-4 block font-display text-[0.55em] normal-case italic leading-none">
-                in Dubai
-              </span>
+            <h1 className="mt-8 max-w-[640px] font-sans text-[clamp(2.75rem,5.4vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.02em] text-foreground">
+              Find your exclusive home in Dubai.
             </h1>
-            <p className="mt-7 max-w-md text-sm leading-7 text-muted-foreground md:text-base md:leading-8">
+            <p className="mt-6 max-w-md text-sm leading-7 text-muted-foreground md:text-base md:leading-8">
               We redefine the property journey in Dubai through innovation, elegance, and trust,
               with a client-first approach and global standards.
             </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-10 flex flex-wrap gap-3 lg:mt-auto lg:pt-16">
               <Button
                 asChild
                 size="lg"
-                className="h-12 rounded-none px-8 text-xs uppercase shadow-none"
-              >
-                <Link to="/contact">
-                  Request a consultation
-                  <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
-                </Link>
-              </Button>
-              <Button
-                asChild
-                size="lg"
-                variant="outline"
-                className="h-12 rounded-none border-foreground/30 bg-transparent px-8 text-xs uppercase shadow-none hover:bg-secondary"
+                variant="secondary"
+                className="h-11 rounded-full px-6 text-sm font-medium shadow-none"
               >
                 <Link to="/portfolio">
                   View the portfolio
-                  <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
+                  <ArrowUpRight aria-hidden="true" className="ml-1.5 size-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                className="h-11 rounded-full bg-foreground px-6 text-sm font-medium text-background shadow-none hover:bg-foreground/85"
+              >
+                <Link to="/contact">
+                  Request a consultation
+                  <ArrowUpRight aria-hidden="true" className="ml-1.5 size-4" />
                 </Link>
               </Button>
             </div>
-            <div className="mt-12 grid max-w-md grid-cols-3 divide-x divide-border text-foreground">
-              <div className="pr-4 md:pr-8">
-                <span className="font-display text-3xl italic md:text-4xl">32+</span>
-                <p className="mt-1 text-[10px] leading-tight text-muted-foreground md:text-xs">
-                  selected
-                  <br />
-                  projects
-                </p>
-              </div>
-              <div className="px-4 md:px-8">
-                <span className="font-display text-3xl italic md:text-4xl">12</span>
-                <p className="mt-1 text-[10px] leading-tight text-muted-foreground md:text-xs">
-                  trusted
-                  <br />
-                  developers
-                </p>
-              </div>
-              <div className="pl-4 md:pl-8">
-                <span className="font-display text-3xl italic md:text-4xl">4.9</span>
-                <p className="mt-1 text-[10px] leading-tight text-muted-foreground md:text-xs">
-                  client
-                  <br />
-                  rating
-                </p>
-              </div>
-            </div>
           </div>
 
-          <div className="hero-reveal hero-reveal-delayed relative min-w-0">
-            {/* Muted panel behind the carousel */}
-            <div
-              aria-hidden="true"
-              className="absolute -inset-x-5 inset-y-8 -z-10 bg-secondary/60 sm:-inset-x-10 lg:-inset-x-6"
-            />
+          <div className="hero-reveal hero-reveal-delayed min-w-0">
             <DeveloperBelt names={developers} />
-            <ProjectCoverflow projects={popularProjects} className="mt-4" />
+            <ProjectCoverflow projects={popularProjects} className="mt-6" />
           </div>
         </div>
       </section>

@@ -56,10 +56,10 @@ export function ProjectCoverflow({
         // -1 … 1: negative when the slide sits left of centre, positive when right of it.
         const signed = clamp(diffToTarget * tweenFactor.current, -1, 1);
         const distance = Math.abs(signed);
-        const scale = 1.04 - 0.16 * distance;
-        const rotate = 12 * signed;
+        const scale = 1.14 - 0.24 * distance;
+        const rotate = 10 * signed;
         node.style.transform = `perspective(1200px) rotateY(${rotate}deg) scale(${scale})`;
-        node.style.opacity = String(1 - 0.28 * distance);
+        node.style.opacity = String(1 - 0.12 * distance);
         node.style.zIndex = String(Math.round(10 - distance * 9));
       });
     });
@@ -116,17 +116,17 @@ export function ProjectCoverflow({
       onFocus={() => (paused.current = true)}
       onBlur={() => (paused.current = false)}
     >
-      <div ref={emblaRef} className="overflow-hidden px-1 py-5">
+      <div ref={emblaRef} className="overflow-hidden px-1 py-8">
         <div className="flex touch-pan-y">
           {projects.map((project, index) => (
             <div
               key={project.slug}
-              className="min-w-0 flex-[0_0_70%] px-2 sm:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
+              className="min-w-0 flex-[0_0_62%] px-1.5 sm:flex-[0_0_44%] lg:flex-[0_0_31%]"
             >
               <div data-card className="relative will-change-transform">
                 <ProjectLink
                   project={project}
-                  className="group relative block aspect-[3/4] overflow-hidden bg-muted"
+                  className="group relative block aspect-[3/4] overflow-hidden rounded-2xl bg-muted shadow-[0_18px_50px_-24px_rgba(20,22,16,0.45)]"
                 >
                   <img
                     src={project.image}
@@ -136,14 +136,12 @@ export function ProjectCoverflow({
                     loading={index < 3 ? "eager" : "lazy"}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
-                  <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(18,22,16,0.78)_0%,rgba(18,22,16,0)_100%)] px-4 pb-4 pt-20 text-[var(--hero-foreground)] sm:px-5 sm:pb-5">
+                  {/* Caption only on hover/focus: the block shows bare portraits. */}
+                  <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(18,22,16,0.78)_0%,rgba(18,22,16,0)_100%)] px-4 pb-4 pt-16 text-[var(--hero-foreground)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                     <p className="text-[10px] font-medium uppercase tracking-[0.12em] opacity-80">
-                      0{index + 1} · {project.developer}
+                      {project.developer} · {project.location}
                     </p>
-                    <p className="mt-1 font-display text-xl italic leading-tight sm:text-2xl">
-                      {project.name}
-                    </p>
-                    <p className="mt-1 text-[11px] opacity-80">{project.location}</p>
+                    <p className="mt-1 font-display text-xl italic leading-tight">{project.name}</p>
                   </div>
                 </ProjectLink>
               </div>
@@ -151,7 +149,7 @@ export function ProjectCoverflow({
           ))}
         </div>
       </div>
-      <div className="mt-3 flex justify-center gap-2 lg:justify-end lg:pr-6" role="tablist">
+      <div className="mt-2 flex justify-center gap-2.5 lg:justify-end lg:pr-8" role="tablist">
         {projects.map((project, index) => (
           <button
             key={project.slug}
@@ -160,8 +158,8 @@ export function ProjectCoverflow({
             aria-selected={index === selected}
             aria-label={`Show ${project.name}`}
             onClick={() => emblaApi?.scrollTo(index)}
-            className={`size-2 rounded-full transition-colors ${
-              index === selected ? "bg-foreground" : "bg-foreground/25 hover:bg-foreground/50"
+            className={`size-1.5 rounded-full transition-colors ${
+              index === selected ? "bg-foreground" : "bg-foreground/20 hover:bg-foreground/45"
             }`}
           />
         ))}
