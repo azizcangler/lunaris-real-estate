@@ -19,7 +19,7 @@ const navigation = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-border bg-background">
-      <div className="grid gap-12 px-6 py-14 sm:px-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr] md:gap-10 md:px-16 md:py-20 lg:px-24">
+      <div className="grid gap-10 px-6 py-12 sm:px-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr] md:gap-10 md:px-16 md:py-20 lg:px-24">
         <div>
           <img
             src={logoAsset.url}
@@ -38,7 +38,7 @@ export function SiteFooter() {
 
         <div>
           <p className="text-[11px] font-medium uppercase text-muted-foreground">Navigation</p>
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:mt-5 md:flex-col md:gap-3">
             {navigation.map((item) => (
               <li key={item.label}>
                 <Link
@@ -55,7 +55,7 @@ export function SiteFooter() {
 
         <div>
           <p className="text-[11px] font-medium uppercase text-muted-foreground">Connect</p>
-          <ul className="mt-5 space-y-3">
+          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:mt-5 md:flex-col md:gap-3">
             <li>
               <a
                 href={company.whatsapp}

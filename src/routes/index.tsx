@@ -9,7 +9,7 @@ import { DeveloperBelt, ProjectCoverflow } from "@/components/project-coverflow"
 import { ProjectLink } from "@/components/project-link";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { howItWorks, strengths, whoWeAre, whyChooseUs } from "@/data/company";
+import { strengths, whoWeAre, whyChooseUs } from "@/data/company";
 import { featuredProjects, projects } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
@@ -232,47 +232,6 @@ function Index() {
       <NewsSection className="border-t border-border" />
       <FaqSection className="border-t border-border bg-secondary/40" />
 
-      <section className="bg-primary px-5 py-14 text-primary-foreground sm:px-10 md:px-16 md:py-24 lg:px-24">
-        <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
-          <div>
-            <p className="text-[11px] font-medium uppercase text-primary-foreground/70">
-              How it works
-            </p>
-            <h2 className="mt-5 font-sans text-4xl font-normal uppercase leading-[0.92] md:text-6xl">
-              Simple
-              <span className="block font-display text-[0.82em] normal-case italic">
-                and stress-free
-              </span>
-            </h2>
-            <p className="mt-6 max-w-sm text-sm leading-7 text-primary-foreground/80">
-              {howItWorks.intro}
-            </p>
-          </div>
-          <ol className="grid gap-8 border-t border-primary-foreground/25 pt-8 sm:grid-cols-3">
-            {howItWorks.steps.map((step) => (
-              <li key={step.number}>
-                <span className="font-display text-3xl italic">{step.number}</span>
-                <h3 className="mt-5 text-sm font-medium uppercase">{step.title}</h3>
-                <p className="mt-3 text-xs leading-6 text-primary-foreground/80">{step.copy}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className="mt-12 flex flex-col gap-4 border-t border-primary-foreground/25 pt-10 md:flex-row md:items-center md:justify-between">
-          <p className="max-w-xl font-display text-2xl italic md:text-3xl">
-            Ready to find your next property?
-          </p>
-          <Button
-            asChild
-            size="lg"
-            className="h-12 rounded-none border border-primary-foreground bg-transparent px-8 text-xs uppercase text-primary-foreground shadow-none hover:bg-primary-foreground hover:text-primary md:w-auto"
-          >
-            <Link to="/contact">
-              Get in touch <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
-            </Link>
-          </Button>
-        </div>
-      </section>
       <SiteFooter />
     </main>
   );

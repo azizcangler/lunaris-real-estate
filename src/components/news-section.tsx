@@ -50,39 +50,43 @@ export function NewsSection({ className = "" }: { className?: string }) {
         </div>
       </div>
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
         {visible.map((item) => (
           <Link
             key={item.slug}
             to={item.to}
-            className="group flex flex-col border border-border bg-card transition-colors hover:border-primary/50"
+            className="group flex border border-border bg-card transition-colors hover:border-primary/50 sm:flex-col"
           >
-            <div className="relative overflow-hidden">
+            {/* Mobile: thumbnail beside the text; sm+: wide image on top. */}
+            <div className="relative w-28 shrink-0 overflow-hidden sm:w-auto">
               <img
                 src={item.image.src}
                 alt={item.image.alt}
                 width={1200}
                 height={900}
                 loading="lazy"
-                className="aspect-[16/9] w-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+                className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.03] sm:aspect-[2/1] sm:h-auto"
               />
-              <span className="absolute right-3 top-3 bg-card px-2.5 py-1 text-[10px] font-medium uppercase tracking-[0.1em] text-foreground">
+              <span className="absolute right-2.5 top-2.5 hidden bg-card px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.1em] text-foreground sm:block">
                 {item.category}
               </span>
             </div>
-            <div className="flex flex-1 flex-col p-4">
-              <h3 className="line-clamp-2 font-display text-xl italic leading-tight text-foreground">
+            <div className="flex min-w-0 flex-1 flex-col p-3 sm:p-3.5">
+              <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground sm:hidden">
+                {item.category}
+              </p>
+              <h3 className="mt-1 line-clamp-2 font-display text-lg italic leading-tight text-foreground sm:mt-0 sm:line-clamp-1">
                 {item.title}
               </h3>
-              <p className="mt-2 line-clamp-2 text-[13px] leading-6 text-muted-foreground">
+              <p className="mt-1.5 hidden line-clamp-2 text-xs leading-5 text-muted-foreground sm:block">
                 {item.excerpt}
               </p>
-              <div className="mt-4 flex items-center justify-between border-t border-border pt-3">
-                <time dateTime={item.date} className="text-xs text-muted-foreground">
+              <div className="mt-auto flex items-center justify-between border-t border-border pt-2 sm:mt-3 sm:pt-2.5">
+                <time dateTime={item.date} className="text-[11px] text-muted-foreground">
                   {formatDate(item.date)}
                 </time>
-                <span className="inline-flex size-7 items-center justify-center border border-border text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
-                  <ArrowUpRight aria-hidden="true" className="size-4" />
+                <span className="inline-flex size-6 items-center justify-center border border-border text-primary transition-colors group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground">
+                  <ArrowUpRight aria-hidden="true" className="size-3.5" />
                 </span>
               </div>
             </div>
