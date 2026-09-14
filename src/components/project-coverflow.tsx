@@ -26,8 +26,8 @@ export function ProjectCoverflow({
   projects: Project[];
   className?: string;
 }) {
-  // Embla's own drag is off: a swipe goes the way the finger points (right → the card on the
-  // right), which is the opposite of scroll-style dragging.
+  // Embla's own drag is off in favour of a simple swipe: one gesture moves exactly one card,
+  // and a swipe never opens the card it ends on.
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
@@ -139,12 +139,13 @@ export function ProjectCoverflow({
     return () => window.clearInterval(id);
   }, [emblaApi]);
 
-  // Decide the swipe from its horizontal travel: right → the card on the right, left → the one on
-  // the left. Diagonal or tiny moves are ignored so vertical page scrolling keeps working.
+  // The cards follow the finger: swipe left and the track moves left (next card), swipe right and
+  // it moves right (previous card). Diagonal or tiny moves are ignored so vertical page scrolling
+  // keeps working.
   const finishSwipe = (dx: number, dy: number) => {
     if (Math.abs(dx) < 24 || Math.abs(dx) < Math.abs(dy)) return;
     swiped.current = true;
-    if (dx > 0) emblaApi?.scrollNext();
+    if (dx < 0) emblaApi?.scrollNext();
     else emblaApi?.scrollPrev();
   };
   // Mouse: pointer events. Touch is handled separately below because browsers may cancel the
