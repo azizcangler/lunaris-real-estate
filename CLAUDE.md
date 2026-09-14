@@ -30,7 +30,7 @@ git push origin main   # GitHub (keychain kimlik bilgisi mevcut)
 ## Sayfalar
 | Route | Dosya | İçerik |
 |---|---|---|
-| `/` | `routes/index.tsx` | Hero, Living/Investing/Renting seçici, Who we are, öne çıkan 3 proje, Why clients choose us, How it works |
+| `/` | `routes/index.tsx` | Split hero (shadcnblocks hero231 uyarlaması: solda başlık/metin/CTA/istatistik, sağda geliştirici adlarından kayan şerit + `components/project-coverflow.tsx` Embla coverflow carousel'i, ilk 7 proje, otomatik ilerler), Living/Investing/Renting seçici, Who we are, öne çıkan 3 proje, Why clients choose us, How it works |
 | `/portfolio` | `routes/portfolio.tsx` | 11 projenin tamamı, her kartta render + PDF broşür linki. Kartların `id`si proje slug'ı (ana sayfadan `hash` ile bağlanır). `details` alanı olan projelerde görsel/başlık ve "Explore the project" linki detay sayfasına gider |
 | `/portfolio/$slug` | `routes/portfolio_.$slug.tsx` | Proje detay sayfası (dosya adındaki `_` route'u `/portfolio` altına yuvalamamak için). Sadece `details` alanı olan projeler için çalışır, diğerleri `notFound()`. Şu an: `the-acres`, `athlon`, `damac-islands` |
 | `/team` | `routes/team.tsx` | About Us: kurucular (Erdi Emecan, Halil Utan), Who we are, How it works |

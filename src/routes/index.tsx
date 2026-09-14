@@ -2,14 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
-import heroAsset from "@/assets/dubai-coast-villa-hero.png.asset.json";
 import teamImage from "@/assets/team-dubai.jpg";
 import { Button } from "@/components/ui/button";
+import { DeveloperBelt, ProjectCoverflow } from "@/components/project-coverflow";
 import { ProjectLink } from "@/components/project-link";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { howItWorks, strengths, whoWeAre, whyChooseUs } from "@/data/company";
-import { featuredProjects } from "@/data/projects";
+import { featuredProjects, projects } from "@/data/projects";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -31,6 +31,10 @@ export const Route = createFileRoute("/")({
   }),
   component: Index,
 });
+
+// Hero carousel: the featured trio first, then the next most-asked-for developments.
+const popularProjects = projects.slice(0, 7);
+const developers = [...new Set(projects.map((project) => project.developer))];
 
 const choices = {
   living: {
@@ -64,39 +68,53 @@ function Index() {
 
   return (
     <main className="min-h-screen overflow-x-hidden bg-background">
-      <SiteHeader overlay />
-      <section className="relative min-h-[560px] h-[72svh] overflow-hidden text-[var(--hero-foreground)] md:min-h-[580px] md:h-[62svh]">
-        <img
-          src={heroAsset.url}
-          alt="Floor-to-ceiling glass doors opening to a calm coastline from a modern villa interior"
-          width={992}
-          height={1488}
-          fetchPriority="high"
-          className="absolute inset-0 h-full w-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--hero-scrim)_0%,transparent_64%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--hero-scrim)_0%,transparent_38%)] opacity-75" />
-
-        <div className="relative z-10 flex h-full flex-col px-5 pb-6 pt-24 sm:px-10 md:px-16 md:pb-10 md:pt-32 lg:px-24">
-          <div className="hero-reveal flex items-start justify-between gap-8">
-            <h1 className="max-w-[820px] font-sans text-[clamp(2.6rem,5.7vw,6.2rem)] font-normal uppercase leading-[0.92]">
+      <SiteHeader />
+      {/* Hero: split layout with the popular projects in a coverflow carousel (shadcnblocks hero231 style) */}
+      <section className="section-watermark border-b border-border px-5 pb-12 pt-10 sm:px-10 md:px-16 md:pb-20 md:pt-14 lg:px-24">
+        <div className="relative z-10 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-16">
+          <div className="hero-reveal min-w-0">
+            <p className="inline-flex items-center gap-2 border border-border bg-card px-3 py-1.5 text-[11px] font-medium uppercase text-muted-foreground">
+              <span aria-hidden="true" className="size-1.5 rounded-full bg-primary" />
+              Popular projects in Dubai
+            </p>
+            <h1 className="mt-7 max-w-[760px] font-sans text-[clamp(2.6rem,5.2vw,5.6rem)] font-normal uppercase leading-[0.92] text-foreground">
               <span className="block">Find your</span>
               <span className="block">exclusive home</span>
               <span className="mt-4 block font-display text-[0.55em] normal-case italic leading-none">
                 in Dubai
               </span>
             </h1>
-            <p className="hidden max-w-[220px] text-right text-xs leading-[1.35] md:block">
+            <p className="mt-7 max-w-md text-sm leading-7 text-muted-foreground md:text-base md:leading-8">
               We redefine the property journey in Dubai through innovation, elegance, and trust,
               with a client-first approach and global standards.
             </p>
-          </div>
-
-          <div className="hero-reveal hero-reveal-delayed mt-auto flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
-            <div className="grid grid-cols-3 divide-x divide-[var(--hero-foreground)]/45">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Button
+                asChild
+                size="lg"
+                className="h-12 rounded-none px-8 text-xs uppercase shadow-none"
+              >
+                <Link to="/contact">
+                  Request a consultation
+                  <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
+                </Link>
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="h-12 rounded-none border-foreground/30 bg-transparent px-8 text-xs uppercase shadow-none hover:bg-secondary"
+              >
+                <Link to="/portfolio">
+                  View the portfolio
+                  <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
+                </Link>
+              </Button>
+            </div>
+            <div className="mt-12 grid max-w-md grid-cols-3 divide-x divide-border text-foreground">
               <div className="pr-4 md:pr-8">
                 <span className="font-display text-3xl italic md:text-4xl">32+</span>
-                <p className="mt-1 text-[10px] leading-tight md:text-xs">
+                <p className="mt-1 text-[10px] leading-tight text-muted-foreground md:text-xs">
                   selected
                   <br />
                   projects
@@ -104,7 +122,7 @@ function Index() {
               </div>
               <div className="px-4 md:px-8">
                 <span className="font-display text-3xl italic md:text-4xl">12</span>
-                <p className="mt-1 text-[10px] leading-tight md:text-xs">
+                <p className="mt-1 text-[10px] leading-tight text-muted-foreground md:text-xs">
                   trusted
                   <br />
                   developers
@@ -112,20 +130,23 @@ function Index() {
               </div>
               <div className="pl-4 md:pl-8">
                 <span className="font-display text-3xl italic md:text-4xl">4.9</span>
-                <p className="mt-1 text-[10px] leading-tight md:text-xs">
+                <p className="mt-1 text-[10px] leading-tight text-muted-foreground md:text-xs">
                   client
                   <br />
                   rating
                 </p>
               </div>
             </div>
-            <Button
-              asChild
-              size="lg"
-              className="h-12 w-full rounded-none bg-card px-8 text-xs text-card-foreground shadow-none hover:bg-secondary md:w-auto"
-            >
-              <Link to="/contact">REQUEST A CONSULTATION</Link>
-            </Button>
+          </div>
+
+          <div className="hero-reveal hero-reveal-delayed relative min-w-0">
+            {/* Muted panel behind the carousel */}
+            <div
+              aria-hidden="true"
+              className="absolute -inset-x-5 inset-y-8 -z-10 bg-secondary/60 sm:-inset-x-10 lg:-inset-x-6"
+            />
+            <DeveloperBelt names={developers} />
+            <ProjectCoverflow projects={popularProjects} className="mt-4" />
           </div>
         </div>
       </section>

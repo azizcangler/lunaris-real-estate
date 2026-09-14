@@ -186,7 +186,17 @@
   opacity: 0.14;
 }
 
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, black 12%, black 88%, transparent);
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .marquee { animation: marquee 36s linear infinite; }
   .hero-reveal { animation: hero-reveal 900ms ease-out both; }
   .step-reveal { animation: hero-reveal 220ms ease-out both; }
   .hero-reveal-delayed { animation-delay: 180ms; }
