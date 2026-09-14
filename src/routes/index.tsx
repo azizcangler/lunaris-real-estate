@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import { ArrowDownRight, ArrowRight, ArrowUp, ArrowUpRight } from "lucide-react";
 
 import teamImage from "@/assets/team-dubai.jpg";
 import { Button } from "@/components/ui/button";
@@ -43,9 +43,12 @@ function Index() {
       <section className="border-b border-border px-5 py-10 sm:px-10 md:px-16 md:py-20 lg:px-24 lg:py-24">
         <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div className="hero-reveal flex min-w-0 flex-col">
+            {/* Points at the carousel: above the copy on mobile, to the right on desktop. */}
             <p className="inline-flex w-fit items-center gap-3 text-[11px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
               <span aria-hidden="true" className="h-px w-8 bg-primary" />
               Popular projects in Dubai
+              <ArrowUp aria-hidden="true" className="size-3.5 text-primary lg:hidden" />
+              <ArrowRight aria-hidden="true" className="hidden size-3.5 text-primary lg:block" />
             </p>
             <h1 className="mt-8 max-w-[640px] font-sans text-[clamp(2.75rem,5.4vw,5.5rem)] font-semibold leading-[1.02] tracking-[-0.02em] text-foreground">
               Find your exclusive home in Dubai.

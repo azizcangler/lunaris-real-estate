@@ -7,7 +7,9 @@ import type { Project } from "@/data/projects";
 
 /** Multiplied by the snap count so the tween reaches its edge value one slide away from centre. */
 const TWEEN_FACTOR_BASE = 0.55;
-const AUTOPLAY_MS = 3800;
+const AUTOPLAY_MS = 4200;
+/** How long a project's brochure cover stays up when its card takes the centre, before fading to the render. */
+const COVER_MS = 1500;
 
 const clamp = (value: number, min: number, max: number) => Math.min(Math.max(value, min), max);
 
@@ -25,6 +27,9 @@ export function ProjectCoverflow({
 }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: "center", duration: 28 });
   const [selected, setSelected] = useState(0);
+  // Slide whose brochure cover is currently shown over the render (top projects only).
+  const [coverOn, setCoverOn] = useState<number | null>(null);
+  const coverTimer = useRef(0);
   const tweenFactor = useRef(0);
   const tweenNodes = useRef<(HTMLElement | null)[]>([]);
   const paused = useRef(false);
@@ -75,7 +80,17 @@ export function ProjectCoverflow({
     const setFactor = (api: EmblaCarouselType) => {
       tweenFactor.current = TWEEN_FACTOR_BASE * api.scrollSnapList().length;
     };
-    const onSelect = (api: EmblaCarouselType) => setSelected(api.selectedScrollSnap());
+    const onSelect = (api: EmblaCarouselType) => {
+      const index = api.selectedScrollSnap();
+      setSelected(index);
+      window.clearTimeout(coverTimer.current);
+      if (projects[index]?.details?.cover) {
+        setCoverOn(index);
+        coverTimer.current = window.setTimeout(() => setCoverOn(null), COVER_MS);
+      } else {
+        setCoverOn(null);
+      }
+    };
 
     setNodes(emblaApi);
     setFactor(emblaApi);
@@ -89,6 +104,7 @@ export function ProjectCoverflow({
       .on("slideFocus", tween)
       .on("select", onSelect);
     return () => {
+      window.clearTimeout(coverTimer.current);
       emblaApi
         .off("reInit", setNodes)
         .off("reInit", setFactor)
@@ -97,7 +113,7 @@ export function ProjectCoverflow({
         .off("slideFocus", tween)
         .off("select", onSelect);
     };
-  }, [emblaApi, tween]);
+  }, [emblaApi, tween, projects]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -136,6 +152,17 @@ export function ProjectCoverflow({
                     loading={index < 3 ? "eager" : "lazy"}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
+                  {project.details?.cover ? (
+                    <img
+                      src={project.details.cover.src}
+                      alt=""
+                      aria-hidden="true"
+                      loading={index < 3 ? "eager" : "lazy"}
+                      className={`absolute inset-0 h-full w-full object-cover transition-opacity ease-out ${
+                        coverOn === index ? "opacity-100 duration-300" : "opacity-0 duration-1000"
+                      }`}
+                    />
+                  ) : null}
                   {/* Caption only on hover/focus: the block shows bare portraits. */}
                   <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(0deg,rgba(18,22,16,0.78)_0%,rgba(18,22,16,0)_100%)] px-4 pb-4 pt-16 text-[var(--hero-foreground)] opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
                     <p className="text-[10px] font-medium uppercase tracking-[0.12em] opacity-80">
