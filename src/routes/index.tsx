@@ -3,6 +3,8 @@ import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 
 import teamImage from "@/assets/team-dubai.jpg";
 import { Button } from "@/components/ui/button";
+import { FaqSection } from "@/components/faq-section";
+import { NewsSection } from "@/components/news-section";
 import { DeveloperBelt, ProjectCoverflow } from "@/components/project-coverflow";
 import { ProjectLink } from "@/components/project-link";
 import { SiteFooter } from "@/components/site-footer";
@@ -226,6 +228,9 @@ function Index() {
           </div>
         </div>
       </section>
+
+      <NewsSection className="border-t border-border" />
+      <FaqSection className="border-t border-border bg-secondary/40" />
 
       <section className="bg-primary px-5 py-14 text-primary-foreground sm:px-10 md:px-16 md:py-24 lg:px-24">
         <div className="grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">

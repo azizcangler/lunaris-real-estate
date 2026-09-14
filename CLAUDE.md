@@ -30,7 +30,7 @@ git push origin main   # GitHub (keychain kimlik bilgisi mevcut)
 ## Sayfalar
 | Route | Dosya | İçerik |
 |---|---|---|
-| `/` | `routes/index.tsx` | Split hero (shadcnblocks hero231 uyarlaması: solda kicker/başlık/metin/CTA'lar, sağda geliştirici adlarından kayan şerit + `components/project-coverflow.tsx` Embla coverflow carousel'i, ilk 7 proje, otomatik ilerler; mobilde carousel üstte), Who we are, öne çıkan 3 proje, Why clients choose us, How it works |
+| `/` | `routes/index.tsx` | Split hero (shadcnblocks hero231 uyarlaması: solda kicker/başlık/metin/CTA'lar, sağda geliştirici adlarından kayan şerit + `components/project-coverflow.tsx` Embla coverflow carousel'i, ilk 7 proje, otomatik ilerler; mobilde carousel üstte), Who we are, öne çıkan 3 proje, Why clients choose us, News & updates (`components/news-section.tsx`, veri `data/news.ts`: kategori filtresi + kartlar, dahili sayfalara link), FAQ (`components/faq-section.tsx`, veri `data/faq.ts`, shadcn Accordion), How it works |
 | `/portfolio` | `routes/portfolio.tsx` | 11 projenin tamamı, her kartta render + PDF broşür linki. Kartların `id`si proje slug'ı (ana sayfadan `hash` ile bağlanır). `details` alanı olan projelerde görsel/başlık ve "Explore the project" linki detay sayfasına gider |
 | `/portfolio/$slug` | `routes/portfolio_.$slug.tsx` | Proje detay sayfası (dosya adındaki `_` route'u `/portfolio` altına yuvalamamak için). Sadece `details` alanı olan projeler için çalışır, diğerleri `notFound()`. Şu an: `the-acres`, `athlon`, `damac-islands` |
 | `/team` | `routes/team.tsx` | About Us: kurucular (Erdi Emecan, Halil Utan), Who we are, How it works |
@@ -44,6 +44,7 @@ Ortak bileşenler: `components/site-header.tsx` (nav linkleri burada), `componen
 - `src/data/project-details/<slug>.ts` — detay sayfası içeriği: `the-acres.ts`, `athlon.ts`, `damac-islands.ts`. Broşür metinlerinden derlendi, hafif düzenlendi. Athlon'da tip açıklamaları ve Damac'ta "Seychelles 2" bilgisi broşür metninde yok (bkz. README).
 - `src/components/project-link.tsx` — `ProjectLink`: `details` varsa `/portfolio/$slug`, yoksa `/portfolio#slug`. Ana sayfa ve portfolio kartları bunu kullanır.
 - `src/data/company.ts` — iletişim bilgileri, sosyal medya, kurucular, Who we are metinleri, strengths, whyChooseUs, howItWorks.
+- `src/data/news.ts` — ana sayfa haber kartları (kategori News/Property showcase/Insights, ISO tarih, başlık, özet, görsel, hedef route; en yeni önce). Metin ve tarihler editoryal, serbestçe düzenlenir; görseller proje kartları ve ekip fotoğrafı. `src/data/faq.ts` — SSS soru/cevapları (genel ve temkinli; ücret/vize gibi bilgiler değişebildiği için "we confirm" diliyle).
 
 ## Varlıklar
 - Proje renderları: `src/assets/projects/<slug>.jpg` (Vite import, hash'li URL; 1200×900). Detay sayfası görselleri: `src/assets/projects/<slug>/*.jpg` (The Acres 34, Athlon 57, Damac Islands 40 görsel; ~12–13 MB/proje; PDF sayfalarından PyMuPDF ile çıkarıldı, 1300–2000 px genişlik, JPEG q78). Villa/tip render'larında başlık bandı vektör olduğu için gömülü görsel (`extract_image`/`Pixmap(doc, xref)`) temizdir; tam sayfa kompozisyonlar (kapak, numaralı masterplan) `get_pixmap` ile render edilir.

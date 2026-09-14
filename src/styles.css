@@ -201,3 +201,19 @@
   .step-reveal { animation: hero-reveal 220ms ease-out both; }
   .hero-reveal-delayed { animation-delay: 180ms; }
 }
+
+/* shadcn accordion open/close (Tailwind v4 registers animations through @theme). */
+@theme inline {
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+}
+
+@keyframes accordion-down {
+  from { height: 0; }
+  to { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to { height: 0; }
+}
