@@ -3,7 +3,7 @@ import { ArrowUpRight, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetClose, SheetContent, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
-import logoAsset from "@/assets/lunaris-logo.png.asset.json";
+import { LunarisLogo } from "@/components/lunaris-logo";
 import { company } from "@/data/company";
 
 type NavLink = {
@@ -57,13 +57,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         className={`flex h-20 items-center justify-between px-6 sm:px-10 md:px-16 lg:px-24 ${tone}`}
       >
         <Link to="/" className="block" aria-label="Lunaris Real Estate home">
-          <img
-            src={logoAsset.url}
-            alt="Lunaris Real Estate"
-            width={1130}
-            height={655}
-            className={`h-auto w-28 object-contain sm:w-32 ${overlay ? "brightness-0 invert" : ""}`}
-          />
+          <LunarisLogo className="w-28 sm:w-32" />
         </Link>
         <nav className="hidden items-center gap-6 md:flex lg:gap-8" aria-label="Main navigation">
           {links.map((link) => (

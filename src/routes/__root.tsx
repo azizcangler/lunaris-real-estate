@@ -78,6 +78,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      // The site has a single light design: opt out of Chrome/Brave "auto dark" and Dark Reader,
+      // which otherwise darken the cream pages and hide dark artwork.
+      { name: "color-scheme", content: "only light" },
+      { name: "darkreader-lock", content: "" },
       { title: "Lunaris Dubai Real Estate" },
       {
         name: "description",

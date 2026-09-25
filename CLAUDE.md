@@ -55,6 +55,7 @@ Ortak bileşenler: `components/whatsapp-button.tsx` (sağ altta sabit WhatsApp b
 - Kurucu fotoğrafları: `src/assets/team/`
 - PDF broşürler: `public/brochures/<slug>.pdf` (toplam ~209 MB; Cloudflare dosya başına 25 MiB sınırı, DWTN 25.7 MB ile sınıra yakın). `meraas-the-acres.pdf` orijinali 37 MB'tı; PyMuPDF `rewrite_images(dpi_target=100, quality=62)` ile 23.6 MB'a indirildi (metin vektör kaldı). `aldar-athlon.pdf` (18.1 MB) ve `damac-islands.pdf` (20.3 MB) sıkıştırmasız kopyalandı. Orijinal PDF'ler repo dışında `../` altında.
 - Logo / filigran / hero: `public/images/` — `src/assets/*.asset.json` dosyalarındaki `url` alanı bunlara işaret eder (Lovable'ın asset mekanizması, dokunma)
+- Logo (25 Eylül 2026): header ve footer `components/lunaris-logo.tsx` inline SVG'sini kullanır (PNG'den potracer ile vektörleştirildi; yazı `currentColor`, yay/yıldız sabit altın `#ae9064`). Böylece overlay header'da ve tarayıcı zorunlu karanlık modunda (Brave/Chrome auto-dark, Dark Reader) yazı otomatik açık renge döner; eskiden PNG'nin siyah yazısı koyu zeminde kayboluyordu. Ayrıca `__root.tsx` meta'larında `color-scheme: only light` ve `darkreader-lock` ile site bu modlardan muaf tutulur. `public/images/lunaris-logo.png` Lovable asset olarak duruyor, sayfalarda artık kullanılmıyor.
 - Not: eski sitenin proje açıklamaları "..." ile kesikti; mevcut metinler tamamlanmış hâlleri, konum bilgileri geliştirici bilgilerinden eklendi. Doğrulanması gerekiyor.
 
 ## Proje detay sayfaları

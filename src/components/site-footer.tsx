@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
-import logoAsset from "@/assets/lunaris-logo.png.asset.json";
+import { LunarisLogo } from "@/components/lunaris-logo";
 import { company } from "@/data/company";
 
 const navigation = [
@@ -21,14 +21,7 @@ export function SiteFooter() {
     <footer className="border-t border-border bg-background">
       <div className="grid gap-10 px-6 py-12 sm:px-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr] md:gap-10 md:px-16 md:py-20 lg:px-24">
         <div>
-          <img
-            src={logoAsset.url}
-            alt={company.name}
-            width={1130}
-            height={655}
-            loading="lazy"
-            className="h-auto w-32 object-contain"
-          />
+          <LunarisLogo className="w-32 text-foreground" title={company.name} />
           <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">
             At Lunaris Real Estate, we redefine the property journey in Dubai through innovation,
             elegance, and trust. With a client-first approach and global standards, we offer
