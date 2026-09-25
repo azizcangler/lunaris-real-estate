@@ -2,44 +2,45 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 
 import { LunarisLogo } from "@/components/lunaris-logo";
+import type { NavLink } from "@/components/site-header";
 import { company } from "@/data/company";
+import { useT } from "@/i18n";
 
-const navigation = [
-  { to: "/", label: "Home" },
-  { to: "/living", label: "Living" },
-  { to: "/investing", label: "Investing" },
-  { to: "/renting", label: "Renting" },
-  { to: "/portfolio", label: "Portfolio" },
-  { to: "/", hash: "news", label: "News" },
-  { to: "/", hash: "faq", label: "FAQ" },
-  { to: "/team", label: "Team" },
-  { to: "/contact", label: "Contact" },
-] as const;
+const navigation: NavLink[] = [
+  { to: "/{-$lang}", label: "home" },
+  { to: "/{-$lang}/living", label: "living" },
+  { to: "/{-$lang}/investing", label: "investing" },
+  { to: "/{-$lang}/renting", label: "renting" },
+  { to: "/{-$lang}/portfolio", label: "portfolio" },
+  { to: "/{-$lang}", hash: "news", label: "news" },
+  { to: "/{-$lang}", hash: "faq", label: "faq" },
+  { to: "/{-$lang}/team", label: "team" },
+  { to: "/{-$lang}/contact", label: "contact" },
+];
 
 export function SiteFooter() {
+  const { t } = useT();
   return (
     <footer className="border-t border-border bg-background">
       <div className="grid gap-10 px-6 py-12 sm:px-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr] md:gap-10 md:px-16 md:py-20 lg:px-24">
         <div>
           <LunarisLogo className="w-32 text-foreground" title={company.name} />
-          <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">
-            At Lunaris Real Estate, we redefine the property journey in Dubai through innovation,
-            elegance, and trust. With a client-first approach and global standards, we offer
-            tailored real estate solutions that go beyond transactions.
-          </p>
+          <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">{t.footer.about}</p>
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase text-muted-foreground">Navigation</p>
+          <p className="text-[11px] font-medium uppercase text-muted-foreground">
+            {t.footer.navigation}
+          </p>
           <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:mt-5 md:flex-col md:gap-3">
             {navigation.map((item) => (
               <li key={item.label}>
                 <Link
                   to={item.to}
-                  {...("hash" in item ? { hash: item.hash } : {})}
+                  {...(item.hash ? { hash: item.hash } : {})}
                   className="text-sm text-foreground hover:text-accent"
                 >
-                  {item.label}
+                  {t.nav[item.label]}
                 </Link>
               </li>
             ))}
@@ -47,7 +48,9 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase text-muted-foreground">Connect</p>
+          <p className="text-[11px] font-medium uppercase text-muted-foreground">
+            {t.footer.connect}
+          </p>
           <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:mt-5 md:flex-col md:gap-3">
             <li>
               <a
@@ -83,7 +86,9 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase text-muted-foreground">Visit us</p>
+          <p className="text-[11px] font-medium uppercase text-muted-foreground">
+            {t.footer.visitUs}
+          </p>
           <address className="mt-5 text-sm not-italic leading-7 text-foreground">
             {company.address.building}, {company.address.area}
             <br />
@@ -104,9 +109,9 @@ export function SiteFooter() {
 
       <div className="flex flex-col gap-2 border-t border-border px-6 py-6 text-[11px] uppercase text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-10 md:px-16 lg:px-24">
         <p>
-          © {new Date().getFullYear()} {company.name}. All rights reserved.
+          © {new Date().getFullYear()} {company.name}. {t.footer.rights}
         </p>
-        <p>Dubai, United Arab Emirates</p>
+        <p>{t.footer.location}</p>
       </div>
     </footer>
   );

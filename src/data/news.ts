@@ -16,9 +16,12 @@ export type NewsItem = {
   title: string;
   excerpt: string;
   image: { src: string; alt: string };
-  /** Internal route the card opens. */
-  to: string;
-};
+} & NewsTarget;
+
+/** Internal route the card opens (language prefix is inherited from the current page); a detail page needs its slug. */
+export type NewsTarget =
+  | { to: "/{-$lang}/contact" | "/{-$lang}/investing" | "/{-$lang}/renting"; params?: undefined }
+  | { to: "/{-$lang}/portfolio/$slug"; params: { slug: string } };
 
 /** Newest first. Copy and dates are editorial: edit freely, the section renders whatever is here. */
 export const news: NewsItem[] = [
@@ -30,7 +33,7 @@ export const news: NewsItem[] = [
     excerpt:
       "Our office is now at Iris Bay Tower, Office 1005-06, in the heart of Business Bay. Visit us for a consultation, or reach the team on WhatsApp for a first conversation wherever you are.",
     image: { src: teamImage, alt: "The Lunaris team in Dubai" },
-    to: "/contact",
+    to: "/{-$lang}/contact",
   },
   {
     slug: "damac-islands-showcase",
@@ -40,7 +43,8 @@ export const news: NewsItem[] = [
     excerpt:
       "Six island-inspired clusters, a jungle river and twenty-two curated attractions, from a floating wedding venue to underwater dining. Townhouses and villas from four to seven bedrooms in Dubailand.",
     image: { src: damacIslandsImage, alt: "Aerial rendering of the Damac Islands lagoon" },
-    to: "/portfolio/damac-islands",
+    to: "/{-$lang}/portfolio/$slug",
+    params: { slug: "damac-islands" },
   },
   {
     slug: "athlon-showcase",
@@ -50,7 +54,8 @@ export const news: NewsItem[] = [
     excerpt:
       "Running, cycling and family loops link seven clubhouses and shaded parks. Townhouses and villas from three to six bedrooms, LEED Platinum pre-certified, in the green heart of Dubailand.",
     image: { src: athlonImage, alt: "Athlon clubhouse at dusk" },
-    to: "/portfolio/athlon",
+    to: "/{-$lang}/portfolio/$slug",
+    params: { slug: "athlon" },
   },
   {
     slug: "the-acres-showcase",
@@ -60,7 +65,8 @@ export const news: NewsItem[] = [
     excerpt:
       "Standalone villas set around lagoons, forest trails and a lakeside promenade. Six villa types, a LEED Gold masterplan and a lifestyle built on nature, minutes from Arabian Ranches.",
     image: { src: acresImage, alt: "The Acres lagoon and gardens" },
-    to: "/portfolio/the-acres",
+    to: "/{-$lang}/portfolio/$slug",
+    params: { slug: "the-acres" },
   },
   {
     slug: "buying-as-a-foreigner",
@@ -70,7 +76,7 @@ export const news: NewsItem[] = [
     excerpt:
       "Freehold ownership in designated areas, developer payment plans, escrow protection for off-plan purchases and the paperwork behind a clean transfer. What to expect from the first viewing to the title deed.",
     image: { src: mercedesImage, alt: "Mercedes-Benz Places towers in Downtown Dubai" },
-    to: "/investing",
+    to: "/{-$lang}/investing",
   },
   {
     slug: "renting-checklist",
@@ -80,6 +86,6 @@ export const news: NewsItem[] = [
     excerpt:
       "Ejari registration, cheque schedules, deposits and the documents landlords ask for. A short checklist so your move-in date does not slip.",
     image: { src: samanaImage, alt: "Samana Resort pool terrace" },
-    to: "/renting",
+    to: "/{-$lang}/renting",
   },
 ];

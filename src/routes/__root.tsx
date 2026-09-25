@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
-  Link,
   createRootRouteWithContext,
   useRouter,
   HeadContent,
@@ -10,34 +9,16 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import { WhatsAppButton } from "@/components/whatsapp-button";
+import { en } from "@/i18n/en";
+import { NotFound } from "@/components/not-found";
+import { localePrefix, useLocale, useT } from "@/i18n";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-
-function NotFoundComponent() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   console.error(error);
   const router = useRouter();
+  const { locale, t } = useT();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error]);
@@ -46,11 +27,9 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
+          {t.errors.errorTitle}
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
+        <p className="mt-2 text-sm text-muted-foreground">{t.errors.errorCopy}</p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
@@ -59,13 +38,13 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Try again
+            {t.errors.tryAgain}
           </button>
           <a
-            href="/"
+            href={localePrefix(locale) || "/"}
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
-            Go home
+            {t.errors.goHome}
           </a>
         </div>
       </div>
@@ -82,17 +61,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       // which otherwise darken the cream pages and hide dark artwork.
       { name: "color-scheme", content: "only light" },
       { name: "darkreader-lock", content: "" },
-      { title: "Lunaris Dubai Real Estate" },
-      {
-        name: "description",
-        content: "Personal guidance across Dubai's most considered residential opportunities.",
-      },
+      // Page routes override these with their own localized meta (see `pageMeta`).
+      { title: en.meta.site.title },
+      { name: "description", content: en.meta.site.description },
       { name: "author", content: "Lunaris Real Estate" },
-      { property: "og:title", content: "Lunaris Dubai Real Estate" },
-      {
-        property: "og:description",
-        content: "Personal guidance across Dubai's most considered residential opportunities.",
-      },
+      { property: "og:title", content: en.meta.site.title },
+      { property: "og:description", content: en.meta.site.description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -110,13 +84,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   }),
   shellComponent: RootShell,
   component: RootComponent,
-  notFoundComponent: NotFoundComponent,
+  notFoundComponent: NotFound,
   errorComponent: ErrorComponent,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  const locale = useLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <HeadContent />
       </head>

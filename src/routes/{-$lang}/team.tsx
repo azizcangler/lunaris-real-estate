@@ -5,34 +5,28 @@ import teamImage from "@/assets/team-dubai.jpg";
 import { Button } from "@/components/ui/button";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
-import { founders, howItWorks, whoWeAre } from "@/data/company";
+import { founders } from "@/data/company";
+import { alternateLinks, fmt, getDictionary, localeFromParam, pageMeta, useT } from "@/i18n";
 
-export const Route = createFileRoute("/team")({
-  head: () => ({
-    meta: [
-      { title: "About Us | Lunaris" },
-      {
-        name: "description",
-        content:
-          "Meet the founder of Lunaris Real Estate and learn how we redefine the property journey in Dubai through innovation, integrity and personalized service.",
-      },
-      { property: "og:title", content: "About Us | Lunaris" },
-      { property: "og:description", content: "More than property. It's a promise." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+export const Route = createFileRoute("/{-$lang}/team")({
+  head: ({ params }) => ({
+    meta: pageMeta(getDictionary(localeFromParam(params.lang)).meta.team),
+    links: alternateLinks("/team"),
   }),
   component: Team,
 });
 
 function Team() {
+  const { t } = useT();
+  const copy = t.team;
+  const { whoWeAre, howItWorks, founderRole } = t.company;
   return (
     <main className="min-h-screen overflow-x-hidden bg-background">
       <SiteHeader />
       <section className="relative min-h-[420px] overflow-hidden text-[var(--hero-foreground)] md:min-h-[480px]">
         <img
           src={teamImage}
-          alt="Lunaris advisory team reviewing property plans in a Dubai office"
+          alt={t.home.teamImageAlt}
           width={1200}
           height={900}
           fetchPriority="high"
@@ -42,18 +36,15 @@ function Team() {
         <div className="absolute inset-0 bg-[linear-gradient(0deg,var(--hero-scrim)_0%,transparent_38%)] opacity-75" />
 
         <div className="relative z-10 flex h-full min-h-[420px] flex-col justify-end px-6 pb-12 pt-28 sm:px-10 md:min-h-[480px] md:px-16 md:pb-16 md:pt-32 lg:px-24">
-          <p className="text-[11px] font-medium uppercase text-white/70">About Lunaris</p>
+          <p className="text-[11px] font-medium uppercase text-white/70">{copy.eyebrow}</p>
           <h1 className="mt-4 max-w-2xl font-sans text-4xl font-normal uppercase leading-[0.92] text-white md:text-6xl">
-            More than property,
+            {copy.title}
             <span className="block font-display text-[0.82em] normal-case italic">
-              it's a promise
+              {copy.titleItalic}
             </span>
           </h1>
           <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/85 md:text-base">
-            At Lunaris Real Estate, we go beyond transactions to build trust, deliver value, and
-            shape meaningful real estate journeys. With a deep understanding of Dubai's dynamic
-            market and a commitment to personalized service, we help clients invest with confidence
-            and clarity.
+            {copy.heroCopy}
           </p>
         </div>
       </section>
@@ -61,11 +52,13 @@ function Team() {
       <section className="px-6 py-20 sm:px-10 md:px-16 md:py-28 lg:px-24">
         <div className="grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
           <div>
-            <p className="text-[11px] font-medium uppercase text-muted-foreground">Who we are</p>
+            <p className="text-[11px] font-medium uppercase text-muted-foreground">
+              {copy.whoEyebrow}
+            </p>
             <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
-              Illuminating
+              {copy.whoTitle}
               <span className="block font-display text-[0.82em] normal-case italic">
-                the path for our clients
+                {copy.whoTitleItalic}
               </span>
             </h2>
           </div>
@@ -77,7 +70,7 @@ function Team() {
               {whoWeAre.inspiration}
             </p>
             <p className="mt-8 text-[11px] font-medium uppercase text-muted-foreground">
-              Whether you're seeking
+              {copy.seeking}
             </p>
             <ul className="mt-4 grid gap-3 sm:grid-cols-2">
               {whoWeAre.offerings.map((item) => (
@@ -108,12 +101,12 @@ function Team() {
       <section className="section-watermark border-t border-border px-6 py-20 sm:px-10 md:px-16 md:py-28 lg:px-24">
         <div className="relative z-10">
           <p className="text-[11px] font-medium uppercase text-muted-foreground">
-            About our founder
+            {copy.founderEyebrow}
           </p>
           <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
-            The person
+            {copy.founderTitle}
             <span className="block font-display text-[0.82em] normal-case italic">
-              behind Lunaris
+              {copy.founderTitleItalic}
             </span>
           </h2>
           <div className="mt-12 grid gap-8 sm:max-w-sm">
@@ -121,7 +114,7 @@ function Team() {
               <article key={person.name} className="border border-border bg-card">
                 <img
                   src={person.image}
-                  alt={`Portrait of ${person.name}, ${person.role} of Lunaris Real Estate`}
+                  alt={fmt(copy.portraitAlt, { name: person.name, role: founderRole })}
                   width={800}
                   height={1000}
                   loading="lazy"
@@ -130,7 +123,7 @@ function Team() {
                 <div className="px-6 py-6">
                   <h3 className="font-display text-3xl italic text-foreground">{person.name}</h3>
                   <p className="mt-1 text-[11px] font-medium uppercase text-muted-foreground">
-                    {person.role}
+                    {founderRole}
                   </p>
                 </div>
               </article>
@@ -143,12 +136,12 @@ function Team() {
         <div className="grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
           <div>
             <p className="text-[11px] font-medium uppercase text-primary-foreground/70">
-              How it works
+              {copy.howEyebrow}
             </p>
             <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] md:text-5xl">
-              Simple
+              {copy.howTitle}
               <span className="block font-display text-[0.82em] normal-case italic">
-                and stress-free
+                {copy.howTitleItalic}
               </span>
             </h2>
             <p className="mt-6 max-w-sm text-sm leading-7 text-primary-foreground/80">
@@ -171,8 +164,8 @@ function Team() {
             size="lg"
             className="h-12 rounded-none border border-primary-foreground bg-transparent px-8 text-xs uppercase text-primary-foreground shadow-none hover:bg-primary-foreground hover:text-primary"
           >
-            <Link to="/contact">
-              Get in touch <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
+            <Link to="/{-$lang}/contact">
+              {copy.getInTouch} <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
             </Link>
           </Button>
         </div>

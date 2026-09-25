@@ -4,30 +4,19 @@ import { ArrowDownRight, Check } from "lucide-react";
 import heroImage from "@/assets/dubai-villas-hero-v2.jpg";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
+import { useT } from "@/i18n";
+import type { EditorialCopy } from "@/i18n/types";
 
-type EditorialPageProps = {
-  eyebrow: string;
-  title: string;
-  italicTitle: string;
-  introduction: string;
-  points: { number: string; title: string; copy: string }[];
-  checklist: string[];
-};
-
-export function EditorialPage({
-  eyebrow,
-  title,
-  italicTitle,
-  introduction,
-  points,
-  checklist,
-}: EditorialPageProps) {
+/** Template for the Living / Investing / Renting pages; all copy comes from the dictionary. */
+export function EditorialPage({ copy }: { copy: EditorialCopy }) {
+  const { t } = useT();
+  const { eyebrow, title, italicTitle, introduction, points, checklist } = copy;
   return (
     <main className="min-h-screen bg-background">
       <SiteHeader />
       <section className="px-6 pb-16 pt-20 sm:px-10 md:px-16 md:pb-24 md:pt-28 lg:px-24">
         <p className="text-[11px] font-medium uppercase text-muted-foreground">{eyebrow}</p>
-        <h1 className="mt-5 max-w-5xl font-sans text-[clamp(3rem,7vw,7rem)] font-normal uppercase leading-[0.86] text-foreground">
+        <h1 className="mt-5 max-w-5xl font-sans text-[clamp(var(--display-min),7vw,7rem)] font-normal uppercase leading-[0.86] text-foreground">
           {title}
           <span className="block font-display text-[0.62em] normal-case italic">{italicTitle}</span>
         </h1>
@@ -50,14 +39,14 @@ export function EditorialPage({
       <section className="grid bg-primary text-primary-foreground md:grid-cols-2">
         <img
           src={heroImage}
-          alt="Modern Dubai villa with an infinity pool overlooking the sea at golden hour"
+          alt={t.editorial.heroAlt}
           width={1920}
           height={1088}
           loading="lazy"
           className="h-full min-h-96 w-full object-cover"
         />
         <div className="flex flex-col justify-center px-6 py-16 sm:px-10 md:px-16 lg:px-24">
-          <p className="font-display text-4xl italic">A considered path, from brief to keys.</p>
+          <p className="font-display text-4xl italic">{t.editorial.path}</p>
           <ul className="mt-10 space-y-5">
             {checklist.map((item) => (
               <li
@@ -69,10 +58,10 @@ export function EditorialPage({
             ))}
           </ul>
           <Link
-            to="/contact"
+            to="/{-$lang}/contact"
             className="mt-10 inline-flex items-center gap-2 text-xs font-medium uppercase hover:underline hover:underline-offset-8"
           >
-            Private consultation <ArrowDownRight className="size-4" aria-hidden="true" />
+            {t.editorial.consultation} <ArrowDownRight className="size-4" aria-hidden="true" />
           </Link>
         </div>
       </section>

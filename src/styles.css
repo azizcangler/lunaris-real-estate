@@ -71,19 +71,19 @@
   --card-foreground: oklch(0.32 0.038 65);
   --popover: oklch(0.985 0.008 82);
   --popover-foreground: oklch(0.32 0.038 65);
-  --primary: oklch(0.50 0.042 72);
+  --primary: oklch(0.5 0.042 72);
   --primary-foreground: oklch(0.985 0.008 82);
   --secondary: oklch(0.92 0.018 80);
-  --secondary-foreground: oklch(0.50 0.042 72);
+  --secondary-foreground: oklch(0.5 0.042 72);
   --muted: oklch(0.93 0.015 80);
-  --muted-foreground: oklch(0.50 0.028 72);
+  --muted-foreground: oklch(0.5 0.028 72);
   --accent: oklch(0.68 0.055 72);
   --accent-foreground: oklch(0.32 0.038 65);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.60 0.022 72 / 40%);
-  --input: oklch(0.60 0.022 72 / 50%);
-  --ring: oklch(0.50 0.038 72);
+  --border: oklch(0.6 0.022 72 / 40%);
+  --input: oklch(0.6 0.022 72 / 50%);
+  --ring: oklch(0.5 0.038 72);
   --hero-foreground: oklch(0.985 0.006 90);
   --hero-scrim: oklch(0.12 0.025 120 / 48%);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -113,14 +113,14 @@
   --secondary: oklch(0.32 0.03 65);
   --secondary-foreground: oklch(0.97 0.009 82);
   --muted: oklch(0.32 0.03 65);
-  --muted-foreground: oklch(0.70 0.028 72);
-  --accent: oklch(0.40 0.04 72);
+  --muted-foreground: oklch(0.7 0.028 72);
+  --accent: oklch(0.4 0.04 72);
   --accent-foreground: oklch(0.97 0.009 82);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.55 0.02 72 / 30%);
   --input: oklch(0.55 0.02 72 / 40%);
-  --ring: oklch(0.70 0.03 72);
+  --ring: oklch(0.7 0.03 72);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
   --chart-3: oklch(0.769 0.188 70.08);
@@ -149,6 +149,30 @@
     letter-spacing: 0;
   }
 
+  /* Turkish and Russian headings carry long single words (ЭКСКЛЮЗИВНЫЕ, GAYRİMENKULDEN) that
+     overflow narrow columns and widen grid tracks; let them hyphenate, and break anywhere as a
+     last resort. English keeps its wrapping untouched. */
+  :is(:lang(tr), :lang(ru)) :is(h1, h2, h3) {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  /* Minimum size of the fluid display headings (`clamp(var(--display-min), 7vw, 7rem)` etc.).
+     Uppercase Cyrillic runs about 15% wider than Latin, so Russian starts smaller on phones. */
+  :root {
+    --display-min: 3rem;
+    --hero-min: 2.75rem;
+    --villas-min: 2.6rem;
+  }
+  :lang(tr) {
+    --display-min: 2.75rem;
+  }
+  :lang(ru) {
+    --display-min: 2.25rem;
+    --hero-min: 2.25rem;
+    --villas-min: 2.25rem;
+  }
+
   button,
   a {
     -webkit-tap-highlight-color: transparent;
@@ -156,8 +180,14 @@
 }
 
 @keyframes hero-reveal {
-  from { opacity: 0; transform: translateY(14px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .section-watermark {
@@ -187,8 +217,12 @@
 }
 
 @keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .marquee-mask {
@@ -196,10 +230,18 @@
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .marquee { animation: marquee 36s linear infinite; }
-  .hero-reveal { animation: hero-reveal 900ms ease-out both; }
-  .step-reveal { animation: hero-reveal 220ms ease-out both; }
-  .hero-reveal-delayed { animation-delay: 180ms; }
+  .marquee {
+    animation: marquee 36s linear infinite;
+  }
+  .hero-reveal {
+    animation: hero-reveal 900ms ease-out both;
+  }
+  .step-reveal {
+    animation: hero-reveal 220ms ease-out both;
+  }
+  .hero-reveal-delayed {
+    animation-delay: 180ms;
+  }
 }
 
 /* shadcn accordion open/close (Tailwind v4 registers animations through @theme). */
@@ -209,22 +251,41 @@
 }
 
 @keyframes accordion-down {
-  from { height: 0; }
-  to { height: var(--radix-accordion-content-height); }
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
 }
 
 @keyframes accordion-up {
-  from { height: var(--radix-accordion-content-height); }
-  to { height: 0; }
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
 }
 
 /* Floating WhatsApp button: a soft ring that breathes outward. */
 @keyframes whatsapp-pulse {
-  0% { transform: scale(1); opacity: 0.7; }
-  70% { transform: scale(1.7); opacity: 0; }
-  100% { transform: scale(1.7); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.7);
+    opacity: 0;
+  }
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .whatsapp-pulse { animation: whatsapp-pulse 2.6s ease-out infinite; }
+  .whatsapp-pulse {
+    animation: whatsapp-pulse 2.6s ease-out infinite;
+  }
 }

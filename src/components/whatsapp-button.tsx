@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { company } from "@/data/company";
+import { useT } from "@/i18n";
 
 /**
  * Floating WhatsApp button, pinned bottom-right on every page: a green disc with a soft pulse,
@@ -8,6 +9,7 @@ import { company } from "@/data/company";
  */
 export function WhatsAppButton() {
   // The bubble greets once after load, then only shows on hover/focus.
+  const { t } = useT();
   const [greeting, setGreeting] = useState(false);
   useEffect(() => {
     const show = window.setTimeout(() => setGreeting(true), 1800);
@@ -23,7 +25,7 @@ export function WhatsAppButton() {
       href={company.whatsapp}
       target="_blank"
       rel="noreferrer"
-      aria-label="Chat with us on WhatsApp"
+      aria-label={t.whatsapp.aria}
       className="group fixed bottom-[max(1.25rem,env(safe-area-inset-bottom))] right-[max(1.25rem,env(safe-area-inset-right))] z-40 flex items-center gap-3 outline-none md:bottom-7 md:right-7"
     >
       {/* Bubble */}
@@ -38,11 +40,9 @@ export function WhatsAppButton() {
         </span>
         <span className="text-left leading-tight">
           <span className="block text-[11px] font-medium uppercase tracking-[0.08em] text-foreground">
-            Chat with us
+            {t.whatsapp.title}
           </span>
-          <span className="block text-[11px] text-muted-foreground">
-            WhatsApp · we reply within the day
-          </span>
+          <span className="block text-[11px] text-muted-foreground">{t.whatsapp.subtitle}</span>
         </span>
       </span>
 

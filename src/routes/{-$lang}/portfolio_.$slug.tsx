@@ -11,26 +11,26 @@ import { ScrollExpand } from "@/components/scroll-expand";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { company } from "@/data/company";
-import { projects, type Project, type ProjectDetails } from "@/data/projects";
+import type { ProjectDetails } from "@/data/projects";
+import { alternateLinks, fmt, getDictionary, localeFromParam, useT, type Dictionary } from "@/i18n";
+import { findDetailedProject } from "@/i18n/projects";
 
-type DetailedProject = Project & { details: ProjectDetails };
-
-function findDetailedProject(slug: string): DetailedProject | undefined {
-  const project = projects.find((item) => item.slug === slug);
-  return project?.details ? (project as DetailedProject) : undefined;
-}
-
-export const Route = createFileRoute("/portfolio_/$slug")({
+export const Route = createFileRoute("/{-$lang}/portfolio_/$slug")({
   loader: ({ params }) => {
-    const project = findDetailedProject(params.slug);
+    const project = findDetailedProject(localeFromParam(params.lang), params.slug);
     if (!project) throw notFound();
     return { slug: project.slug };
   },
-  head: ({ loaderData }) => {
-    const project = loaderData ? findDetailedProject(loaderData.slug) : undefined;
+  head: ({ loaderData, params }) => {
+    const locale = localeFromParam(params.lang);
+    const project = loaderData ? findDetailedProject(locale, loaderData.slug) : undefined;
     if (!project) return {};
-    const title = `${project.name} by ${project.developer} | Lunaris`;
+    const title = fmt(getDictionary(locale).meta.projectTitle, {
+      name: project.name,
+      developer: project.developer,
+    });
     return {
+      links: alternateLinks(`/portfolio/${project.slug}`),
       meta: [
         { title },
         { name: "description", content: project.details.summary },
@@ -88,13 +88,23 @@ function FeatureList({ items, className = "" }: { items: string[]; className?: s
 
 type Villa = ProjectDetails["villas"]["items"][number];
 
-function VillaCell({ villa, index, onOpen }: { villa: Villa; index: number; onOpen: () => void }) {
+function VillaCell({
+  villa,
+  index,
+  onOpen,
+  openLabel,
+}: {
+  villa: Villa;
+  index: number;
+  onOpen: () => void;
+  openLabel: string;
+}) {
   const [cover, hover] = villa.images;
   return (
     <button
       type="button"
       onClick={onOpen}
-      aria-label={`Open ${villa.name}${villa.bedrooms ? `, ${villa.bedrooms}` : ""}`}
+      aria-label={`${openLabel}${villa.bedrooms ? `, ${villa.bedrooms}` : ""}`}
       className="group relative block h-[38svh] w-full cursor-pointer overflow-hidden border-b border-border bg-muted text-left outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring md:h-[60vh]"
     >
       {cover ? (
@@ -141,11 +151,13 @@ function VillaDialogBody({
   index,
   total,
   brochure,
+  labels,
 }: {
   villa: Villa;
   index: number;
   total: number;
   brochure: string;
+  labels: Dictionary["project"];
 }) {
   const [current, setCurrent] = useState(0);
   const image = villa.images[current] ?? villa.images[0];
@@ -176,7 +188,7 @@ function VillaDialogBody({
           {villa.copy}
         </DialogDescription>
         {villa.images.length > 1 ? (
-          <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label="More views">
+          <div className="mt-6 flex flex-wrap gap-2" role="tablist" aria-label={labels.moreViews}>
             {villa.images.map((view, viewIndex) => (
               <button
                 key={view.src}
@@ -202,8 +214,9 @@ function VillaDialogBody({
             size="lg"
             className="h-11 rounded-none bg-primary px-6 text-xs uppercase text-primary-foreground shadow-none hover:bg-secondary hover:text-secondary-foreground"
           >
-            <Link to="/contact">
-              Request availability <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
+            <Link to="/{-$lang}/contact">
+              {labels.requestAvailability}{" "}
+              <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
             </Link>
           </Button>
           <a
@@ -212,7 +225,7 @@ function VillaDialogBody({
             rel="noreferrer"
             className="inline-flex items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
           >
-            <FileText className="size-4" aria-hidden="true" /> Floor plans in the brochure
+            <FileText className="size-4" aria-hidden="true" /> {labels.floorPlansInBrochure}
           </a>
         </div>
       </div>
@@ -222,9 +235,11 @@ function VillaDialogBody({
 
 function ProjectPage() {
   const { slug } = Route.useLoaderData();
+  const { locale, t } = useT();
+  const labels = t.project;
   const [openVilla, setOpenVilla] = useState<number | null>(null);
   const [openMasterplan, setOpenMasterplan] = useState(false);
-  const project = findDetailedProject(slug);
+  const project = findDetailedProject(locale, slug);
   if (!project) return null;
   const { details } = project;
   const { theme } = details;
@@ -271,7 +286,7 @@ function ProjectPage() {
         title={project.name}
         subtitle={details.titleItalic}
         eyebrow={details.eyebrow}
-        scrollHint="Scroll to explore"
+        scrollHint={labels.scrollHint}
         useWindowScroll
         startWidth={42}
         startHeight={58}
@@ -285,10 +300,10 @@ function ProjectPage() {
         enabled
         topSlot={
           <Link
-            to="/portfolio"
+            to="/{-$lang}/portfolio"
             className="inline-flex items-center gap-2 text-[11px] font-medium uppercase text-white/75 hover:text-white"
           >
-            <ArrowLeft className="size-3.5" aria-hidden="true" /> All projects
+            <ArrowLeft className="size-3.5" aria-hidden="true" /> {labels.allProjects}
           </Link>
         }
       >
@@ -310,7 +325,7 @@ function ProjectPage() {
       <section className={`py-20 md:py-28 ${sectionPadding}`}>
         <div className="grid gap-12 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
           <div>
-            <Eyebrow>About the project</Eyebrow>
+            <Eyebrow>{labels.aboutProject}</Eyebrow>
             <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
               {details.intro.heading}
               <span className="block font-display text-[0.82em] normal-case italic">
@@ -353,8 +368,9 @@ function ProjectPage() {
                 size="lg"
                 className="h-12 rounded-none bg-primary px-8 text-xs uppercase text-primary-foreground shadow-none hover:bg-secondary hover:text-secondary-foreground"
               >
-                <Link to="/contact">
-                  Request availability <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
+                <Link to="/{-$lang}/contact">
+                  {labels.requestAvailability}{" "}
+                  <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
                 </Link>
               </Button>
               <a
@@ -363,7 +379,7 @@ function ProjectPage() {
                 rel="noreferrer"
                 className="inline-flex h-12 items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
               >
-                <FileText className="size-4" aria-hidden="true" /> Download the brochure (PDF)
+                <FileText className="size-4" aria-hidden="true" /> {labels.downloadBrochure}
               </a>
             </div>
           </div>
@@ -400,7 +416,7 @@ function ProjectPage() {
           className={`relative z-10 pb-[300px] pt-20 md:py-28 lg:min-h-[860px] ${sectionPadding}`}
         >
           <div className="max-w-xl">
-            <Eyebrow>Location</Eyebrow>
+            <Eyebrow>{labels.location}</Eyebrow>
             <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
               {details.location.heading}
               <span className="block font-display text-[0.82em] normal-case italic">
@@ -584,7 +600,7 @@ function ProjectPage() {
         {details.keyFeaturesMap ? (
           <div className="relative z-10 grid gap-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
             <div>
-              <Eyebrow>Key features</Eyebrow>
+              <Eyebrow>{labels.keyFeatures}</Eyebrow>
               <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
                 {details.keyFeaturesHeading.line}
                 <span className="block font-display text-[0.82em] normal-case italic">
@@ -606,13 +622,13 @@ function ProjectPage() {
                 onClick={() => setOpenMasterplan(true)}
                 className="mt-8 inline-flex cursor-pointer items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent"
               >
-                Open the full masterplan <ArrowUpRight className="size-4" aria-hidden="true" />
+                {labels.openMasterplan} <ArrowUpRight className="size-4" aria-hidden="true" />
               </button>
             </div>
             <button
               type="button"
               onClick={() => setOpenMasterplan(true)}
-              aria-label="Open the full masterplan"
+              aria-label={labels.openMasterplan}
               className="group relative block cursor-pointer self-start overflow-hidden border border-border bg-[#dfdbcf] text-left outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <img
@@ -623,7 +639,7 @@ function ProjectPage() {
                 className="w-full object-cover transition-transform duration-700 group-hover:scale-[1.02]"
               />
               <span className="pointer-events-none absolute bottom-4 right-4 inline-flex items-center gap-2 bg-background/90 px-3 py-2 text-[11px] font-medium uppercase text-foreground backdrop-blur">
-                Tap to enlarge <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                {labels.tapToEnlarge} <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </span>
             </button>
           </div>
@@ -632,7 +648,7 @@ function ProjectPage() {
           <div className="relative z-10">
             <div className="grid gap-8 md:grid-cols-[0.8fr_1.2fr] md:items-end md:gap-20">
               <div>
-                <Eyebrow>Key features</Eyebrow>
+                <Eyebrow>{labels.keyFeatures}</Eyebrow>
                 <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
                   {details.keyFeaturesHeading.line}
                   <span className="block font-display text-[0.82em] normal-case italic">
@@ -659,10 +675,10 @@ function ProjectPage() {
           <DialogContent className="max-h-[94svh] w-[min(96vw,60rem)] max-w-none gap-0 overflow-y-auto rounded-none border-border bg-[#e7e2d6] p-0 sm:rounded-none">
             <div className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-border bg-[#e7e2d6]/95 px-5 py-3 pr-14 backdrop-blur">
               <DialogTitle className="font-sans text-sm font-medium uppercase tracking-normal text-foreground">
-                The masterplan · key features
+                {labels.masterplanDialogTitle}
               </DialogTitle>
               <DialogDescription className="hidden text-[11px] uppercase text-muted-foreground sm:block">
-                Scroll to explore the plan and each feature
+                {labels.masterplanDialogCopy}
               </DialogDescription>
             </div>
             <img
@@ -741,7 +757,7 @@ function ProjectPage() {
             className={`flex flex-col justify-center border-b border-border py-16 md:h-[60vh] md:py-0 ${sectionPadding}`}
           >
             <Eyebrow>{details.villas.eyebrow}</Eyebrow>
-            <h2 className="mt-5 font-sans text-[clamp(2.6rem,5.5vw,5.25rem)] font-normal uppercase leading-[0.88] text-foreground">
+            <h2 className="mt-5 font-sans text-[clamp(var(--villas-min),5.5vw,5.25rem)] font-normal uppercase leading-[0.88] text-foreground">
               {details.villas.heading}
               <span className="block font-display text-[0.62em] normal-case italic">
                 {details.villas.headingItalic}
@@ -752,7 +768,7 @@ function ProjectPage() {
             </p>
             <p className="mt-8 inline-flex items-center gap-3 text-[11px] font-medium uppercase text-muted-foreground">
               <span className="h-px w-8 bg-primary/50" aria-hidden="true" />
-              {details.villas.items.length} {details.villas.unitLabel} · select one to explore
+              {details.villas.items.length} {details.villas.unitLabel} · {labels.selectOne}
             </p>
           </div>
           {details.villas.items.map((villa, index) => (
@@ -761,10 +777,11 @@ function ProjectPage() {
               villa={villa}
               index={index}
               onOpen={() => setOpenVilla(index)}
+              openLabel={fmt(labels.openType, { name: villa.name })}
             />
           ))}
           <Link
-            to="/contact"
+            to="/{-$lang}/contact"
             className={`group relative block h-[38svh] overflow-hidden border-b border-border bg-muted md:h-[60vh] ${
               ctaSpansRow ? "md:col-span-2 md:border-r-0!" : ""
             }`}
@@ -781,10 +798,10 @@ function ProjectPage() {
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-6 p-6 text-white sm:p-8">
               <div>
                 <p className="text-[11px] font-medium uppercase text-white/75">
-                  Floor plans & pricing
+                  {labels.floorPlansPricing}
                 </p>
                 <h3 className="mt-2 font-display text-3xl italic md:text-4xl">
-                  Request availability
+                  {labels.requestAvailability}
                 </h3>
               </div>
               <ArrowUpRight
@@ -805,6 +822,7 @@ function ProjectPage() {
               index={openVilla}
               total={details.villas.items.length}
               brochure={project.brochure}
+              labels={labels}
             />
           ) : null}
         </DialogContent>
@@ -815,7 +833,7 @@ function ProjectPage() {
         <section className={`border-t border-border py-20 md:py-28 ${sectionPadding}`}>
           <div className="flex items-end justify-between gap-6">
             <div>
-              <Eyebrow>Gallery</Eyebrow>
+              <Eyebrow>{labels.gallery}</Eyebrow>
               <h2 className="mt-4 font-display text-4xl italic text-foreground md:text-5xl">
                 {details.galleryHeading}
               </h2>
@@ -826,7 +844,7 @@ function ProjectPage() {
               rel="noreferrer"
               className="hidden items-center gap-2 text-xs font-medium uppercase text-primary hover:text-accent sm:inline-flex"
             >
-              Full brochure <ArrowUpRight aria-hidden="true" className="size-4" />
+              {labels.fullBrochure} <ArrowUpRight aria-hidden="true" className="size-4" />
             </a>
           </div>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -850,7 +868,7 @@ function ProjectPage() {
         <div className="grid gap-14 md:grid-cols-2 md:gap-20">
           {details.materials ? (
             <div>
-              <Eyebrow>Material board</Eyebrow>
+              <Eyebrow>{labels.materialBoard}</Eyebrow>
               <h2 className="mt-5 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-4xl">
                 {details.materials.heading.line}
                 <span className="block font-display text-[0.82em] normal-case italic">
@@ -870,7 +888,7 @@ function ProjectPage() {
             </div>
           ) : null}
           <div>
-            <Eyebrow>About the developer</Eyebrow>
+            <Eyebrow>{labels.aboutDeveloper}</Eyebrow>
             <h2 className="mt-5 font-display text-4xl italic text-foreground md:text-5xl">
               {details.developer.name}
             </h2>
@@ -899,16 +917,15 @@ function ProjectPage() {
       >
         <div className="grid gap-10 md:grid-cols-[1.2fr_0.8fr] md:items-end md:gap-20">
           <div>
-            <Eyebrow tone="light">Next step</Eyebrow>
+            <Eyebrow tone="light">{labels.nextStep}</Eyebrow>
             <h2 className="mt-5 font-sans text-4xl font-normal uppercase leading-[0.92] md:text-6xl">
-              Interested in
+              {labels.interestedIn}
               <span className="block font-display text-[0.82em] normal-case italic">
                 {project.name}?
               </span>
             </h2>
             <p className="mt-6 max-w-lg text-sm leading-7 text-primary-foreground/80">
-              Ask us for current availability, floor plans, pricing and payment plans. We guide you
-              from the first conversation to handover.
+              {labels.ctaCopy}
             </p>
           </div>
           <div className="flex flex-col gap-4 border-t border-primary-foreground/25 pt-8 md:border-t-0 md:pt-0">
@@ -917,8 +934,9 @@ function ProjectPage() {
               size="lg"
               className="h-12 rounded-none border border-primary-foreground bg-primary-foreground px-8 text-xs uppercase text-primary shadow-none hover:bg-transparent hover:text-primary-foreground"
             >
-              <Link to="/contact">
-                Request availability <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
+              <Link to="/{-$lang}/contact">
+                {labels.requestAvailability}{" "}
+                <ArrowDownRight aria-hidden="true" className="ml-2 size-4" />
               </Link>
             </Button>
             <Button
@@ -927,7 +945,7 @@ function ProjectPage() {
               className="h-12 rounded-none border border-primary-foreground bg-transparent px-8 text-xs uppercase text-primary-foreground shadow-none hover:bg-primary-foreground hover:text-primary"
             >
               <a href={company.whatsapp} target="_blank" rel="noreferrer">
-                Chat on WhatsApp <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
+                {labels.chatOnWhatsApp} <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
               </a>
             </Button>
             <a
@@ -936,7 +954,7 @@ function ProjectPage() {
               rel="noreferrer"
               className="inline-flex items-center gap-2 text-xs font-medium uppercase text-primary-foreground/80 hover:text-primary-foreground"
             >
-              <FileText className="size-4" aria-hidden="true" /> Download the brochure (PDF)
+              <FileText className="size-4" aria-hidden="true" /> {labels.downloadBrochure}
             </a>
           </div>
         </div>

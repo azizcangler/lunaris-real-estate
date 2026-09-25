@@ -1,6 +1,6 @@
 # Lunaris Real Estate — Proje Raporu
 
-_Son güncelleme: 14 Eylül 2026 (akşam)_
+_Son güncelleme: 25 Eylül 2026_
 
 Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, Cloudflare Workers'a taşındı ve üç projenin kendi detay sayfası var: The Acres, Athlon ve Damac Islands. Bu dosya projenin genel durumunu, ne yapıldığını ve sırada ne olduğunu özetler. Teknik ayrıntılar ve çalışma kuralları için [`CLAUDE.md`](./CLAUDE.md) dosyasına bakın.
 
@@ -18,11 +18,15 @@ Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, Clou
 
 TanStack Start 1.168, React 19, Tailwind 4, shadcn/ui. Build Vite 8 + Nitro (cloudflare-module). Ek çalışma zamanı bağımlılığı yok; animasyonlar CSS ve küçük React bileşenleriyle yazıldı.
 
+## Diller
+
+Site üç dilde: İngilizce (`/`), Türkçe (`/tr/...`) ve Rusça (`/ru/...`). Başlıktaki EN / TR / RU seçici ziyaretçiyi aynı sayfada tutar. Arayüz metinleri, şirket metinleri, SSS, haberler, proje kartları ve üç detay sayfasının tamamı çevrildi (25 Eylül 2026, İngilizce kaynaktan; müşteri kontrolü önerilir). Teknik yapı `CLAUDE.md` → Diller.
+
 ## Sayfalar
 
 | Route | İçerik |
 |---|---|
-| `/` | Popüler projeler hero'su (solda başlık ve CTA'lar, sağda geliştirici şeridi ve otomatik dönen coverflow proje carousel'i; 14 Eylül'de eski görsel hero'nun yerine), Who we are, öne çıkan 3 proje (The Acres, Athlon, Damac Islands), Why clients choose us, News & updates (filtreli haber kartları, `src/data/news.ts`), FAQ (akordeon, `src/data/faq.ts`). Living/Investing/Renting seçici ve How it works bölümleri 14 Eylül'de ana sayfadan kaldırıldı |
+| `/` | Popüler projeler hero'su (solda başlık ve CTA'lar, sağda geliştirici şeridi ve otomatik dönen coverflow proje carousel'i; 14 Eylül'de eski görsel hero'nun yerine), Who we are, öne çıkan 3 proje (The Acres, Athlon, Damac Islands), Why clients choose us, News & updates (filtreli haber kartları, `src/data/news.ts`), FAQ (akordeon, sözlükteki `faq.items`). Living/Investing/Renting seçici ve How it works bölümleri 14 Eylül'de ana sayfadan kaldırıldı |
 | `/portfolio` | 13 projenin tamamı; detay sayfası olanlar karttan detaya gider |
 | `/portfolio/the-acres` | **The Acres (Meraas)** detay sayfası |
 | `/portfolio/athlon` | **Athlon (Aldar)** detay sayfası |

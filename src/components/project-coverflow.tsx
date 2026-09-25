@@ -5,6 +5,7 @@ import useEmblaCarousel from "embla-carousel-react";
 
 import { ProjectLink } from "@/components/project-link";
 import type { Project } from "@/data/projects";
+import { fmt, useT } from "@/i18n";
 
 /** Multiplied by the snap count so the tween reaches its edge value one slide away from centre. */
 const TWEEN_FACTOR_BASE = 0.55;
@@ -26,6 +27,7 @@ export function ProjectCoverflow({
   projects: Project[];
   className?: string;
 }) {
+  const { t } = useT();
   // Embla's own drag is off in favour of a simple swipe: one gesture moves exactly one card,
   // and a swipe never opens the card it ends on.
   const [emblaRef, emblaApi] = useEmblaCarousel({
@@ -231,7 +233,10 @@ export function ProjectCoverflow({
                 >
                   <img
                     src={project.image}
-                    alt={`Architectural rendering of ${project.name} by ${project.developer}`}
+                    alt={fmt(t.home.renderAlt, {
+                      name: project.name,
+                      developer: project.developer,
+                    })}
                     width={1200}
                     height={900}
                     loading={index < 3 ? "eager" : "lazy"}
@@ -274,7 +279,7 @@ export function ProjectCoverflow({
             type="button"
             role="tab"
             aria-selected={index === selected}
-            aria-label={`Show ${project.name}`}
+            aria-label={fmt(t.home.showProject, { name: project.name })}
             onClick={() => emblaApi?.scrollTo(index)}
             className={`size-1.5 rounded-full transition-colors ${
               index === selected ? "bg-foreground" : "bg-foreground/20 hover:bg-foreground/45"
@@ -288,9 +293,10 @@ export function ProjectCoverflow({
 
 /** Faded, slowly scrolling belt of developer names (the block's "logo strip" without logos). */
 export function DeveloperBelt({ names, className = "" }: { names: string[]; className?: string }) {
+  const { t } = useT();
   const belt = [...names, ...names];
   return (
-    <div className={`marquee-mask overflow-hidden ${className}`} aria-label="Developers">
+    <div className={`marquee-mask overflow-hidden ${className}`} aria-label={t.home.developers}>
       <div className="marquee flex w-max items-center gap-12 pr-12">
         {belt.map((name, index) => (
           <span

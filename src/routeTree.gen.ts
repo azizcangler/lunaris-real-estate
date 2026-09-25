@@ -9,201 +9,238 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as ContactRouteImport } from './routes/contact'
-import { Route as InvestingRouteImport } from './routes/investing'
-import { Route as LivingRouteImport } from './routes/living'
-import { Route as PortfolioRouteImport } from './routes/portfolio'
-import { Route as RentingRouteImport } from './routes/renting'
-import { Route as TeamRouteImport } from './routes/team'
-import { Route as PortfolioSlugRouteImport } from './routes/portfolio_.$slug'
+import { Route as Char123LangChar125RouteRouteImport } from './routes/{-$lang}/route'
+import { Route as Char123LangChar125IndexRouteImport } from './routes/{-$lang}/index'
+import { Route as Char123LangChar125ContactRouteImport } from './routes/{-$lang}/contact'
+import { Route as Char123LangChar125InvestingRouteImport } from './routes/{-$lang}/investing'
+import { Route as Char123LangChar125LivingRouteImport } from './routes/{-$lang}/living'
+import { Route as Char123LangChar125PortfolioRouteImport } from './routes/{-$lang}/portfolio'
+import { Route as Char123LangChar125RentingRouteImport } from './routes/{-$lang}/renting'
+import { Route as Char123LangChar125TeamRouteImport } from './routes/{-$lang}/team'
+import { Route as Char123LangChar125PortfolioSlugRouteImport } from './routes/{-$lang}/portfolio_.$slug'
 
-const IndexRoute = IndexRouteImport.update({
+const Char123LangChar125RouteRoute = Char123LangChar125RouteRouteImport.update({
+  id: '/{-$lang}',
+  path: '/{-$lang}',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Char123LangChar125IndexRoute = Char123LangChar125IndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => Char123LangChar125RouteRoute,
 } as any)
-const ContactRoute = ContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestingRoute = InvestingRouteImport.update({
-  id: '/investing',
-  path: '/investing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LivingRoute = LivingRouteImport.update({
-  id: '/living',
-  path: '/living',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortfolioRoute = PortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RentingRoute = RentingRouteImport.update({
-  id: '/renting',
-  path: '/renting',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TeamRoute = TeamRouteImport.update({
+const Char123LangChar125ContactRoute =
+  Char123LangChar125ContactRouteImport.update({
+    id: '/contact',
+    path: '/contact',
+    getParentRoute: () => Char123LangChar125RouteRoute,
+  } as any)
+const Char123LangChar125InvestingRoute =
+  Char123LangChar125InvestingRouteImport.update({
+    id: '/investing',
+    path: '/investing',
+    getParentRoute: () => Char123LangChar125RouteRoute,
+  } as any)
+const Char123LangChar125LivingRoute =
+  Char123LangChar125LivingRouteImport.update({
+    id: '/living',
+    path: '/living',
+    getParentRoute: () => Char123LangChar125RouteRoute,
+  } as any)
+const Char123LangChar125PortfolioRoute =
+  Char123LangChar125PortfolioRouteImport.update({
+    id: '/portfolio',
+    path: '/portfolio',
+    getParentRoute: () => Char123LangChar125RouteRoute,
+  } as any)
+const Char123LangChar125RentingRoute =
+  Char123LangChar125RentingRouteImport.update({
+    id: '/renting',
+    path: '/renting',
+    getParentRoute: () => Char123LangChar125RouteRoute,
+  } as any)
+const Char123LangChar125TeamRoute = Char123LangChar125TeamRouteImport.update({
   id: '/team',
   path: '/team',
-  getParentRoute: () => rootRouteImport,
+  getParentRoute: () => Char123LangChar125RouteRoute,
 } as any)
-const PortfolioSlugRoute = PortfolioSlugRouteImport.update({
-  id: '/portfolio_/$slug',
-  path: '/portfolio/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const Char123LangChar125PortfolioSlugRoute =
+  Char123LangChar125PortfolioSlugRouteImport.update({
+    id: '/portfolio_/$slug',
+    path: '/portfolio/$slug',
+    getParentRoute: () => Char123LangChar125RouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/contact': typeof ContactRoute
-  '/investing': typeof InvestingRoute
-  '/living': typeof LivingRoute
-  '/portfolio': typeof PortfolioRoute
-  '/renting': typeof RentingRoute
-  '/team': typeof TeamRoute
-  '/portfolio/$slug': typeof PortfolioSlugRoute
+  '/{-$lang}': typeof Char123LangChar125RouteRouteWithChildren
+  '/{-$lang}/contact': typeof Char123LangChar125ContactRoute
+  '/{-$lang}/investing': typeof Char123LangChar125InvestingRoute
+  '/{-$lang}/living': typeof Char123LangChar125LivingRoute
+  '/{-$lang}/portfolio': typeof Char123LangChar125PortfolioRoute
+  '/{-$lang}/renting': typeof Char123LangChar125RentingRoute
+  '/{-$lang}/team': typeof Char123LangChar125TeamRoute
+  '/{-$lang}/': typeof Char123LangChar125IndexRoute
+  '/{-$lang}/portfolio/$slug': typeof Char123LangChar125PortfolioSlugRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/contact': typeof ContactRoute
-  '/investing': typeof InvestingRoute
-  '/living': typeof LivingRoute
-  '/portfolio': typeof PortfolioRoute
-  '/renting': typeof RentingRoute
-  '/team': typeof TeamRoute
-  '/portfolio/$slug': typeof PortfolioSlugRoute
+  '/{-$lang}/contact': typeof Char123LangChar125ContactRoute
+  '/{-$lang}/investing': typeof Char123LangChar125InvestingRoute
+  '/{-$lang}/living': typeof Char123LangChar125LivingRoute
+  '/{-$lang}/portfolio': typeof Char123LangChar125PortfolioRoute
+  '/{-$lang}/renting': typeof Char123LangChar125RentingRoute
+  '/{-$lang}/team': typeof Char123LangChar125TeamRoute
+  '/{-$lang}': typeof Char123LangChar125IndexRoute
+  '/{-$lang}/portfolio/$slug': typeof Char123LangChar125PortfolioSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/contact': typeof ContactRoute
-  '/investing': typeof InvestingRoute
-  '/living': typeof LivingRoute
-  '/portfolio': typeof PortfolioRoute
-  '/renting': typeof RentingRoute
-  '/team': typeof TeamRoute
-  '/portfolio_/$slug': typeof PortfolioSlugRoute
+  '/{-$lang}': typeof Char123LangChar125RouteRouteWithChildren
+  '/{-$lang}/contact': typeof Char123LangChar125ContactRoute
+  '/{-$lang}/investing': typeof Char123LangChar125InvestingRoute
+  '/{-$lang}/living': typeof Char123LangChar125LivingRoute
+  '/{-$lang}/portfolio': typeof Char123LangChar125PortfolioRoute
+  '/{-$lang}/renting': typeof Char123LangChar125RentingRoute
+  '/{-$lang}/team': typeof Char123LangChar125TeamRoute
+  '/{-$lang}/': typeof Char123LangChar125IndexRoute
+  '/{-$lang}/portfolio_/$slug': typeof Char123LangChar125PortfolioSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/contact'
-    | '/investing'
-    | '/living'
-    | '/portfolio'
-    | '/renting'
-    | '/team'
-    | '/portfolio/$slug'
+    | '/{-$lang}'
+    | '/{-$lang}/contact'
+    | '/{-$lang}/investing'
+    | '/{-$lang}/living'
+    | '/{-$lang}/portfolio'
+    | '/{-$lang}/renting'
+    | '/{-$lang}/team'
+    | '/{-$lang}/'
+    | '/{-$lang}/portfolio/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/contact'
-    | '/investing'
-    | '/living'
-    | '/portfolio'
-    | '/renting'
-    | '/team'
-    | '/portfolio/$slug'
+    | '/{-$lang}/contact'
+    | '/{-$lang}/investing'
+    | '/{-$lang}/living'
+    | '/{-$lang}/portfolio'
+    | '/{-$lang}/renting'
+    | '/{-$lang}/team'
+    | '/{-$lang}'
+    | '/{-$lang}/portfolio/$slug'
   id:
     | '__root__'
-    | '/'
-    | '/contact'
-    | '/investing'
-    | '/living'
-    | '/portfolio'
-    | '/renting'
-    | '/team'
-    | '/portfolio_/$slug'
+    | '/{-$lang}'
+    | '/{-$lang}/contact'
+    | '/{-$lang}/investing'
+    | '/{-$lang}/living'
+    | '/{-$lang}/portfolio'
+    | '/{-$lang}/renting'
+    | '/{-$lang}/team'
+    | '/{-$lang}/'
+    | '/{-$lang}/portfolio_/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  ContactRoute: typeof ContactRoute
-  InvestingRoute: typeof InvestingRoute
-  LivingRoute: typeof LivingRoute
-  PortfolioRoute: typeof PortfolioRoute
-  RentingRoute: typeof RentingRoute
-  TeamRoute: typeof TeamRoute
-  PortfolioSlugRoute: typeof PortfolioSlugRoute
+  Char123LangChar125RouteRoute: typeof Char123LangChar125RouteRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/{-$lang}': {
+      id: '/{-$lang}'
+      path: '/{-$lang}'
+      fullPath: '/{-$lang}'
+      preLoaderRoute: typeof Char123LangChar125RouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/{-$lang}/': {
+      id: '/{-$lang}/'
       path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/'
+      preLoaderRoute: typeof Char123LangChar125IndexRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/contact': {
-      id: '/contact'
+    '/{-$lang}/contact': {
+      id: '/{-$lang}/contact'
       path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof ContactRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/contact'
+      preLoaderRoute: typeof Char123LangChar125ContactRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/investing': {
-      id: '/investing'
+    '/{-$lang}/investing': {
+      id: '/{-$lang}/investing'
       path: '/investing'
-      fullPath: '/investing'
-      preLoaderRoute: typeof InvestingRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/investing'
+      preLoaderRoute: typeof Char123LangChar125InvestingRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/living': {
-      id: '/living'
+    '/{-$lang}/living': {
+      id: '/{-$lang}/living'
       path: '/living'
-      fullPath: '/living'
-      preLoaderRoute: typeof LivingRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/living'
+      preLoaderRoute: typeof Char123LangChar125LivingRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/portfolio': {
-      id: '/portfolio'
+    '/{-$lang}/portfolio': {
+      id: '/{-$lang}/portfolio'
       path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof PortfolioRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/portfolio'
+      preLoaderRoute: typeof Char123LangChar125PortfolioRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/renting': {
-      id: '/renting'
+    '/{-$lang}/renting': {
+      id: '/{-$lang}/renting'
       path: '/renting'
-      fullPath: '/renting'
-      preLoaderRoute: typeof RentingRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/renting'
+      preLoaderRoute: typeof Char123LangChar125RentingRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/team': {
-      id: '/team'
+    '/{-$lang}/team': {
+      id: '/{-$lang}/team'
       path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof TeamRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/team'
+      preLoaderRoute: typeof Char123LangChar125TeamRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
-    '/portfolio_/$slug': {
-      id: '/portfolio_/$slug'
+    '/{-$lang}/portfolio_/$slug': {
+      id: '/{-$lang}/portfolio_/$slug'
       path: '/portfolio/$slug'
-      fullPath: '/portfolio/$slug'
-      preLoaderRoute: typeof PortfolioSlugRouteImport
-      parentRoute: typeof rootRouteImport
+      fullPath: '/{-$lang}/portfolio/$slug'
+      preLoaderRoute: typeof Char123LangChar125PortfolioSlugRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
     }
   }
 }
 
+interface Char123LangChar125RouteRouteChildren {
+  Char123LangChar125ContactRoute: typeof Char123LangChar125ContactRoute
+  Char123LangChar125InvestingRoute: typeof Char123LangChar125InvestingRoute
+  Char123LangChar125LivingRoute: typeof Char123LangChar125LivingRoute
+  Char123LangChar125PortfolioRoute: typeof Char123LangChar125PortfolioRoute
+  Char123LangChar125RentingRoute: typeof Char123LangChar125RentingRoute
+  Char123LangChar125TeamRoute: typeof Char123LangChar125TeamRoute
+  Char123LangChar125IndexRoute: typeof Char123LangChar125IndexRoute
+  Char123LangChar125PortfolioSlugRoute: typeof Char123LangChar125PortfolioSlugRoute
+}
+
+const Char123LangChar125RouteRouteChildren: Char123LangChar125RouteRouteChildren =
+  {
+    Char123LangChar125ContactRoute: Char123LangChar125ContactRoute,
+    Char123LangChar125InvestingRoute: Char123LangChar125InvestingRoute,
+    Char123LangChar125LivingRoute: Char123LangChar125LivingRoute,
+    Char123LangChar125PortfolioRoute: Char123LangChar125PortfolioRoute,
+    Char123LangChar125RentingRoute: Char123LangChar125RentingRoute,
+    Char123LangChar125TeamRoute: Char123LangChar125TeamRoute,
+    Char123LangChar125IndexRoute: Char123LangChar125IndexRoute,
+    Char123LangChar125PortfolioSlugRoute: Char123LangChar125PortfolioSlugRoute,
+  }
+
+const Char123LangChar125RouteRouteWithChildren =
+  Char123LangChar125RouteRoute._addFileChildren(
+    Char123LangChar125RouteRouteChildren,
+  )
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  ContactRoute: ContactRoute,
-  InvestingRoute: InvestingRoute,
-  LivingRoute: LivingRoute,
-  PortfolioRoute: PortfolioRoute,
-  RentingRoute: RentingRoute,
-  TeamRoute: TeamRoute,
-  PortfolioSlugRoute: PortfolioSlugRoute,
+  Char123LangChar125RouteRoute: Char123LangChar125RouteRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

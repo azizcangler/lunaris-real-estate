@@ -9,25 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import { company } from "@/data/company";
+import { alternateLinks, fmt, getDictionary, localeFromParam, pageMeta, useT } from "@/i18n";
 
-export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact Us | Lunaris" },
-      {
-        name: "description",
-        content:
-          "Reach Lunaris Real Estate in Dubai by WhatsApp, phone or email, or send us a message about your property plans.",
-      },
-      { property: "og:title", content: "Contact Us | Lunaris" },
-      {
-        property: "og:description",
-        content:
-          "Whether you're buying, selling, or investing, we're here to guide you with local expertise and personalized service.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
+export const Route = createFileRoute("/{-$lang}/contact")({
+  head: ({ params }) => ({
+    meta: pageMeta(getDictionary(localeFromParam(params.lang)).meta.contact),
+    links: alternateLinks("/contact"),
   }),
   component: ContactPage,
 });
@@ -35,6 +22,8 @@ export const Route = createFileRoute("/contact")({
 type Channel = "whatsapp" | "email";
 
 function ContactPage() {
+  const { t } = useT();
+  const copy = t.contact;
   const [channel, setChannel] = useState<Channel>("whatsapp");
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -47,18 +36,18 @@ function ContactPage() {
     const message = String(data.get("message") ?? "").trim();
 
     const lines = [
-      `Hello Lunaris, I'm ${firstName} ${lastName}.`,
+      fmt(copy.greeting, { firstName, lastName }),
       message,
       "",
-      email ? `Email: ${email}` : "",
-      phone ? `Phone: ${phone}` : "",
+      email ? `${copy.emailLabel}: ${email}` : "",
+      phone ? `${copy.phoneLabel}: ${phone}` : "",
     ].filter((line, index) => line !== "" || index === 2);
     const body = lines.join("\n");
 
     if (channel === "whatsapp") {
       window.open(`${company.whatsapp}?text=${encodeURIComponent(body)}`, "_blank", "noopener");
     } else {
-      const subject = encodeURIComponent(`Property enquiry from ${firstName} ${lastName}`);
+      const subject = encodeURIComponent(fmt(copy.subject, { firstName, lastName }));
       window.location.href = `mailto:${company.email}?subject=${subject}&body=${encodeURIComponent(body)}`;
     }
   }
@@ -67,17 +56,14 @@ function ContactPage() {
     <main className="min-h-screen bg-background">
       <SiteHeader />
       <section className="px-6 pb-16 pt-20 sm:px-10 md:px-16 md:pb-24 md:pt-28 lg:px-24">
-        <p className="text-[11px] font-medium uppercase text-muted-foreground">Get in touch</p>
-        <h1 className="mt-5 max-w-5xl font-sans text-[clamp(3rem,7vw,7rem)] font-normal uppercase leading-[0.86] text-foreground">
-          Ready to find
+        <p className="text-[11px] font-medium uppercase text-muted-foreground">{copy.eyebrow}</p>
+        <h1 className="mt-5 max-w-5xl font-sans text-[clamp(var(--display-min),7vw,7rem)] font-normal uppercase leading-[0.86] text-foreground">
+          {copy.title}
           <span className="block font-display text-[0.62em] normal-case italic">
-            your next property?
+            {copy.titleItalic}
           </span>
         </h1>
-        <p className="mt-8 max-w-xl text-sm leading-7 text-muted-foreground">
-          Whether you're buying, selling, or investing, we're here to guide you with local expertise
-          and personalized service every step of the way.
-        </p>
+        <p className="mt-8 max-w-xl text-sm leading-7 text-muted-foreground">{copy.intro}</p>
 
         <div className="mt-14 grid gap-12 border-t border-border pt-10 md:grid-cols-[0.8fr_1.2fr] md:gap-20">
           <div className="space-y-8">
@@ -117,11 +103,13 @@ function ContactPage() {
                 rel="noreferrer"
                 className="inline-flex items-center gap-1 text-sm leading-7 text-foreground hover:text-accent"
               >
-                Chat on WhatsApp <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                {copy.chatOnWhatsApp} <ArrowUpRight className="size-3.5" aria-hidden="true" />
               </a>
             </div>
             <div className="border-t border-border pt-8">
-              <p className="text-[11px] font-medium uppercase text-muted-foreground">Follow us</p>
+              <p className="text-[11px] font-medium uppercase text-muted-foreground">
+                {copy.followUs}
+              </p>
               <div className="mt-4 flex gap-6">
                 <a
                   href={company.social.instagram}
@@ -149,7 +137,7 @@ function ContactPage() {
           >
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="grid gap-2">
-                <Label htmlFor="firstName">First name</Label>
+                <Label htmlFor="firstName">{copy.firstName}</Label>
                 <Input
                   id="firstName"
                   name="firstName"
@@ -159,7 +147,7 @@ function ContactPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="lastName">Last name</Label>
+                <Label htmlFor="lastName">{copy.lastName}</Label>
                 <Input
                   id="lastName"
                   name="lastName"
@@ -171,7 +159,7 @@ function ContactPage() {
             </div>
             <div className="grid gap-6 sm:grid-cols-2">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email address</Label>
+                <Label htmlFor="email">{copy.email}</Label>
                 <Input
                   id="email"
                   name="email"
@@ -181,7 +169,7 @@ function ContactPage() {
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="phone">Phone number</Label>
+                <Label htmlFor="phone">{copy.phone}</Label>
                 <Input
                   id="phone"
                   name="phone"
@@ -192,43 +180,39 @@ function ContactPage() {
               </div>
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="message">Message</Label>
+              <Label htmlFor="message">{copy.message}</Label>
               <Textarea
                 id="message"
                 name="message"
                 rows={5}
                 required
-                placeholder="Tell us what you're looking for: location, budget, property type."
+                placeholder={copy.messagePlaceholder}
                 className="rounded-none"
               />
             </div>
 
             <div className="grid gap-2">
               <span className="text-[11px] font-medium uppercase text-muted-foreground">
-                Send via
+                {copy.sendVia}
               </span>
-              <div
-                className="grid grid-cols-2 gap-2"
-                role="group"
-                aria-label="Choose how to send your message"
-              >
+              <div className="grid grid-cols-2 gap-2" role="group" aria-label={copy.chooseChannel}>
                 <Button
                   type="button"
                   variant={channel === "whatsapp" ? "default" : "outline"}
                   aria-pressed={channel === "whatsapp"}
                   onClick={() => setChannel("whatsapp")}
-                  className="h-11 rounded-none border-primary text-[11px] shadow-none"
+                  className="h-11 rounded-none border-primary text-[11px] uppercase shadow-none"
                 >
-                  WHATSAPP
+                  {copy.whatsapp}
                 </Button>
                 <Button
                   type="button"
                   variant={channel === "email" ? "default" : "outline"}
                   aria-pressed={channel === "email"}
                   onClick={() => setChannel("email")}
-                  className="h-11 rounded-none border-primary text-[11px] shadow-none"
+                  className="h-11 rounded-none border-primary text-[11px] uppercase shadow-none"
                 >
-                  EMAIL
+                  {copy.emailChannel}
                 </Button>
               </div>
             </div>
@@ -238,11 +222,10 @@ function ContactPage() {
               size="lg"
               className="h-12 rounded-none bg-primary px-8 text-xs uppercase text-primary-foreground shadow-none hover:bg-secondary hover:text-secondary-foreground"
             >
-              Send message <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
+              {copy.send} <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
             </Button>
             <p className="text-xs leading-6 text-muted-foreground">
-              Your message opens in {channel === "whatsapp" ? "WhatsApp" : "your email app"} with
-              the details prefilled, so nothing is stored on this site.
+              {fmt(copy.note, { app: channel === "whatsapp" ? copy.noteWhatsApp : copy.noteEmail })}
             </p>
           </form>
         </div>
