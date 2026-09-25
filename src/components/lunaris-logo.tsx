@@ -1,5 +1,7 @@
 /**
  * Inline SVG logo, vectorised from public/images/lunaris-logo.png (tools: potracer).
+ * The viewBox is the PNG's full 1152×928 canvas (including its transparent padding) so the logo
+ * renders at exactly the size and position the PNG had at the same CSS width.
  * The wordmark uses `currentColor`, so it follows the surrounding text colour: dark on the cream
  * pages, light on the overlay header, and light again when a browser forces a dark theme.
  * The arc and star keep the brand gold.
@@ -18,7 +20,7 @@ export function LunarisLogo({
   title?: string;
 }) {
   return (
-    <svg viewBox="154 194 849 516" role="img" aria-label={title} className={`h-auto ${className}`}>
+    <svg viewBox="0 0 1152 928" role="img" aria-label={title} className={`h-auto ${className}`}>
       <path fill={GOLD} d={ARC_AND_STAR} />
       <path fill="currentColor" d={WORDMARK} />
     </svg>
