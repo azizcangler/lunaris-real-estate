@@ -71,8 +71,6 @@ export const en: Dictionary = {
     language: "Language",
   },
   footer: {
-    about:
-      "At Lunaris Real Estate, we redefine the property journey in Dubai through innovation, elegance, and trust. With a client-first approach and global standards, we offer tailored real estate solutions that go beyond transactions.",
     navigation: "Navigation",
     connect: "Connect",
     visitUs: "Visit us",
@@ -105,6 +103,7 @@ export const en: Dictionary = {
     whoTitle: "Local insight,",
     whoTitleItalic: "personal guidance",
     teamImageAlt: "Lunaris advisory team reviewing property plans in a Dubai office",
+    officeImageAlt: "Reception of the Lunaris Real Estate office in Dubai",
     meetTheTeam: "Meet the team",
     ourPortfolio: "Our portfolio",
     selectedProjects: "Selected projects",

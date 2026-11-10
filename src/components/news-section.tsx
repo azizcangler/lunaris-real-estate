@@ -33,7 +33,7 @@ export function NewsSection({ className = "" }: { className?: string }) {
           </p>
           <h2 className="mt-4 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-4xl">
             {t.news.title}
-            <span className="block font-display text-[0.82em] normal-case italic">
+            <span className="block font-editorial text-[0.8em] normal-case">
               {t.news.titleItalic}
             </span>
           </h2>
@@ -84,7 +84,7 @@ export function NewsSection({ className = "" }: { className?: string }) {
               <p className="text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground sm:hidden">
                 {t.news.categories[item.category]}
               </p>
-              <h3 className="mt-1 line-clamp-2 font-display text-lg italic leading-tight text-foreground sm:mt-0 sm:line-clamp-1">
+              <h3 className="mt-1 line-clamp-2 font-editorial text-lg leading-tight text-foreground sm:mt-0 sm:line-clamp-1">
                 {item.title}
               </h3>
               <p className="mt-1.5 hidden line-clamp-2 text-xs leading-5 text-muted-foreground sm:block">

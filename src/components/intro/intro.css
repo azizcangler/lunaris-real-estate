@@ -1,0 +1,594 @@
+/* 3D intro demo (/intro): a scroll-driven line drawing of a master-planned community, then a
+   closing title card, then the regular home page. Everything is scoped under .intro3d. */
+.intro3d {
+  --i-bg: #f9f5ed;
+  --i-ink: #402f1e;
+  --i-gold: #ae9064;
+  --i-mute: rgba(var(--i-ink-rgb), 0.62);
+  /* rgb triplets for the translucent tints, so the dark theme can swap them */
+  --i-bg-rgb: 249, 245, 237;
+  --i-ink-rgb: 64, 47, 30;
+  --i-shade-rgb: 43, 31, 20;
+  --i-ascii: #2b1f14;
+  --i-chars: #5c4a3d;
+  color: var(--i-ink);
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* Dark mode (header toggle): the site's dark tokens, espresso brown rather than black. */
+.intro3d[data-theme="dark"] {
+  --i-bg: #24180c;
+  --i-ink: #f8f5ee;
+  --i-gold: #d8bd8c;
+  --i-mute: rgba(248, 245, 238, 0.6);
+  --i-bg-rgb: 36, 24, 12;
+  --i-ink-rgb: 248, 245, 238;
+  --i-shade-rgb: 15, 7, 3;
+  --i-ascii: #f8f5ee;
+  --i-chars: #aa9c8c;
+}
+.intro3d[data-theme="dark"] .intro3d-ascii {
+  text-shadow: 0 0 8px rgba(216, 195, 160, 0.35);
+}
+.intro3d-theme {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* Story: seven screens of camera scroll plus the outro's height, during which the outro rises
+   over the still-stuck stage. `--outro-h` is the outro's height (smaller on phones). */
+.intro3d {
+  --outro-h: 100svh;
+}
+.intro3d-story {
+  position: relative;
+  height: calc(700vh + var(--outro-h));
+}
+.intro3d-stage {
+  --cover: 0;
+  transform: scale(calc(1 - var(--cover) * 0.06));
+  transform-origin: 50% 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--i-bg);
+}
+.intro3d-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.intro3d-veil {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(var(--i-bg-rgb), 0) 50%, rgba(var(--i-bg-rgb), 0.75) 100%);
+}
+.intro3d-hero-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  will-change: opacity;
+  background: radial-gradient(
+    ellipse 60% 45% at 50% 44%,
+    rgba(var(--i-bg-rgb), 0.92) 0%,
+    rgba(var(--i-bg-rgb), 0.55) 60%,
+    rgba(var(--i-bg-rgb), 0) 100%
+  );
+}
+
+.intro3d-header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 28px;
+}
+.intro3d-brand {
+  font-family: "Playfair Display", serif;
+  letter-spacing: 0.35em;
+  font-size: 15px;
+}
+.intro3d-brand small {
+  display: block;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 8px;
+  letter-spacing: 0.4em;
+  color: var(--i-gold);
+  margin-top: 2px;
+}
+.intro3d-nav {
+  display: flex;
+  gap: 8px;
+}
+.intro3d-nav a,
+.intro3d-nav button,
+.intro3d-btn {
+  color: var(--i-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: 1px solid rgba(var(--i-ink-rgb), 0.3);
+  padding: 8px 12px;
+  background: rgba(var(--i-bg-rgb), 0.6);
+  transition: 0.3s;
+}
+.intro3d-nav a:hover,
+.intro3d-nav button:hover,
+.intro3d-btn:hover {
+  border-color: var(--i-gold);
+  color: var(--i-gold);
+}
+
+/* Chapter panels. */
+.intro3d-panel {
+  position: absolute;
+  z-index: 3;
+  max-width: 430px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s,
+    transform 0.6s;
+  pointer-events: none;
+}
+.intro3d-panel.on {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.intro3d-label {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--i-gold);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.intro3d-label::before {
+  content: "";
+  width: 28px;
+  height: 1px;
+  background: var(--i-gold);
+  opacity: 0.8;
+}
+.intro3d-panel h2 {
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
+  font-size: clamp(32px, 4vw, 54px);
+  line-height: 1.05;
+  margin-top: 14px;
+}
+.intro3d-panel p {
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--i-mute);
+  margin-top: 14px;
+}
+.intro3d-tag {
+  font-size: 11px;
+  color: var(--i-gold);
+  margin-top: 14px;
+}
+.intro3d-plate {
+  background: rgba(var(--i-bg-rgb), 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 26px 28px;
+  border-left: 1px solid var(--i-gold);
+}
+.intro3d-pos-l {
+  left: 6vw;
+  top: 26vh;
+}
+.intro3d-pos-r {
+  right: 6vw;
+  top: 22vh;
+}
+.intro3d-pos-bl {
+  left: 6vw;
+  bottom: 14vh;
+}
+
+.intro3d-hero {
+  inset: 0;
+  max-width: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.intro3d-ascii {
+  font-size: clamp(4px, 0.6vw, 9px);
+  line-height: 1;
+  letter-spacing: 0.05em;
+  color: var(--i-ascii);
+  font-weight: 500;
+  white-space: pre;
+  margin: -6vh 0 0;
+  font-family: "JetBrains Mono", monospace;
+  text-shadow:
+    0 0 2px var(--i-bg),
+    0 0 6px var(--i-bg);
+}
+.intro3d-hero-copy {
+  position: absolute;
+  left: 6vw;
+  bottom: 12vh;
+  max-width: 460px;
+}
+.intro3d-hero-copy h1 {
+  font-family: "Playfair Display", serif;
+  font-weight: 400;
+  font-size: 28px;
+}
+.intro3d-hero-copy p {
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--i-mute);
+  margin-top: 10px;
+}
+.intro3d-cta {
+  display: inline-flex;
+  gap: 8px;
+  margin-top: 18px;
+  color: var(--i-ink);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-bottom: 1px solid var(--i-gold);
+  padding-bottom: 3px;
+}
+.intro3d-final {
+  left: 0;
+  right: 0;
+  bottom: 13vh;
+  max-width: none;
+  text-align: center;
+}
+.intro3d-final .intro3d-label {
+  justify-content: center;
+}
+.intro3d-final h2 {
+  font-size: clamp(36px, 5vw, 70px);
+}
+.intro3d-final p {
+  max-width: 460px;
+  margin-inline: auto;
+}
+.intro3d-final .intro3d-ascii {
+  display: inline-block;
+  font-size: clamp(4px, 0.55vw, 8px);
+  margin: 0 0 4vh;
+}
+
+.intro3d-progress {
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 26px;
+  z-index: 4;
+  height: 1px;
+  background: rgba(var(--i-ink-rgb), 0.15);
+}
+.intro3d-progress i {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: var(--i-gold);
+  transform: scaleX(0);
+  transform-origin: left;
+  will-change: transform;
+}
+.intro3d-hint {
+  position: absolute;
+  bottom: 34px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  color: var(--i-mute);
+}
+
+/* Closing title card: emblem outline drawn, a sheen of light, drifting glyphs, the wordmark. */
+/* The outro closes over the maquette: it overlaps the last screen of the story and slides up
+   across the stuck stage like a lid, rounded at the top until it lands. The stage behind
+   (`--cover` 0 → 1, set from the scroll position) shrinks back and darkens a little. */
+.intro3d-stage::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background: rgba(var(--i-shade-rgb), calc(var(--cover) * 0.35));
+}
+.intro3d-outro {
+  --cover: 0;
+  position: relative;
+  z-index: 2;
+  margin-top: calc(-1 * var(--outro-h));
+  height: var(--outro-h);
+  border-radius: calc((1 - var(--cover)) * 32px) calc((1 - var(--cover)) * 32px) 0 0;
+  box-shadow: 0 -24px 60px rgba(var(--i-shade-rgb), calc((1 - var(--cover)) * 0.18));
+  background: var(--i-bg);
+  border-top: 1px solid rgba(var(--i-ink-rgb), 0.14);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+/* The leading edge of the lid: a gold hairline that fades once it has landed. */
+.intro3d-outro::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 6%;
+  right: 6%;
+  height: 1px;
+  z-index: 5;
+  background: linear-gradient(90deg, transparent, var(--i-gold), transparent);
+  opacity: calc(1 - var(--cover));
+}
+.intro3d-outro-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 30px 32px;
+  position: relative;
+  z-index: 4;
+}
+.intro3d-kicker {
+  font-size: 13px;
+  color: var(--i-mute);
+}
+.intro3d-otitle {
+  font-weight: 700;
+  font-size: clamp(20px, 2vw, 28px);
+  letter-spacing: 0.02em;
+  margin-top: 8px;
+}
+.intro3d-outro-top p {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--i-mute);
+  margin-top: 10px;
+}
+/* Button framed by corner brackets (top and bottom edges only). */
+.intro3d-bracket {
+  position: relative;
+  padding: 12px 20px;
+  color: var(--i-ink);
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s;
+}
+.intro3d-bracket::before,
+.intro3d-bracket::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 8px;
+  border: 1px solid rgba(var(--i-ink-rgb), 0.45);
+  transition: border-color 0.3s;
+}
+.intro3d-bracket::before {
+  top: 0;
+  border-bottom: 0;
+}
+.intro3d-bracket::after {
+  bottom: 0;
+  border-top: 0;
+}
+.intro3d-bracket:hover {
+  color: var(--i-gold);
+}
+.intro3d-bracket:hover::before,
+.intro3d-bracket:hover::after {
+  border-color: var(--i-gold);
+}
+
+.intro3d-chars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 2.4s 1.6s;
+  pointer-events: none;
+}
+.intro3d-outro.in .intro3d-chars {
+  opacity: 1;
+}
+
+/* The emblem spans the card; the foot of the arc slips behind the wordmark. */
+.intro3d-emblem {
+  position: absolute;
+  left: 50%;
+  top: 17vh;
+  width: min(92vw, 205vh);
+  aspect-ratio: 510 / 214;
+  transform: translateX(-50%);
+  z-index: 1;
+  pointer-events: none;
+}
+.intro3d-emblem svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+/* Frosted glass inside the mark (mask set inline from the logo path): glyphs blur behind it. */
+.intro3d-glass {
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(9px);
+  -webkit-backdrop-filter: blur(9px);
+  background: rgba(var(--i-bg-rgb), 0.25);
+  opacity: 0;
+  transition: opacity 1.6s 1s;
+}
+.intro3d-outro.in .intro3d-glass {
+  opacity: 1;
+}
+.intro3d-emblem use,
+.intro3d-emblem .e-sheen {
+  fill: none;
+}
+#intro3d-mark {
+  vector-effect: non-scaling-stroke;
+}
+.intro3d-emblem .e-base {
+  stroke: rgba(var(--i-ink-rgb), 0.22);
+  stroke-width: 1.2;
+}
+.intro3d-emblem .e-draw {
+  stroke: var(--i-gold);
+  stroke-width: 1.4;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  opacity: 0.9;
+  transition:
+    stroke-dashoffset 2.8s cubic-bezier(0.45, 0, 0.2, 1),
+    opacity 1.4s 2.8s;
+}
+.intro3d-outro.in .e-draw {
+  stroke-dashoffset: 0;
+  opacity: 0.35;
+}
+.intro3d-emblem .e-sheen {
+  opacity: 0;
+  transition: opacity 1.4s 2.6s;
+}
+.intro3d-outro.in .e-sheen {
+  opacity: 1;
+}
+
+/* Heavy, tightly set wordmark across the full width, in front of the emblem. */
+.intro3d-wordmark {
+  position: relative;
+  z-index: 3;
+  margin: auto 1.6vw 0;
+  width: 96.8vw;
+  display: block;
+  overflow: hidden;
+}
+.intro3d-wordmark path {
+  fill: var(--i-ink);
+  transform-box: fill-box;
+  transform: translateY(115%);
+  transition: transform 1.3s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s;
+}
+.intro3d-outro.in .intro3d-wordmark path {
+  transform: none;
+}
+.intro3d-outro-foot {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 32px 18px;
+  margin-top: 1.5vh;
+  border-top: 1px solid rgba(var(--i-ink-rgb), 0.12);
+  font-size: 11px;
+  color: var(--i-mute);
+  background: var(--i-bg);
+}
+
+@media (max-width: 700px) {
+  /* Phones: a shorter outro packed around the emblem (no empty band under the header). */
+  .intro3d {
+    --outro-h: 78svh;
+  }
+  /* Compact cards low on the screen, so the model keeps the upper two thirds. */
+  .intro3d-pos-l,
+  .intro3d-pos-r,
+  .intro3d-pos-bl {
+    left: 14px;
+    right: 14px;
+    top: auto;
+    bottom: calc(5vh + 64px); /* clear of the site's floating WhatsApp button */
+  }
+  .intro3d-plate {
+    padding: 14px 16px;
+    /* No live blur on phones: re-blurring the moving 3D scene every frame is expensive. */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(var(--i-bg-rgb), 0.92);
+  }
+  .intro3d-panel h2 {
+    font-size: 25px;
+    margin-top: 8px;
+  }
+  .intro3d-panel p {
+    font-size: 11px;
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+  .intro3d-tag,
+  .intro3d-hint {
+    display: none;
+  }
+  .intro3d-ascii {
+    margin-top: -24vh;
+  }
+  .intro3d-hero-copy {
+    bottom: calc(5vh + 64px);
+  }
+  .intro3d-hero-copy h1 {
+    font-size: 22px;
+  }
+  .intro3d-final {
+    bottom: 9vh;
+    padding: 0 14px;
+  }
+  .intro3d-final h2 {
+    font-size: 30px;
+  }
+  .intro3d-final .intro3d-ascii {
+    margin: 0 0 3vh;
+  }
+  .intro3d-nav a:not(:last-child) {
+    display: none;
+  }
+  .intro3d-hero-copy {
+    left: 20px;
+    right: 20px;
+  }
+  /* Anchored to the bottom so the foot of the arc lands on the wordmark at any phone height. */
+  .intro3d-emblem {
+    top: auto;
+    bottom: calc(12.4vw + 58px);
+    width: 94vw;
+  }
+  .intro3d-glass {
+    display: none;
+  }
+  /* The lid's soft shadow and rounding change with every scroll frame: a full repaint on phones. */
+  .intro3d-outro {
+    box-shadow: none;
+  }
+  .intro3d-outro-top {
+    flex-direction: column;
+    padding: 24px 20px;
+  }
+  .intro3d-outro-foot {
+    flex-direction: column;
+  }
+}

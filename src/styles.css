@@ -21,6 +21,8 @@
 @theme inline {
   --font-sans: "Work Sans", sans-serif;
   --font-display: "Instrument Serif", serif;
+  /* Home page sections below the hero; unlike Instrument Serif it also covers Cyrillic. */
+  --font-editorial: "Playfair Display", serif;
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -197,7 +199,8 @@
 }
 
 .section-watermark::before {
-  background-image: url("/images/lunaris-watermark.png");
+  /* 2x of the 280px display height, JPEG (the 1672px PNG original was 1.5 MB). */
+  background-image: url("/images/lunaris-watermark.jpg");
   background-position: top center;
   background-repeat: repeat-x;
   background-size: auto 280px;

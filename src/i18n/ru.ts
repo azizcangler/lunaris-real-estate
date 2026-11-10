@@ -73,8 +73,6 @@ export const ru: Dictionary = {
     language: "Язык",
   },
   footer: {
-    about:
-      "В Lunaris Real Estate мы переосмысливаем путь к недвижимости в Дубае через инновации, элегантность и доверие. Ориентируясь на клиента и мировые стандарты, мы предлагаем индивидуальные решения, которые выходят за рамки сделки.",
     navigation: "Навигация",
     connect: "Связь",
     visitUs: "Наш офис",
@@ -108,6 +106,7 @@ export const ru: Dictionary = {
     whoTitle: "Знание города,",
     whoTitleItalic: "личное сопровождение",
     teamImageAlt: "Команда Lunaris обсуждает планировки в офисе в Дубае",
+    officeImageAlt: "Ресепшен офиса Lunaris Real Estate в Дубае",
     meetTheTeam: "Познакомиться с командой",
     ourPortfolio: "Наше портфолио",
     selectedProjects: "Избранные проекты",

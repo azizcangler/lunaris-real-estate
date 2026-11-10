@@ -1,5 +1,15 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowUpRight } from "lucide-react";
+import {
+  ArrowUpRight,
+  Instagram,
+  Linkedin,
+  Mail,
+  MapPin,
+  MessageCircle,
+  Phone,
+  type LucideIcon,
+} from "lucide-react";
+import type { ReactNode } from "react";
 
 import { LunarisLogo } from "@/components/lunaris-logo";
 import type { NavLink } from "@/components/site-header";
@@ -18,27 +28,48 @@ const navigation: NavLink[] = [
   { to: "/{-$lang}/contact", label: "contact" },
 ];
 
+const socials: { label: string; href: string; icon: LucideIcon }[] = [
+  { label: "WhatsApp", href: company.whatsapp, icon: MessageCircle },
+  { label: "Instagram", href: company.social.instagram, icon: Instagram },
+  { label: "LinkedIn", href: company.social.linkedin, icon: Linkedin },
+];
+
+/** Gold eyebrow with a leading rule, as in the home page sections. */
+function FooterHeading({ children }: { children: ReactNode }) {
+  return (
+    <p className="inline-flex items-center gap-3 text-[11px] font-medium uppercase tracking-[0.2em] text-[#d8c3a0]">
+      <span aria-hidden="true" className="h-px w-8 bg-[#d8c3a0]/70" />
+      {children}
+    </p>
+  );
+}
+
+function IconBadge({ icon: Icon }: { icon: LucideIcon }) {
+  return (
+    <span className="flex size-9 shrink-0 items-center justify-center rounded-full border border-[#d8c3a0]/40 text-[#d8c3a0] transition-colors group-hover:border-[#d8c3a0] group-hover:bg-[#d8c3a0] group-hover:text-[#2b221c]">
+      <Icon aria-hidden="true" className="size-4" strokeWidth={1.5} />
+    </span>
+  );
+}
+
 export function SiteFooter() {
   const { t } = useT();
   return (
-    <footer className="border-t border-border bg-background">
-      <div className="grid gap-10 px-6 py-12 sm:px-10 md:grid-cols-[1.2fr_0.8fr_0.8fr_1fr] md:gap-10 md:px-16 md:py-20 lg:px-24">
+    <footer className="bg-[#2b221c] text-[#efe9dc]">
+      <div className="grid gap-12 px-6 py-14 sm:px-10 md:grid-cols-2 md:px-16 md:py-20 lg:grid-cols-[1fr_1.1fr_0.9fr_1.2fr] lg:gap-10 lg:px-24">
         <div>
-          <LunarisLogo className="w-32 text-foreground" title={company.name} />
-          <p className="mt-6 max-w-sm text-sm leading-7 text-muted-foreground">{t.footer.about}</p>
+          <LunarisLogo className="w-36 text-[#efe9dc]" title={company.name} />
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase text-muted-foreground">
-            {t.footer.navigation}
-          </p>
-          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:mt-5 md:flex-col md:gap-3">
+          <FooterHeading>{t.footer.navigation}</FooterHeading>
+          <ul className="mt-6 grid grid-cols-2 gap-x-6 gap-y-3">
             {navigation.map((item) => (
               <li key={item.label}>
                 <Link
                   to={item.to}
                   {...(item.hash ? { hash: item.hash } : {})}
-                  className="text-sm text-foreground hover:text-accent"
+                  className="font-editorial text-lg text-[#efe9dc]/85 transition-colors hover:text-[#d8c3a0]"
                 >
                   {t.nav[item.label]}
                 </Link>
@@ -48,66 +79,61 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase text-muted-foreground">
-            {t.footer.connect}
-          </p>
-          <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 md:mt-5 md:flex-col md:gap-3">
-            <li>
-              <a
-                href={company.whatsapp}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-foreground hover:text-accent"
-              >
-                WhatsApp <ArrowUpRight className="size-3.5" aria-hidden="true" />
-              </a>
-            </li>
-            <li>
-              <a
-                href={company.social.instagram}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-foreground hover:text-accent"
-              >
-                Instagram <ArrowUpRight className="size-3.5" aria-hidden="true" />
-              </a>
-            </li>
-            <li>
-              <a
-                href={company.social.linkedin}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-1 text-sm text-foreground hover:text-accent"
-              >
-                LinkedIn <ArrowUpRight className="size-3.5" aria-hidden="true" />
-              </a>
-            </li>
+          <FooterHeading>{t.footer.connect}</FooterHeading>
+          <ul className="mt-6 flex flex-col gap-4">
+            {socials.map((item) => (
+              <li key={item.label}>
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center gap-4 text-sm text-[#efe9dc]/85 hover:text-[#efe9dc]"
+                >
+                  <IconBadge icon={item.icon} />
+                  {item.label}
+                  <ArrowUpRight className="size-3.5 opacity-50" aria-hidden="true" />
+                </a>
+              </li>
+            ))}
           </ul>
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase text-muted-foreground">
-            {t.footer.visitUs}
-          </p>
-          <address className="mt-5 text-sm not-italic leading-7 text-foreground">
-            {company.address.building}, {company.address.area}
-            <br />
-            {company.address.office}
-            <br />
-            {company.address.city}
-          </address>
-          <p className="mt-5 text-sm leading-7">
-            <a href={`mailto:${company.email}`} className="block text-foreground hover:text-accent">
-              {company.email}
-            </a>
-            <a href={`tel:${company.phoneTel}`} className="block text-foreground hover:text-accent">
-              {company.phoneDisplay}
-            </a>
-          </p>
+          <FooterHeading>{t.footer.visitUs}</FooterHeading>
+          <ul className="mt-6 flex flex-col gap-4 text-sm leading-6 text-[#efe9dc]/85">
+            <li className="flex items-start gap-4">
+              <IconBadge icon={MapPin} />
+              <address className="not-italic">
+                {company.address.building}, {company.address.area}
+                <br />
+                {company.address.office}
+                <br />
+                {company.address.city}
+              </address>
+            </li>
+            <li>
+              <a
+                href={`mailto:${company.email}`}
+                className="group inline-flex items-center gap-4 hover:text-[#efe9dc]"
+              >
+                <IconBadge icon={Mail} />
+                {company.email}
+              </a>
+            </li>
+            <li>
+              <a
+                href={`tel:${company.phoneTel}`}
+                className="group inline-flex items-center gap-4 hover:text-[#efe9dc]"
+              >
+                <IconBadge icon={Phone} />
+                {company.phoneDisplay}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 
-      <div className="flex flex-col gap-2 border-t border-border px-6 py-6 text-[11px] uppercase text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-10 md:px-16 lg:px-24">
+      <div className="flex flex-col gap-2 border-t border-white/10 px-6 py-6 text-[11px] uppercase tracking-[0.12em] text-[#efe9dc]/50 sm:flex-row sm:items-center sm:justify-between sm:px-10 md:px-16 lg:px-24">
         <p>
           © {new Date().getFullYear()} {company.name}. {t.footer.rights}
         </p>

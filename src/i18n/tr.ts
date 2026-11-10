@@ -73,8 +73,6 @@ export const tr: Dictionary = {
     language: "Dil",
   },
   footer: {
-    about:
-      "Lunaris Real Estate olarak Dubai'de gayrimenkul yolculuğunu yenilik, zarafet ve güvenle yeniden tanımlıyoruz. Müşteri odaklı yaklaşımımız ve küresel standartlarımızla, işlemin ötesine geçen kişiye özel gayrimenkul çözümleri sunuyoruz.",
     navigation: "Sayfalar",
     connect: "Bize ulaşın",
     visitUs: "Bizi ziyaret edin",
@@ -108,6 +106,7 @@ export const tr: Dictionary = {
     whoTitle: "Yerel bilgi,",
     whoTitleItalic: "kişisel rehberlik",
     teamImageAlt: "Dubai'deki ofisinde proje planlarını inceleyen Lunaris danışmanlık ekibi",
+    officeImageAlt: "Lunaris Real Estate'in Dubai ofisindeki resepsiyon",
     meetTheTeam: "Ekiple tanışın",
     ourPortfolio: "Portföyümüz",
     selectedProjects: "Seçilmiş projeler",

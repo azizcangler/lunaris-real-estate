@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as Char123LangChar125RouteRouteImport } from './routes/{-$lang}/route'
 import { Route as Char123LangChar125IndexRouteImport } from './routes/{-$lang}/index'
 import { Route as Char123LangChar125ContactRouteImport } from './routes/{-$lang}/contact'
+import { Route as Char123LangChar125IntroRouteImport } from './routes/{-$lang}/intro'
 import { Route as Char123LangChar125InvestingRouteImport } from './routes/{-$lang}/investing'
 import { Route as Char123LangChar125LivingRouteImport } from './routes/{-$lang}/living'
 import { Route as Char123LangChar125PortfolioRouteImport } from './routes/{-$lang}/portfolio'
@@ -35,6 +36,11 @@ const Char123LangChar125ContactRoute =
     path: '/contact',
     getParentRoute: () => Char123LangChar125RouteRoute,
   } as any)
+const Char123LangChar125IntroRoute = Char123LangChar125IntroRouteImport.update({
+  id: '/intro',
+  path: '/intro',
+  getParentRoute: () => Char123LangChar125RouteRoute,
+} as any)
 const Char123LangChar125InvestingRoute =
   Char123LangChar125InvestingRouteImport.update({
     id: '/investing',
@@ -74,6 +80,7 @@ const Char123LangChar125PortfolioSlugRoute =
 export interface FileRoutesByFullPath {
   '/{-$lang}': typeof Char123LangChar125RouteRouteWithChildren
   '/{-$lang}/contact': typeof Char123LangChar125ContactRoute
+  '/{-$lang}/intro': typeof Char123LangChar125IntroRoute
   '/{-$lang}/investing': typeof Char123LangChar125InvestingRoute
   '/{-$lang}/living': typeof Char123LangChar125LivingRoute
   '/{-$lang}/portfolio': typeof Char123LangChar125PortfolioRoute
@@ -84,6 +91,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/{-$lang}/contact': typeof Char123LangChar125ContactRoute
+  '/{-$lang}/intro': typeof Char123LangChar125IntroRoute
   '/{-$lang}/investing': typeof Char123LangChar125InvestingRoute
   '/{-$lang}/living': typeof Char123LangChar125LivingRoute
   '/{-$lang}/portfolio': typeof Char123LangChar125PortfolioRoute
@@ -96,6 +104,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/{-$lang}': typeof Char123LangChar125RouteRouteWithChildren
   '/{-$lang}/contact': typeof Char123LangChar125ContactRoute
+  '/{-$lang}/intro': typeof Char123LangChar125IntroRoute
   '/{-$lang}/investing': typeof Char123LangChar125InvestingRoute
   '/{-$lang}/living': typeof Char123LangChar125LivingRoute
   '/{-$lang}/portfolio': typeof Char123LangChar125PortfolioRoute
@@ -109,6 +118,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/{-$lang}'
     | '/{-$lang}/contact'
+    | '/{-$lang}/intro'
     | '/{-$lang}/investing'
     | '/{-$lang}/living'
     | '/{-$lang}/portfolio'
@@ -119,6 +129,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/{-$lang}/contact'
+    | '/{-$lang}/intro'
     | '/{-$lang}/investing'
     | '/{-$lang}/living'
     | '/{-$lang}/portfolio'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/{-$lang}'
     | '/{-$lang}/contact'
+    | '/{-$lang}/intro'
     | '/{-$lang}/investing'
     | '/{-$lang}/living'
     | '/{-$lang}/portfolio'
@@ -164,6 +176,13 @@ declare module '@tanstack/react-router' {
       path: '/contact'
       fullPath: '/{-$lang}/contact'
       preLoaderRoute: typeof Char123LangChar125ContactRouteImport
+      parentRoute: typeof Char123LangChar125RouteRoute
+    }
+    '/{-$lang}/intro': {
+      id: '/{-$lang}/intro'
+      path: '/intro'
+      fullPath: '/{-$lang}/intro'
+      preLoaderRoute: typeof Char123LangChar125IntroRouteImport
       parentRoute: typeof Char123LangChar125RouteRoute
     }
     '/{-$lang}/investing': {
@@ -213,6 +232,7 @@ declare module '@tanstack/react-router' {
 
 interface Char123LangChar125RouteRouteChildren {
   Char123LangChar125ContactRoute: typeof Char123LangChar125ContactRoute
+  Char123LangChar125IntroRoute: typeof Char123LangChar125IntroRoute
   Char123LangChar125InvestingRoute: typeof Char123LangChar125InvestingRoute
   Char123LangChar125LivingRoute: typeof Char123LangChar125LivingRoute
   Char123LangChar125PortfolioRoute: typeof Char123LangChar125PortfolioRoute
@@ -225,6 +245,7 @@ interface Char123LangChar125RouteRouteChildren {
 const Char123LangChar125RouteRouteChildren: Char123LangChar125RouteRouteChildren =
   {
     Char123LangChar125ContactRoute: Char123LangChar125ContactRoute,
+    Char123LangChar125IntroRoute: Char123LangChar125IntroRoute,
     Char123LangChar125InvestingRoute: Char123LangChar125InvestingRoute,
     Char123LangChar125LivingRoute: Char123LangChar125LivingRoute,
     Char123LangChar125PortfolioRoute: Char123LangChar125PortfolioRoute,

@@ -19,7 +19,7 @@ export function FaqSection({ className = "" }: { className?: string }) {
           <p className="text-[11px] font-medium uppercase text-muted-foreground">{t.faq.eyebrow}</p>
           <h2 className="mt-4 font-sans text-3xl font-normal uppercase leading-[0.92] text-foreground md:text-5xl">
             {t.faq.title}
-            <span className="block font-display text-[0.82em] normal-case italic">
+            <span className="block font-editorial text-[0.8em] normal-case">
               {t.faq.titleItalic}
             </span>
           </h2>

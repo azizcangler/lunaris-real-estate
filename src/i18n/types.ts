@@ -63,7 +63,6 @@ export interface Dictionary {
     language: string;
   };
   footer: {
-    about: string;
     navigation: string;
     connect: string;
     visitUs: string;
@@ -92,6 +91,7 @@ export interface Dictionary {
     whoTitle: string;
     whoTitleItalic: string;
     teamImageAlt: string;
+    officeImageAlt: string;
     meetTheTeam: string;
     ourPortfolio: string;
     selectedProjects: string;
