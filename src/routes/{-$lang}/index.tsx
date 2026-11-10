@@ -17,6 +17,20 @@ export const Route = createFileRoute("/{-$lang}/")({
               rel: "stylesheet",
               href: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap",
             },
+            // The 3D model and tree list start downloading with the page instead of after
+            // three.js has loaded (the scene fetches them with the same CORS mode).
+            {
+              rel: "preload",
+              href: "/intro/community.glb",
+              as: "fetch",
+              crossOrigin: "anonymous" as const,
+            },
+            {
+              rel: "preload",
+              href: "/intro/trees.json",
+              as: "fetch",
+              crossOrigin: "anonymous" as const,
+            },
           ]
         : []),
     ],
@@ -32,7 +46,7 @@ function Index() {
     return (
       <main className="min-h-screen overflow-x-clip bg-background">
         <Intro3D />
-        <HomeContent />
+        <HomeContent belowIntro />
       </main>
     );
   }

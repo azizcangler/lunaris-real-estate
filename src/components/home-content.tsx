@@ -13,7 +13,7 @@ import { fmt, useT } from "@/i18n";
 import { getFeaturedProjects, getProjects } from "@/i18n/projects";
 
 /** Everything on the home page below the site header: shared by `/` and the `/intro` demo. */
-export function HomeContent() {
+export function HomeContent({ belowIntro = false }: { belowIntro?: boolean } = {}) {
   const { locale, t } = useT();
   const projects = getProjects(locale);
   const featuredProjects = getFeaturedProjects(locale);
@@ -66,7 +66,7 @@ export function HomeContent() {
               {home.popularProjects}
             </p>
             <DeveloperBelt names={developers} className="mt-5" />
-            <ProjectCoverflow projects={popularProjects} className="mt-4" />
+            <ProjectCoverflow projects={popularProjects} className="mt-4" eager={!belowIntro} />
           </div>
         </div>
       </section>

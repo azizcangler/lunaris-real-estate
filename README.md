@@ -10,7 +10,6 @@ Dubai merkezli Lunaris Real Estate'in vitrin sitesi. Lovable ile üretildi, Clou
 |---|---|
 | Site | https://lunarisrealestate.com (ve www; 14 Eylül'de Cloudflare özel alan adı olarak bağlandı, DNS GoDaddy'den Cloudflare'e taşındı) |
 | Workers.dev adresi | https://lunaris-real-estate.aguler2949.workers.dev (aynı worker, açık tutuluyor) |
-| Yedek adres | https://lunaris.aguler2949.workers.dev (aynı kod, geçici) |
 | Repo | https://github.com/azizcangler/lunaris-real-estate (`main`) |
 | Eski site | GitHub Pages'teki eski site alan adından ayrıldı; kopyası `../old-site-reference/` altında |
 
@@ -26,13 +25,17 @@ Site üç dilde: İngilizce (`/`), Türkçe (`/tr/...`) ve Rusça (`/ru/...`). B
 
 | Route | İçerik |
 |---|---|
-| `/` | Popüler projeler hero'su (solda başlık ve CTA'lar, sağda geliştirici şeridi ve otomatik dönen coverflow proje carousel'i; 14 Eylül'de eski görsel hero'nun yerine), Who we are, öne çıkan 3 proje (The Acres, Athlon, Damac Islands), Why clients choose us, News & updates (filtreli haber kartları, `src/data/news.ts`), FAQ (akordeon, sözlükteki `faq.items`). Living/Investing/Renting seçici ve How it works bölümleri 14 Eylül'de ana sayfadan kaldırıldı |
+| `/` | İngilizcede önce 3D intro (bkz. Ana sayfa intro'su), sonra: popüler projeler hero'su (TR/RU'da sayfanın en üstü) (solda başlık ve CTA'lar, sağda geliştirici şeridi ve otomatik dönen coverflow proje carousel'i; 14 Eylül'de eski görsel hero'nun yerine), Who we are, öne çıkan 3 proje (The Acres, Athlon, Damac Islands), Why clients choose us, News & updates (filtreli haber kartları, `src/data/news.ts`), FAQ (akordeon, sözlükteki `faq.items`). Living/Investing/Renting seçici ve How it works bölümleri 14 Eylül'de ana sayfadan kaldırıldı |
 | `/portfolio` | 13 projenin tamamı; detay sayfası olanlar karttan detaya gider |
 | `/portfolio/the-acres` | **The Acres (Meraas)** detay sayfası |
 | `/portfolio/athlon` | **Athlon (Aldar)** detay sayfası |
 | `/portfolio/damac-islands` | **Damac Islands (Damac)** detay sayfası |
 | `/team`, `/contact` | Kurucular ve iletişim (form WhatsApp / e-posta ile açılır) |
 | `/living`, `/investing`, `/renting` | Şablon sayfalar |
+
+## Ana sayfa intro'su
+
+3D intro (10 Kasım 2026): İngilizce ana sayfa (`/`) `components/intro/intro-3d.tsx` ile açılır, ardından normal ana sayfa bölümleri (`components/home-content.tsx`, `belowIntro`) gelir; `/tr` ve `/ru` intro metinleri İngilizce olduğu için eski split hero + `SiteHeader` ile açılır. `/intro` aynı sahneyi gösteren noindex demo sayfası. Sahne `intro-scene.ts` (three.js, `public/intro/community.glb` + `trees.json`; Blender betiği repo dışında), kaydırmaya bağlı kamera, 5 bölüm kartı, ASCII 'LUNARIS', kapanışta logo amblemi. Intro başlığı sitenin tam menüsünü (`site-header.tsx`'ten `links`), `LanguageSwitcher` ve 1200px altında `MobileMenu` (yan panel) kullanır. Performans: telefon/dokunmatikte (`lite`) daha seyrek kum tepesi/ızgara/ay geometrisi, yavaş karelerde piksel oranı kademeli düşer, intro ekran dışındayken döngü durur, ilerleme çubuğu `transform` ile, telefonda kapanış gölgesi yok, paralaks yalnız fareyle; model ve ağaç listesi `<head>`'de preload, intro altındaki coverflow görselleri lazy (eskiden ~1.4 MB eager preload'du). Uzak binaların kahverengiye koyulaşması (`uFront`) kapalı. `prefers-reduced-motion`: hikâye tek ekrana iner, bölüm kartları/ilerleme/kayan harfler gizli, ASCII sabit, geçişler kapalı. Logo yayı (`lunaris-logo.tsx` `ARC_AND_STAR`) potrace tırtıklarından arındırılmış düzgün hilal olarak yeniden çizildi (yıldız aynı).
 
 ## Proje detay sayfaları
 
@@ -94,7 +97,7 @@ Site üç dilde: İngilizce (`/`), Türkçe (`/tr/...`) ve Rusça (`/ru/...`). B
 
 - **Performans (14 Eylül):** Sitenin düşük kare hızında çalıştığı bildirildi. İki müdahale: (1) hero'da her karede ölçeklenen görsel, solan doku ve karartma katmanları ile masterplan sahnesinde kaydırmayla kayan görsel/metin blokları `will-change` ile kompozitör katmanına alındı; (2) karşılaştırma için üretim build'i wrangler ile 8789 portunda sunuldu. Bildirim Vite dev sunucusunda (5180) yapıldıysa esas fark geliştirme modundan geliyor olabilir; üretim adresinde doğrulanması bekleniyor. Chrome eklentisinin sekmesi arka planda sayıldığı için otomatik kare hızı ölçümü yapılamadı. Gerekirse sıradaki adım görsel boyutlarını düşürmek (hero 2000 → 1600 px, sahne görselleri 1300 → 1000 px).
 - **8788 portu:** Önceki bir oturumdan kalan `workerd` süreci (PID 54421) eski build'i sunuyor; yeni sayfalar orada görünmez. `kill 54421` ile kapatılabilir.
-- **Hosting olayı (13 Eylül):** Ana workers.dev adresi Cloudflare tarafında eski sürümde takılı kaldı; yeni deploy'lar, tetikleyici yenileme, workers.dev kapat/aç ve rollback etkisizdi. Worker silinip aynı adla yeniden kurulunca yaklaşık 10 dakika gecikmeyle düzeldi. Bu sırada açılan `lunaris` yedek worker'ı hâlâ duruyor; gerekirse `npx wrangler delete --name lunaris` ile kaldırılır. Deploy sonrası ana adreste yeni asset hash'ini `curl` ile doğrulamak iyi bir alışkanlık.
+- **Hosting olayı (13 Eylül):** Ana workers.dev adresi Cloudflare tarafında eski sürümde takılı kaldı; yeni deploy'lar, tetikleyici yenileme, workers.dev kapat/aç ve rollback etkisizdi. Worker silinip aynı adla yeniden kurulunca yaklaşık 10 dakika gecikmeyle düzeldi. Bu sırada açılan `lunaris` yedek worker'ı 10 Kasım 2026'da silindi. Deploy sonrası ana adreste yeni asset hash'ini `curl` ile doğrulamak iyi bir alışkanlık.
 - **Tarayıcı:** Brave'de kaydırma farklı hissedildiği bildirildi; Chrome ve Safari'de sorun yok. Shields kapalıyken test edilmesi bekleniyor.
 - **Öne çıkanlar:** Ana sayfadaki üçlü The Acres, Athlon, Damac Islands; portföy sayfasında da bu üçü başta. Sıralama `projects.ts` içinden değiştirilir.
 - **Durum:** Athlon ve Damac Islands sayfaları ile 14 Eylül düzeltmeleri `c036934` ile commit edilip push edildi ve aynı gün deploy edildi (sürüm `3becbb07`); ana adreste yeni asset hash'leri ve hero düzeltmesi `curl` ile doğrulandı.

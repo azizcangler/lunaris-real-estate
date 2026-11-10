@@ -131,6 +131,9 @@ export function startIntro(root: HTMLElement): () => void {
   const story = q<HTMLElement>(root, ".intro3d-story");
   // Phones and tablets: lighter geometry and slower text effects (decided once, at start).
   const lite = matchMedia("(max-width: 700px), (pointer: coarse)").matches;
+  // Reduced motion: the CSS shortens the story to one screen; here the text effects and
+  // parallax stay still (the ASCII word is drawn once, headings appear without scrambling).
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const canvas = q<HTMLCanvasElement>(root, ".intro3d-canvas");
   // High-density screens are already sharp: skip MSAA there (a big cost on phones).
   const renderer = new THREE.WebGLRenderer({
@@ -179,8 +182,8 @@ export function startIntro(root: HTMLElement): () => void {
           gl_FragColor = vec4(mix(uColor, uBg, fog), uOpacity);
         }`,
     });
-  // Fills: background-coloured where near (hiding the lines behind, like a drawing); far buildings
-  // turn a soft brown once you scroll. `uFront` is shared, so one update moves every fill.
+  // Fills: background-coloured, hiding the lines behind like a drawing. `uFront` (the depth where
+  // fills would turn brown) is kept out of reach: the far darkening is switched off.
   const uFront = { value: 9000 };
   const fillMat = (base: Key, canDark: boolean, inst = false) =>
     new THREE.ShaderMaterial({
@@ -363,7 +366,7 @@ export function startIntro(root: HTMLElement): () => void {
   };
   const onPointer = (e: PointerEvent) => {
     // Parallax follows a mouse only: touches would re-render the scene for nothing.
-    if (e.pointerType !== "mouse") return;
+    if (e.pointerType !== "mouse" || still) return;
     mx = e.clientX / innerWidth - 0.5;
     my = e.clientY / innerHeight - 0.5;
   };
@@ -400,6 +403,7 @@ export function startIntro(root: HTMLElement): () => void {
   const glyphs = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#%&*+=<>/\\|01";
   const scrambles = new Map<HTMLElement, number>();
   const scramble = (el: HTMLElement) => {
+    if (still) return;
     const final = (el.dataset["text"] ??= el.textContent ?? "");
     let frame = 0;
     clearInterval(scrambles.get(el));
@@ -466,7 +470,7 @@ export function startIntro(root: HTMLElement): () => void {
       .join("\n");
     live.forEach((el) => (el.textContent = text));
   };
-  const asciiTimer = window.setInterval(drawAscii, lite ? 220 : 140);
+  const asciiTimer = still ? 0 : window.setInterval(drawAscii, lite ? 220 : 140);
 
   // ---- Outro: the outline draws itself (CSS), then a sheen glides across it and glyphs drift.
   const outro = q<HTMLElement>(root, ".intro3d-outro");
@@ -584,10 +588,8 @@ export function startIntro(root: HTMLElement): () => void {
           hi.value += ((on ? 1 : 0) - hi.value) * 0.08;
         }
       });
-      // Darkness waits until chapter 02 and stays a soft brown; it lifts again for the finale.
-      const wave =
-        ease((step - 1.3) / (sections - 2.3)) * (1 - ease((step - (sections - 1)) * 1.3));
-      uFront.value = wave < 0.02 ? 9000 : 1000 - wave * 720;
+      // No darkening of far buildings: they keep the same cream fill as the near ones (`uFront`
+      // stays out of reach), so the drawing reads as one continuous line work while scrolling.
       if (Math.abs(u - lastBar) > 0.0005) {
         bar.style.transform = `scaleX(${u.toFixed(4)})`;
         lastBar = u;
@@ -622,7 +624,7 @@ export function startIntro(root: HTMLElement): () => void {
       stage.style.setProperty("--cover", v);
       lastCover = cover;
     }
-    if (outroVisible && outro.classList.contains("in")) {
+    if (!still && outroVisible && outro.classList.contains("in")) {
       const w = outro.clientWidth,
         h = outro.clientHeight,
         ts = now / 1000;

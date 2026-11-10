@@ -106,7 +106,34 @@
 }
 .intro3d-nav {
   display: flex;
+  align-items: center;
   gap: 8px;
+  color: var(--i-ink);
+}
+/* Language switcher: the site's own component, plain text links in the intro's ink. */
+.intro3d-nav .intro3d-lang a {
+  border: 0;
+  padding: 0 2px;
+  background: none;
+}
+.intro3d-lang {
+  padding: 0 6px;
+}
+/* The side-sheet menu replaces the link row below 1200px. */
+.intro3d-nav .intro3d-menu {
+  display: none;
+  padding: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 0;
+}
+@media (max-width: 1199px) {
+  .intro3d-nav .intro3d-link {
+    display: none;
+  }
+  .intro3d-nav .intro3d-menu {
+    display: inline-flex;
+  }
 }
 .intro3d-nav a,
 .intro3d-nav button,
@@ -564,8 +591,11 @@
   .intro3d-final .intro3d-ascii {
     margin: 0 0 3vh;
   }
-  .intro3d-nav a:not(:last-child) {
-    display: none;
+  .intro3d-header {
+    padding: 16px 14px 16px 20px;
+  }
+  .intro3d-nav {
+    gap: 6px;
   }
   .intro3d-hero-copy {
     left: 20px;
@@ -590,5 +620,29 @@
   }
   .intro3d-outro-foot {
     flex-direction: column;
+  }
+}
+
+/* Reduced motion: no scroll-driven flight. The intro is one still screen (the master plan with
+   the hero copy), the outro appears already drawn, and nothing drifts, flickers or slides. */
+@media (prefers-reduced-motion: reduce) {
+  .intro3d-story {
+    height: calc(100svh + var(--outro-h));
+  }
+  .intro3d-panel:not(.intro3d-hero),
+  .intro3d-progress,
+  .intro3d-hint,
+  .intro3d-chars,
+  .intro3d-emblem .e-sheen {
+    display: none;
+  }
+  .intro3d *,
+  .intro3d *::before,
+  .intro3d *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+  .intro3d-stage {
+    transform: none;
   }
 }

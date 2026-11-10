@@ -2,6 +2,8 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 
 import { ARC_AND_STAR, WORDMARK } from "@/components/lunaris-logo";
+import { LanguageSwitcher, MobileMenu, links } from "@/components/site-header";
+import { useT } from "@/i18n";
 
 import "./intro.css";
 
@@ -61,6 +63,7 @@ const CHAPTERS = [
 
 /** Scroll-driven 3D intro (demo): the community as a line drawing, then a closing title card. */
 export function Intro3D() {
+  const { t } = useT();
   const root = useRef<HTMLDivElement>(null);
 
   // Always opens light; the header toggle switches the whole page to the site's dark mode
@@ -97,10 +100,19 @@ export function Intro3D() {
             <div className="intro3d-brand">
               LUNARIS<small>REAL ESTATE</small>
             </div>
-            <nav className="intro3d-nav">
-              <Link to="/{-$lang}/portfolio">Portfolio</Link>
-              <Link to="/{-$lang}/team">Team</Link>
-              <Link to="/{-$lang}/contact">Contact</Link>
+            {/* The site's full navigation (wide screens) plus the language switcher and its side-sheet menu. */}
+            <nav className="intro3d-nav" aria-label={t.nav.mainNavigation}>
+              {links.map((link) => (
+                <Link
+                  key={link.label}
+                  className="intro3d-link"
+                  to={link.to}
+                  {...(link.hash ? { hash: link.hash } : {})}
+                >
+                  {t.nav[link.label]}
+                </Link>
+              ))}
+              <LanguageSwitcher compact className="intro3d-lang" />
               <button
                 type="button"
                 className="intro3d-theme"
@@ -109,6 +121,7 @@ export function Intro3D() {
               >
                 {theme === "dark" ? "☀ Light" : "☾ Dark"}
               </button>
+              <MobileMenu triggerClassName="intro3d-menu" />
             </nav>
           </header>
 

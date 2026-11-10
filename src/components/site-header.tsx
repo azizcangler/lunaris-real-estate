@@ -22,7 +22,7 @@ export type NavLink = {
 };
 
 /** Desktop navigation, left to right. The home-page sections link by hash. */
-const links: NavLink[] = [
+export const links: NavLink[] = [
   { to: "/{-$lang}/portfolio", label: "portfolio" },
   { to: "/{-$lang}/living", label: "living" },
   { to: "/{-$lang}/investing", label: "investing" },
@@ -59,7 +59,7 @@ const groups: { label: keyof Dictionary["nav"]; items: NavLink[] }[] = [
  * EN · TR · RU switcher that keeps the visitor on the same page. The current route's full path
  * (with its `{-$lang}` segment) is re-linked with a different `lang` param.
  */
-function LanguageSwitcher({
+export function LanguageSwitcher({
   className = "",
   compact = false,
 }: {
@@ -137,76 +137,82 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
         </div>
         <div className="flex items-center gap-3 lg:hidden">
           <LanguageSwitcher compact />
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" aria-label={t.nav.openMenu} className={tone}>
-                <Menu className="size-5" />
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="flex w-[86vw] max-w-sm flex-col overflow-y-auto bg-background pt-16">
-              <SheetTitle className="sr-only">{t.nav.menu}</SheetTitle>
-              <nav className="flex flex-col gap-8" aria-label={t.nav.mobileNavigation}>
-                {groups.map((group) => (
-                  <div key={group.label}>
-                    <p className="text-[11px] font-medium uppercase text-muted-foreground">
-                      {t.nav[group.label]}
-                    </p>
-                    <ul className="mt-3 flex flex-col">
-                      {group.items.map((link) => (
-                        <li key={link.label} className="border-b border-border">
-                          <SheetClose asChild>
-                            <Link
-                              to={link.to}
-                              {...(link.hash ? { hash: link.hash } : {})}
-                              className="flex items-center justify-between py-3 font-display text-3xl italic text-foreground"
-                            >
-                              {t.nav[link.label]}
-                              <ArrowUpRight
-                                aria-hidden="true"
-                                className="size-4 text-muted-foreground"
-                              />
-                            </Link>
-                          </SheetClose>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </nav>
-              <div className="mt-auto border-t border-border pt-6">
-                <p className="text-[11px] font-medium uppercase text-muted-foreground">
-                  {t.nav.language}
-                </p>
-                <LanguageSwitcher className="mt-3 text-foreground" />
-                <p className="mt-6 text-[11px] font-medium uppercase text-muted-foreground">
-                  {t.nav.getInTouch}
-                </p>
-                <a
-                  href={`tel:${company.phoneTel}`}
-                  className="mt-3 block text-sm text-foreground hover:text-accent"
-                >
-                  {company.phoneDisplay}
-                </a>
-                <a
-                  href={`mailto:${company.email}`}
-                  className="mt-1 block text-sm text-foreground hover:text-accent"
-                >
-                  {company.email}
-                </a>
-                <Button
-                  asChild
-                  className="mt-5 h-11 w-full rounded-none text-xs uppercase shadow-none"
-                >
-                  <a href={company.whatsapp} target="_blank" rel="noreferrer">
-                    {t.nav.chatOnWhatsApp}{" "}
-                    <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
-                  </a>
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          <MobileMenu triggerClassName={tone} />
         </div>
       </div>
     </header>
+  );
+}
+
+/** The grouped menu in a side sheet (phones, tablets, and the home intro's header). */
+export function MobileMenu({ triggerClassName = "" }: { triggerClassName?: string }) {
+  const { t } = useT();
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button
+          variant="ghost"
+          size="icon"
+          aria-label={t.nav.openMenu}
+          className={triggerClassName}
+        >
+          <Menu className="size-5" />
+        </Button>
+      </SheetTrigger>
+      <SheetContent className="flex w-[86vw] max-w-sm flex-col overflow-y-auto bg-background pt-16">
+        <SheetTitle className="sr-only">{t.nav.menu}</SheetTitle>
+        <nav className="flex flex-col gap-8" aria-label={t.nav.mobileNavigation}>
+          {groups.map((group) => (
+            <div key={group.label}>
+              <p className="text-[11px] font-medium uppercase text-muted-foreground">
+                {t.nav[group.label]}
+              </p>
+              <ul className="mt-3 flex flex-col">
+                {group.items.map((link) => (
+                  <li key={link.label} className="border-b border-border">
+                    <SheetClose asChild>
+                      <Link
+                        to={link.to}
+                        {...(link.hash ? { hash: link.hash } : {})}
+                        className="flex items-center justify-between py-3 font-display text-3xl italic text-foreground"
+                      >
+                        {t.nav[link.label]}
+                        <ArrowUpRight aria-hidden="true" className="size-4 text-muted-foreground" />
+                      </Link>
+                    </SheetClose>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </nav>
+        <div className="mt-auto border-t border-border pt-6">
+          <p className="text-[11px] font-medium uppercase text-muted-foreground">
+            {t.nav.language}
+          </p>
+          <LanguageSwitcher className="mt-3 text-foreground" />
+          <p className="mt-6 text-[11px] font-medium uppercase text-muted-foreground">
+            {t.nav.getInTouch}
+          </p>
+          <a
+            href={`tel:${company.phoneTel}`}
+            className="mt-3 block text-sm text-foreground hover:text-accent"
+          >
+            {company.phoneDisplay}
+          </a>
+          <a
+            href={`mailto:${company.email}`}
+            className="mt-1 block text-sm text-foreground hover:text-accent"
+          >
+            {company.email}
+          </a>
+          <Button asChild className="mt-5 h-11 w-full rounded-none text-xs uppercase shadow-none">
+            <a href={company.whatsapp} target="_blank" rel="noreferrer">
+              {t.nav.chatOnWhatsApp} <ArrowUpRight aria-hidden="true" className="ml-2 size-4" />
+            </a>
+          </Button>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

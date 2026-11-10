@@ -22,7 +22,7 @@ function IntroPage() {
   return (
     <main className="min-h-screen overflow-x-clip bg-background">
       <Intro3D />
-      <HomeContent />
+      <HomeContent belowIntro />
     </main>
   );
 }

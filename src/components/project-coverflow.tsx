@@ -23,9 +23,12 @@ const clamp = (value: number, min: number, max: number) => Math.min(Math.max(val
 export function ProjectCoverflow({
   projects,
   className = "",
+  eager = true,
 }: {
   projects: Project[];
   className?: string;
+  /** First cards load at once (above the fold); off when the carousel sits below the 3D intro. */
+  eager?: boolean;
 }) {
   const { t } = useT();
   // Embla's own drag is off in favour of a simple swipe: one gesture moves exactly one card,
@@ -239,7 +242,7 @@ export function ProjectCoverflow({
                     })}
                     width={1200}
                     height={900}
-                    loading={index < 3 ? "eager" : "lazy"}
+                    loading={eager && index < 3 ? "eager" : "lazy"}
                     draggable={false}
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
                   />
@@ -248,7 +251,7 @@ export function ProjectCoverflow({
                       src={project.details.cover.src}
                       alt=""
                       aria-hidden="true"
-                      loading={index < 3 ? "eager" : "lazy"}
+                      loading={eager && index < 3 ? "eager" : "lazy"}
                       className={`absolute inset-0 h-full w-full object-cover transition-opacity ease-out ${
                         coverOn === index ? "opacity-100 duration-300" : "opacity-0 duration-1000"
                       }`}
